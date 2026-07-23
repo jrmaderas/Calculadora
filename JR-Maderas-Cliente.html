@@ -378,9 +378,10 @@ input[type=range] { width:100%; accent-color:var(--rojo); height:4px; cursor:poi
   <div class="aviso">Ingresá el total de metros lineales del perímetro a cercar.</div>
 
   <div class="stitle">Separación entre postes</div>
-  <div class="opts g2" id="gce-sep">
+  <div class="opts g3" id="gce-sep">
+    <button class="ob" data-v="2" onclick="sel(this,'gce-sep')">Cada 2 m<sub>muy firme</sub></button>
     <button class="ob sel" data-v="2.5" onclick="sel(this,'gce-sep')">Cada 2,5 m<sub>recomendado</sub><span class="rb">estándar</span></button>
-    <button class="ob" data-v="3" onclick="sel(this,'gce-sep')">Cada 3 m<sub>menor cantidad</sub></button>
+    <button class="ob" data-v="3" onclick="sel(this,'gce-sep')">Cada 3 m<sub>menos postes</sub></button>
   </div>
   <div class="aviso">⚠ Enterrar mínimo 60 cm por poste. El largo visible será el largo del poste menos 60 cm.</div>
 
@@ -526,7 +527,7 @@ function calcCielorraso(){
 
     titulo='🏠 CIELORRASO MADERA — '+m2.toFixed(1)+' m²';
     addItem(items,'Machimbre ½"×5" de '+lgo+'m',hojas,'hojas');
-    addItem(items,'Clavadoras '+clavTipo+'" de 3m',clavTotal,'listones');
+    addItem(items,'Clavadoras '+clavTipo+' de 3m',clavTotal,'listones');
     addItem(items,'Corniza con borde — '+cornisas+' ml',cornisasUnid,'piezas de 3m',true);
 
     document.getElementById('rc-aviso').innerHTML=
@@ -539,7 +540,7 @@ function calcCielorraso(){
       medidas:ancho+'×'+largo+' m ('+m2.toFixed(1)+' m²)',
       items:[
         'Machimbre ½"×5" de '+lgo+'m: '+hojas+' hojas',
-        'Clavadoras '+clavTipo+'" de 3m: '+clavTotal+' listones',
+        'Clavadoras '+clavTipo+' de 3m: '+clavTotal+' listones',
         'Corniza con borde: '+cornisasUnid+' piezas de 3m ('+cornisas+' ml)'
       ]
     };
@@ -620,14 +621,14 @@ function calcTecho(){
   items.innerHTML='';
 
   var pieStr=rec?rec[0]+' pies ('+rec[1]+' m)':'consultar';
-  addItem(items,'Tirantes '+sec+'" — '+pieStr,totalTir,'tirantes');
+  addItem(items,'Tirantes '+sec+' — '+pieStr,totalTir,'tirantes');
 
   var avisoTxt='<strong>Techo '+luz+'×'+ancho+' m';
   if(alero>0) avisoTxt+=' + alero '+Math.round(alero*100)+' cm c/lado';
   avisoTxt+='</strong> — Largo necesario: '+total.toFixed(2)+' m → <strong>'+pieStr+'</strong><br>';
   avisoTxt+='Separación '+sep*100+' cm → '+lineas+' líneas';
 
-  var waItems=['Tirantes '+sec+'" '+pieStr+': '+totalTir+' unidades'];
+  var waItems=['Tirantes '+sec+' '+pieStr+': '+totalTir+' unidades'];
 
   if(tipo==='machimbre'){
     var anchMach=parseFloat(gv('gt-mach-med')||0.11);
@@ -726,7 +727,7 @@ function calcEntrepiso(){
 
   var items=document.getElementById('ren-items');
   items.innerHTML='';
-  addItem(items,'Tirantes '+sec+'" — '+pieStr,totalTir,'tirantes');
+  addItem(items,'Tirantes '+sec+' — '+pieStr,totalTir,'tirantes');
   addItem(items,'Machimbre piso 1"×6" de 3m',hojasPiso,'hojas',true);
 
   document.getElementById('ren-aviso').innerHTML=
@@ -737,7 +738,7 @@ function calcEntrepiso(){
     proy:'Entrepiso',
     medidas:largo+'×'+ancho+' m ('+m2.toFixed(1)+' m²)',
     items:[
-      'Tirantes '+sec+'" '+pieStr+': '+totalTir+' unidades',
+      'Tirantes '+sec+' '+pieStr+': '+totalTir+' unidades',
       'Machimbre piso 1"×6" de 3m: '+hojasPiso+' hojas',
       'Separación entre tirantes: '+sep*100+' cm'
     ]
