@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Setup JSONBin — JR Maderas</title>
+<style>
+  body{font-family:sans-serif;background:#1a1a1a;color:#fafae8;padding:24px;}
+  h2{color:#d4e600;}
+  pre{background:#000;padding:16px;border-radius:8px;white-space:pre-wrap;word-break:break-all;font-size:16px;}
+  .ok{color:#25a244;}
+  .err{color:#e53935;}
+</style>
+</head>
+<body>
+<h2>Configurando el guardado en JSONBin...</h2>
+<pre id="out">Cargando, esperá unos segundos...</pre>
+
+<script>
+var MASTER_KEY = "$2a$10$.diacpBEsDFL8.3SkwyKqOm4bkiZ8vwxNb2Nb/FVNHVbT.E3gXAQC";
+
+var stockInicial = [
+  {id:1,nombre:'Machimbre pino ½"×5"×12',unid:48,piesUnid:0,esM2:true,m2:334.56,precioMay:3600,precioConst:4800,tipo:'machimbre',deposito:'alejandro'},
+  {id:2,nombre:'Tirante 3×6×10',unid:126,piesUnid:15.05,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tirante',deposito:'alejandro'},
+  {id:3,nombre:'Tirante 2×6×14',unid:168,piesUnid:14,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tirante',deposito:'alejandro'},
+  {id:4,nombre:'Tirante 2×6×12',unid:84,piesUnid:12,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tirante',deposito:'alejandro'},
+  {id:5,nombre:'Tirante 2×6×10',unid:84,piesUnid:10,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tirante',deposito:'alejandro'},
+  {id:6,nombre:'Tirante 2×4×10',unid:140,piesUnid:6.67,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tirante',deposito:'alejandro'},
+  {id:7,nombre:'Tabla 1×6×12',unid:304,piesUnid:6,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tabla',deposito:'alejandro'},
+  {id:8,nombre:'Tabla 1×6×11',unid:25,piesUnid:5.5,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tabla',deposito:'alejandro'},
+  {id:9,nombre:'Tabla 1×6×10',unid:259,piesUnid:5,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tabla',deposito:'alejandro'},
+  {id:10,nombre:'Tabla 1×6×9',unid:70,piesUnid:4.5,esM2:false,m2:0,precioMay:660,precioConst:780,tipo:'tabla',deposito:'alejandro'},
+  {id:11,nombre:'Listón 1×2×10',unid:2160,piesUnid:1.67,esM2:false,m2:0,precioMay:425,precioConst:520,tipo:'listaon',deposito:'alejandro'},
+  {id:12,nombre:'Tabla pino cepillada 1×4×9',unid:720,piesUnid:3,esM2:false,m2:0,precioMay:489,precioConst:520,tipo:'tabla_cep',deposito:'alejandro'},
+  {id:101,nombre:'Poste eucalipto 5m',unid:84,piesUnid:0,esM2:false,m2:0,precioMay:5000,precioConst:12000,tipo:'poste',deposito:'romero'},
+  {id:102,nombre:'Poste eucalipto 4m',unid:242,piesUnid:0,esM2:false,m2:0,precioMay:4000,precioConst:8000,tipo:'poste',deposito:'romero'},
+  {id:103,nombre:'Poste eucalipto 3m',unid:190,piesUnid:0,esM2:false,m2:0,precioMay:3000,precioConst:6000,tipo:'poste',deposito:'romero'},
+  {id:104,nombre:'Poste eucalipto 2,5m',unid:586,piesUnid:0,esM2:false,m2:0,precioMay:1000,precioConst:1000,tipo:'poste',deposito:'romero'},
+  {id:105,nombre:'Poste eucalipto 5m',unid:45,piesUnid:0,esM2:false,m2:0,precioMay:5000,precioConst:12000,tipo:'poste',deposito:'quintana'},
+  {id:106,nombre:'Poste eucalipto 4m',unid:260,piesUnid:0,esM2:false,m2:0,precioMay:4000,precioConst:8000,tipo:'poste',deposito:'quintana'},
+  {id:107,nombre:'Poste eucalipto 3m',unid:440,piesUnid:0,esM2:false,m2:0,precioMay:3000,precioConst:6000,tipo:'poste',deposito:'quintana'},
+  {id:108,nombre:'Poste eucalipto 2,5m',unid:445,piesUnid:0,esM2:false,m2:0,precioMay:1000,precioConst:1000,tipo:'poste',deposito:'quintana'},
+];
+
+async function crearBin(nombre, data){
+  var r = await fetch("https://api.jsonbin.io/v3/b", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": MASTER_KEY,
+      "X-Bin-Name": nombre,
+      "X-Bin-Private": "true"
+    },
+    body: JSON.stringify(data)
+  });
+  if(!r.ok){
+    var txt = await r.text();
+    throw new Error("HTTP " + r.status + " — " + txt);
+  }
+  var j = await r.json();
+  return j.metadata.id;
+}
+
+(async function(){
+  var out = document.getElementById('out');
+  try{
+    out.textContent = "Creando espacio de STOCK...";
+    var stockId = await crearBin("JR-Maderas-STOCK", stockInicial);
+
+    out.textContent = "Creando espacio de MOVIMIENTOS...";
+    var movId = await crearBin("JR-Maderas-MOVIMIENTOS", []);
+
+    out.innerHTML =
+      '<span class="ok">¡LISTO! Se crearon los dos espacios de guardado.</span>\n\n' +
+      'STOCK_BIN_ID:\n' + stockId + '\n\n' +
+      'MOV_BIN_ID:\n' + movId + '\n\n' +
+      'Sacale una captura a esta pantalla (o copiá estos dos códigos) y pasáselos a Claude para terminar la conexión.';
+  }catch(e){
+    out.innerHTML = '<span class="err">ERROR: ' + e.message + '</span>\n\nSacale una captura a esto y mandámela.';
+  }
+})();
+</script>
+</body>
+</html>
