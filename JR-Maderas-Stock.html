@@ -37,6 +37,7 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
 .tabs{display:grid;gap:0;border-bottom:2px solid var(--amarillo);}
 .tabs.t3{grid-template-columns:repeat(3,1fr);}
 .tabs.t4{grid-template-columns:repeat(4,1fr);}
+.tabs.t5{grid-template-columns:repeat(5,1fr);}
 .tab-btn{background:var(--rojo);border:none;padding:10px 4px;font-family:'Barlow',sans-serif;font-size:10px;font-weight:800;color:rgba(255,255,255,.45);cursor:pointer;letter-spacing:.5px;text-transform:uppercase;transition:all .2s;}
 .tab-btn.act{background:var(--amarillo);color:var(--rojo);}
 
@@ -146,11 +147,12 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
 </div>
 
 <!-- TABS ADMIN -->
-<div class="tabs t4" id="tabs-admin" style="display:none;">
+<div class="tabs t5" id="tabs-admin" style="display:none;">
   <button class="tab-btn act" onclick="setTab('resumen',this)">📊 Resumen</button>
   <button class="tab-btn" onclick="setTab('stock',this)">📦 Stock</button>
   <button class="tab-btn" onclick="setTab('mover',this)">🔄 Mover</button>
   <button class="tab-btn" onclick="setTab('historial',this)">📋 Historial</button>
+  <button class="tab-btn" onclick="setTab('precios',this)">💲 Precios</button>
 </div>
 
 <!-- TABS ALEJANDRO -->
@@ -181,6 +183,7 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
     <button class="f-btn" onclick="filtrarDep('alejandro',this)" id="dep-ale">🏪 Alejandro</button>
     <button class="f-btn" onclick="filtrarDep('romero',this)" id="dep-rom">🌿 J. Romero</button>
     <button class="f-btn" onclick="filtrarDep('quintana',this)" id="dep-qui">🌲 Quintana</button>
+    <button class="f-btn" onclick="filtrarDep('monte',this)" id="dep-mte">🌳 Monte</button>
   </div>
   <div class="stitle" id="dep-titulo">Todos los depósitos</div>
   <div class="res-grid">
@@ -228,9 +231,19 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
   <div id="sec-agregar-prod" style="display:none;">
     <div class="stitle">Agregar producto</div>
     <div class="form-grid">
+      <div class="fg full" id="fg-np-deposito" style="display:none;">
+        <label>Depósito</label>
+        <select id="np-deposito">
+          <option value="alejandro">Alejandro</option>
+          <option value="romero">J. Romero</option>
+          <option value="quintana">Quintana</option>
+          <option value="local">Local</option>
+          <option value="monte">Monte</option>
+        </select>
+      </div>
       <div class="fg full"><label>Nombre</label><input type="text" id="np-nombre" placeholder="Ej: Tirante 2×6×12"></div>
       <div class="fg"><label>Unidades iniciales</label><input type="number" id="np-unid" placeholder="84" min="0"></div>
-      <div class="fg"><label>Pies por unidad</label><input type="number" id="np-pies" placeholder="12" min="0" step="0.1"></div>
+      <div class="fg"><label>Pies por unidad (o m² totales si es Machimbre)</label><input type="number" id="np-pies" placeholder="12" min="0" step="0.1"></div>
       <div class="fg"><label>Precio mayorista/p²</label><input type="number" id="np-precio" placeholder="660" min="0"></div>
       <div class="fg"><label>Precio constructor/p²</label><input type="number" id="np-precio2" placeholder="780" min="0"></div>
       <div class="fg full">
@@ -268,18 +281,67 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
         <option value="venta_rom">🌿 Venta J. Romero (Fontana)</option>
         <option value="venta_loc">🏬 Venta Local Chacabuco</option>
         <option value="venta_qui">🌲 Venta Quintana (San Miguel)</option>
+        <option value="venta_mte">🚚 Carga/Venta Monte</option>
+        <option value="gasto_campo">⛽ Gasto de campo (Monte)</option>
+        <option value="baja_defecto">❌ Baja por defecto (Monte)</option>
+        <option value="reclasif">🔁 Reclasificación — ingreso a otra medida (Monte)</option>
       </select>
     </div>
     <div class="fg"><label>Unidades</label><input type="number" id="mov-unid" placeholder="0" min="1"></div>
     <div class="fg"><label>Pies/m² (si aplica)</label><input type="number" id="mov-pies" placeholder="0" min="0" step="0.1"></div>
-    <div class="fg full"><label>Notas</label><input type="text" id="mov-notas" placeholder="Ej: Obra calle San Martín"></div>
+    <div class="fg"><label>Cliente (Monte/ventas)</label><input type="text" id="mov-cliente" placeholder="Ej: Javier (Corrientes)"></div>
+    <div class="fg"><label>Destino de la carga</label><input type="text" id="mov-destino" placeholder="Ej: Corrientes"></div>
+    <div class="fg"><label>Chofer/Camión</label><input type="text" id="mov-chofer" placeholder="Ej: David"></div>
+    <div class="fg">
+      <label>Forma de pago</label>
+      <select id="mov-pago">
+        <option value="">-- N/A --</option>
+        <option value="efectivo">💵 Efectivo</option>
+        <option value="cheque">🧾 Cheque</option>
+        <option value="mp">📱 MercadoPago</option>
+        <option value="transferencia">🏦 Transferencia</option>
+      </select>
+    </div>
+    <div class="fg full"><label>Monto real cobrado (opcional — si no lo llenás, usa el precio de catálogo)</label><input type="number" id="mov-monto" placeholder="Ej: 50000" min="0"></div>
+    <div class="fg full"><label>Notas</label><input type="text" id="mov-notas" placeholder="Ej: Obra calle San Martín / concepto del gasto"></div>
   </div>
   <button class="btn btn-rojo" onclick="registrarMov('admin')">REGISTRAR</button>
 </div>
 
-<!-- ══ VENDER (Alejandro) ══ -->
+<!-- ══ AJUSTE DE PRECIOS (Admin) ══ -->
+<div class="panel" id="t-precios">
+  <div class="stitle">Ajustar precios</div>
+  <div class="aviso">Aplica un aumento porcentual a TODOS los productos de un depósito, o editá uno puntual abajo.</div>
+  <div class="form-grid">
+    <div class="fg">
+      <label>Depósito</label>
+      <select id="pr-deposito">
+        <option value="alejandro">Alejandro</option>
+        <option value="romero">J. Romero</option>
+        <option value="quintana">Quintana</option>
+        <option value="local">Local</option>
+        <option value="monte">Monte</option>
+      </select>
+    </div>
+    <div class="fg"><label>Aumento (%)</label><input type="number" id="pr-porcentaje" placeholder="Ej: 10" step="0.1"></div>
+  </div>
+  <button class="btn btn-marron" onclick="aumentarPrecios()">📈 APLICAR AUMENTO AL DEPÓSITO</button>
+
+  <div class="stitle" style="margin-top:16px;">Editar un producto puntual</div>
+  <div class="form-grid">
+    <div class="fg full">
+      <label>Producto</label>
+      <select id="pr-prod"><option value="">-- Seleccionar --</option></select>
+    </div>
+    <div class="fg"><label>Nuevo precio mayorista</label><input type="number" id="pr-precio-may" placeholder="0" min="0"></div>
+    <div class="fg"><label>Nuevo precio constructor</label><input type="number" id="pr-precio-const" placeholder="0" min="0"></div>
+  </div>
+  <button class="btn btn-marron" onclick="editarPrecioProducto()">💾 GUARDAR PRECIO</button>
+</div>
+
+<!-- ══ VENDER (Alejandro/Romero/Local/Quintana) ══ -->
 <div class="panel" id="t-vender">
-  <div class="aviso">📱 Alejandro — registrá acá cada venta que hacés del stock de J&R Maderas.</div>
+  <div class="aviso" id="vender-aviso">📱 Registrá acá cada venta que hacés del stock de J&R Maderas.</div>
   <div class="form-grid">
     <div class="fg full">
       <label>¿Qué vendiste?</label>
@@ -288,6 +350,7 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
     <div class="fg"><label>Unidades vendidas</label><input type="number" id="ale-unid" placeholder="1" min="1"></div>
     <div class="fg"><label>Pies tabla (si sabés)</label><input type="number" id="ale-pies" placeholder="0" min="0" step="0.1"></div>
     <div class="fg full"><label>Nombre del cliente (opcional)</label><input type="text" id="ale-cliente" placeholder="Ej: Martínez obra Sarmiento"></div>
+    <div class="fg full" id="fg-ale-monto"><label>Monto real cobrado (si es distinto al precio de lista)</label><input type="number" id="ale-monto" placeholder="Ej: 50000" min="0"></div>
   </div>
   <button class="btn btn-verde" onclick="registrarMov('alejandro')">✅ REGISTRAR VENTA</button>
 </div>
@@ -370,7 +433,18 @@ var stockQuintana = [
   {id:108,nombre:'Poste eucalipto 2,5m',unid:445,piesUnid:0,esM2:false,m2:0,precioMay:1000,precioConst:1000,tipo:'poste',deposito:'quintana'},
 ];
 
-var stockInicial = [...stockAlejandro, ...stockRomero, ...stockQuintana];
+// Stock Monte (con Eliel) — Postes pelados producidos en el monte
+var stockMonte = [
+  {id:201,nombre:'Poste eucalipto 2,5m',unid:661,piesUnid:0,esM2:false,m2:0,precioMay:1000,precioConst:1000,tipo:'poste',deposito:'monte'},
+  {id:202,nombre:'Poste eucalipto 3m',unid:414,piesUnid:0,esM2:false,m2:0,precioMay:3000,precioConst:3000,tipo:'poste',deposito:'monte'},
+  {id:203,nombre:'Poste eucalipto 4m',unid:166,piesUnid:0,esM2:false,m2:0,precioMay:4000,precioConst:4000,tipo:'poste',deposito:'monte'},
+  {id:204,nombre:'Poste eucalipto 5m',unid:138,piesUnid:0,esM2:false,m2:0,precioMay:5000,precioConst:5000,tipo:'poste',deposito:'monte'},
+  {id:205,nombre:'Poste eucalipto 6m',unid:0,piesUnid:0,esM2:false,m2:0,precioMay:6000,precioConst:6000,tipo:'poste',deposito:'monte'},
+  {id:206,nombre:'Poste eucalipto 7,5m',unid:565,piesUnid:0,esM2:false,m2:0,precioMay:9375,precioConst:9375,tipo:'poste',deposito:'monte'},
+  {id:207,nombre:'Poste eucalipto 9m',unid:0,piesUnid:0,esM2:false,m2:0,precioMay:11250,precioConst:11250,tipo:'poste',deposito:'monte'},
+];
+
+var stockInicial = [...stockAlejandro, ...stockRomero, ...stockQuintana, ...stockMonte];
 
 // Ventas ya registradas de José Romero
 var movsIniciales = [
@@ -433,6 +507,10 @@ var TIPOS_MOV = {
   venta_rom:'🌿 Venta J. Romero',
   venta_loc:'🏬 Venta Local',
   venta_qui:'🌲 Venta Quintana',
+  venta_mte:'🚚 Carga/Venta Monte',
+  gasto_campo:'⛽ Gasto de campo (Monte)',
+  baja_defecto:'❌ Baja por defecto (Monte)',
+  reclasif:'🔁 Reclasificación (Monte)',
   retiro_yo:'🔄 Retiro Ricardo',
   retiro_sec:'👤 Retiro secretario',
   ingreso:'📦 Ingreso stock'
@@ -446,6 +524,7 @@ var ACCESOS = {
   'JOSE2026':    {rol:'romero',   nombre:'🌿 José Romero — Fontana', deposito:'romero'},
   'LOCAL2026':   {rol:'local',    nombre:'🏬 Local Chacabuco',       deposito:'local'},
   'MARIO2026':   {rol:'quintana', nombre:'🌲 Mario Jara — Quintana',  deposito:'quintana'},
+  'ELIEL2026':   {rol:'monte_ro', nombre:'🌳 Eliel — Monte (lectura)',deposito:'monte'},
   'CONSULTA2026':{rol:'consulta', nombre:'👀 Consulta — Solo lectura',deposito:'todos'},
 };
 var USUARIO_ACTUAL = null;
@@ -468,10 +547,17 @@ function verificarClave(){
     // Mostrar tabs correctos
     document.getElementById('tabs-admin').style.display     = ROL==='admin'?'grid':'none';
     document.getElementById('tabs-alejandro').style.display  = (ROL==='alejandro'||ROL==='romero'||ROL==='local'||ROL==='quintana')?'grid':'none';
-    document.getElementById('tabs-consulta').style.display   = ROL==='consulta'?'grid':'none';
-    // Agregar producto solo admin
+    document.getElementById('tabs-consulta').style.display   = (ROL==='consulta'||ROL==='monte_ro')?'grid':'none';
+    // Agregar producto: Admin (cualquier depósito) y Alejandro (solo el suyo)
     var sa = document.getElementById('sec-agregar-prod');
-    if(sa) sa.style.display = ROL==='admin'?'block':'none';
+    if(sa) sa.style.display = (ROL==='admin'||ROL==='alejandro') ? 'block' : 'none';
+    var fgDep = document.getElementById('fg-np-deposito');
+    if(fgDep) fgDep.style.display = ROL==='admin' ? 'block' : 'none';
+    // Monto real cobrado: no aplica a Alejandro (revende a precio fijo)
+    var fgMonto = document.getElementById('fg-ale-monto');
+    if(fgMonto) fgMonto.style.display = ROL==='alejandro' ? 'none' : 'block';
+    var avisoVender = document.getElementById('vender-aviso');
+    if(avisoVender) avisoVender.textContent = '📱 ' + (acceso.nombre.replace(/^[^ ]+ /,'')) + ' — registrá acá cada venta que hacés del stock de J&R Maderas.';
     // Tab inicial
     if(ROL==='admin') setTabSilent('resumen');
     else if(ROL==='consulta') setTabSilent('stock');
@@ -617,7 +703,7 @@ function renderStock(stock){
 }
 
 function renderSelectProd(stock){
-  ['mov-prod','ale-prod'].forEach(id=>{
+  ['mov-prod','ale-prod','pr-prod'].forEach(id=>{
     var sel = document.getElementById(id);
     if(!sel) return;
     var v = sel.value;
@@ -708,16 +794,42 @@ async function registrarMov(origen){
   var prodIdEl = origen==='alejandro' ? 'ale-prod' : 'mov-prod';
   var unidEl   = origen==='alejandro' ? 'ale-unid' : 'mov-unid';
   var piesEl   = origen==='alejandro' ? 'ale-pies' : 'mov-pies';
-  var notasEl  = origen==='alejandro' ? 'ale-cliente' : 'mov-notas';
+  var clienteEl= origen==='alejandro' ? 'ale-cliente' : 'mov-cliente';
+  var montoEl  = origen==='alejandro' ? 'ale-monto' : 'mov-monto';
   var tipoEl   = origen==='alejandro' ? null : 'mov-tipo';
 
-  var prodId = parseInt(document.getElementById(prodIdEl).value);
-  var unid   = parseInt(document.getElementById(unidEl).value)||0;
-  var pies   = parseFloat(document.getElementById(piesEl).value)||0;
-  var notas  = document.getElementById(notasEl).value.trim();
   var tipoAuto = ROL==='alejandro'?'venta_ale':ROL==='romero'?'venta_rom':ROL==='local'?'venta_loc':ROL==='quintana'?'venta_qui':'venta_ale';
   var tipo   = origen==='alejandro' ? tipoAuto : document.getElementById(tipoEl).value;
 
+  var unid    = parseInt(document.getElementById(unidEl).value)||0;
+  var pies    = parseFloat(document.getElementById(piesEl).value)||0;
+  var cliente = document.getElementById(clienteEl).value.trim();
+  var montoReal = parseFloat(document.getElementById(montoEl).value)||0;
+  var destino = document.getElementById('mov-destino') ? document.getElementById('mov-destino').value.trim() : '';
+  var chofer  = document.getElementById('mov-chofer')  ? document.getElementById('mov-chofer').value.trim()  : '';
+  var pago    = document.getElementById('mov-pago')    ? document.getElementById('mov-pago').value            : '';
+  var notas   = document.getElementById('mov-notas')   ? document.getElementById('mov-notas').value.trim()    : cliente;
+
+  // ── Gasto de campo: no descuenta stock, es un registro de gasto ──
+  if(tipo === 'gasto_campo'){
+    if(!montoReal){ alert('Ingresá el monto del gasto en "Monto real cobrado".'); return; }
+    if(!notas){ alert('Contá brevemente qué es el gasto en Notas.'); return; }
+    var movsG = await getMov();
+    movsG.push({
+      id:Date.now(), prod:'Gasto de campo (Monte)', prodId:0,
+      tipo:tipo, unid:0, pies:0, valor:montoReal,
+      notas:notas, cliente:'', destino:'', chofer:'', medioPago:pago,
+      origen:origen, fecha:new Date().toISOString()
+    });
+    await saveMov(movsG);
+    document.getElementById('mov-notas').value='';
+    document.getElementById(montoEl).value='';
+    await renderAll();
+    alert('✅ Gasto registrado: '+fmt(montoReal));
+    return;
+  }
+
+  var prodId = parseInt(document.getElementById(prodIdEl).value);
   if(!prodId){alert('Seleccioná un producto.');return;}
   if(!unid&&!pies){alert('Ingresá la cantidad.');return;}
 
@@ -725,27 +837,33 @@ async function registrarMov(origen){
   var p = stock.find(x=>x.id===prodId);
   if(!p){alert('Producto no encontrado.');return;}
 
+  var esIngreso = (tipo==='ingreso' || tipo==='reclasif');
   var valor=0;
   if(p.esM2){
     var m2mov = pies||unid;
     valor = m2mov*p.precioMay;
-    if(tipo!=='ingreso') p.m2 = Math.max(0,p.m2-m2mov);
+    if(!esIngreso) p.m2 = Math.max(0,p.m2-m2mov);
     else p.m2 += m2mov;
   } else if(p.piesUnid>0){
     valor = unid*p.piesUnid*p.precioMay;
-    if(tipo!=='ingreso') p.unid = Math.max(0,p.unid-unid);
+    if(!esIngreso) p.unid = Math.max(0,p.unid-unid);
     else p.unid += unid;
   } else {
     valor = unid*p.precioMay;
-    if(tipo!=='ingreso') p.unid = Math.max(0,p.unid-unid);
+    if(!esIngreso) p.unid = Math.max(0,p.unid-unid);
     else p.unid += unid;
   }
+
+  // Si es una venta y se cargó un monto real, ese manda por sobre el precio de catálogo
+  var esVenta = tipo.indexOf('venta_')===0;
+  if(esVenta && montoReal>0){ valor = montoReal; }
 
   var movs = await getMov();
   movs.push({
     id:Date.now(), prod:p.nombre, prodId:prodId,
     tipo:tipo, unid:unid, pies:pies||(unid*p.piesUnid),
-    valor:valor, notas:notas, origen:origen,
+    valor:valor, notas:notas, cliente:cliente, destino:destino,
+    chofer:chofer, medioPago:pago, origen:origen,
     fecha:new Date().toISOString()
   });
 
@@ -755,10 +873,52 @@ async function registrarMov(origen){
   // Reset
   document.getElementById(unidEl).value='';
   document.getElementById(piesEl).value='';
-  document.getElementById(notasEl).value='';
+  document.getElementById(clienteEl).value='';
+  document.getElementById(montoEl).value='';
+  if(document.getElementById('mov-destino')) document.getElementById('mov-destino').value='';
+  if(document.getElementById('mov-chofer'))  document.getElementById('mov-chofer').value='';
+  if(document.getElementById('mov-notas') && origen!=='alejandro') document.getElementById('mov-notas').value='';
 
   await renderAll();
   alert('✅ Registrado: '+fmt(valor));
+}
+
+async function aumentarPrecios(){
+  var dep = document.getElementById('pr-deposito').value;
+  var pct = parseFloat(document.getElementById('pr-porcentaje').value);
+  if(!pct){ alert('Ingresá un porcentaje.'); return; }
+  if(!confirm('¿Aplicar '+pct+'% a TODOS los precios del depósito "'+dep+'"?')) return;
+  var stock = await getStock();
+  var factor = 1 + (pct/100);
+  var afectados = 0;
+  stock.forEach(p=>{
+    if(p.deposito === dep){
+      p.precioMay   = Math.round(p.precioMay * factor);
+      p.precioConst = Math.round(p.precioConst * factor);
+      afectados++;
+    }
+  });
+  await saveStock(stock);
+  await renderAll();
+  alert('✅ Se actualizaron '+afectados+' productos.');
+}
+
+async function editarPrecioProducto(){
+  var prodId = parseInt(document.getElementById('pr-prod').value);
+  var nuevoMay = parseFloat(document.getElementById('pr-precio-may').value);
+  var nuevoConst = parseFloat(document.getElementById('pr-precio-const').value);
+  if(!prodId){ alert('Seleccioná un producto.'); return; }
+  if(!nuevoMay && !nuevoConst){ alert('Ingresá al menos un precio nuevo.'); return; }
+  var stock = await getStock();
+  var p = stock.find(x=>x.id===prodId);
+  if(!p){ alert('Producto no encontrado.'); return; }
+  if(nuevoMay) p.precioMay = nuevoMay;
+  if(nuevoConst) p.precioConst = nuevoConst;
+  await saveStock(stock);
+  document.getElementById('pr-precio-may').value='';
+  document.getElementById('pr-precio-const').value='';
+  await renderAll();
+  alert('✅ Precio de "'+p.nombre+'" actualizado.');
 }
 
 async function agregarProducto(){
@@ -769,13 +929,27 @@ async function agregarProducto(){
   var precio2= parseFloat(document.getElementById('np-precio2').value)||precio;
   var tipo   = document.getElementById('np-tipo').value;
   if(!nombre||!precio){alert('Completá nombre y precio.');return;}
+
+  // Depósito: Alejandro queda fijo a su depósito; Admin elige del selector
+  var deposito = (ROL==='alejandro') ? 'alejandro'
+               : (document.getElementById('np-deposito') ? document.getElementById('np-deposito').value : 'alejandro');
+
+  var esM2 = (tipo === 'machimbre');
+
   var stock = await getStock();
   var newId = stock.length ? Math.max(...stock.map(p=>p.id))+1 : 1;
-  stock.push({id:newId,nombre,unid,piesUnid:pies,esM2:false,m2:0,precioMay:precio,precioConst:precio2,tipo});
+  stock.push({
+    id:newId, nombre, unid,
+    piesUnid: esM2 ? 0 : pies,
+    esM2: esM2,
+    m2: esM2 ? pies : 0,
+    precioMay:precio, precioConst:precio2,
+    tipo, deposito
+  });
   await saveStock(stock);
   ['np-nombre','np-unid','np-pies','np-precio','np-precio2'].forEach(id=>document.getElementById(id).value='');
   await renderAll();
-  alert('✅ Producto agregado.');
+  alert('✅ Producto agregado a '+deposito+'.');
 }
 
 function filtrarStock(f, btn){
@@ -798,7 +972,7 @@ function filtrarDep(dep, btn){
   FILTRO_DEP = dep;
   document.querySelectorAll('#t-resumen .f-btn').forEach(b=>b.classList.remove('act'));
   btn.classList.add('act');
-  var titulos = {todos:'Todos los depósitos', alejandro:'Depósito Alejandro — Chacabuco y Lamadrid', romero:'Depósito J. Romero — Camino a Fontana', quintana:'Depósito Quintana — San Miguel'};
+  var titulos = {todos:'Todos los depósitos', alejandro:'Depósito Alejandro — Chacabuco y Lamadrid', romero:'Depósito J. Romero — Camino a Fontana', quintana:'Depósito Quintana — San Miguel', monte:'Monte (con Eliel)'};
   document.getElementById('dep-titulo').textContent = titulos[dep]||'';
   renderAll();
 }
