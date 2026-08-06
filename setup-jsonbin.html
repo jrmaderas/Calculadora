@@ -42,41 +42,55 @@ var stockInicial = [
 ];
 
 async function crearBin(nombre, data){
+  var body = JSON.stringify(data);
+  if(!body || body.length < 2){
+    throw new Error("El JSON a enviar quedó vacío (body: '" + body + "')");
+  }
   var r = await fetch("https://api.jsonbin.io/v3/b", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "X-Master-Key": MASTER_KEY,
-      "X-Bin-Name": nombre,
-      "X-Bin-Private": "true"
+      "X-Bin-Name": nombre
     },
-    body: JSON.stringify(data)
+    body: body
   });
+  var txt = await r.text();
   if(!r.ok){
-    var txt = await r.text();
-    throw new Error("HTTP " + r.status + " — " + txt);
+    throw new Error("HTTP " + r.status + " — " + txt + " — (envié " + body.length + " caracteres, empieza así: " + body.slice(0,80) + ")");
   }
-  var j = await r.json();
+  var j = JSON.parse(txt);
   return j.metadata.id;
 }
 
 (async function(){
   var out = document.getElementById('out');
+  var stockId = null, movId = null;
+
   try{
-    out.textContent = "Creando espacio de STOCK...";
-    var stockId = await crearBin("JR-Maderas-STOCK", stockInicial);
-
-    out.textContent = "Creando espacio de MOVIMIENTOS...";
-    var movId = await crearBin("JR-Maderas-MOVIMIENTOS", []);
-
-    out.innerHTML =
-      '<span class="ok">¡LISTO! Se crearon los dos espacios de guardado.</span>\n\n' +
-      'STOCK_BIN_ID:\n' + stockId + '\n\n' +
-      'MOV_BIN_ID:\n' + movId + '\n\n' +
-      'Sacale una captura a esta pantalla (o copiá estos dos códigos) y pasáselos a Claude para terminar la conexión.';
+    out.textContent = "Paso 1/2: creando espacio de STOCK...";
+    stockId = await crearBin("JR-Maderas-STOCK", stockInicial);
+    out.textContent = "Paso 1/2 OK. STOCK_BIN_ID: " + stockId + "\n\nPaso 2/2: creando espacio de MOVIMIENTOS...";
   }catch(e){
-    out.innerHTML = '<span class="err">ERROR: ' + e.message + '</span>\n\nSacale una captura a esto y mandámela.';
+    out.innerHTML = '<span class="err">FALLÓ EL PASO 1 (STOCK):\n' + e.message + '</span>\n\nSacale una captura a esto y mandámela.';
+    return;
   }
+
+  try{
+    movId = await crearBin("JR-Maderas-MOVIMIENTOS", {movs: []});
+  }catch(e){
+    out.innerHTML =
+      '<span class="ok">Paso 1/2 OK. STOCK_BIN_ID:\n' + stockId + '</span>\n\n' +
+      '<span class="err">FALLÓ EL PASO 2 (MOVIMIENTOS):\n' + e.message + '</span>\n\n' +
+      'Sacale una captura a esto y mandámela (ya tenemos el primer código igual).';
+    return;
+  }
+
+  out.innerHTML =
+    '<span class="ok">¡LISTO! Se crearon los dos espacios de guardado.</span>\n\n' +
+    'STOCK_BIN_ID:\n' + stockId + '\n\n' +
+    'MOV_BIN_ID:\n' + movId + '\n\n' +
+    'Sacale una captura a esta pantalla (o copiá estos dos códigos) y pasáselos a Claude para terminar la conexión.';
 })();
 </script>
 </body>
