@@ -332,8 +332,11 @@ var FILTRO_STOCK = 'todos';
 var FILTRO_HIST = 'todos';
 
 // ── BASE DE DATOS (storage de artifacts = sincronización) ──
-var STOCK_KEY = 'jr_stock_v2';
-var MOV_KEY   = 'jr_movimientos_v2';
+// ── CONEXIÓN JSONBin (guardado real, funciona fuera de Claude) ──
+var JSONBIN_MASTER_KEY = "$2a$10$.diacpBEsDFL8.3SkwyKqOm4bkiZ8vwxNb2Nb/FVNHVbT.E3gXAQC";
+var STOCK_BIN_ID = "6a74a54ff5f4af5e29f352d7";
+var MOV_BIN_ID   = "6a74a550da38895dfec1df78";
+var JSONBIN_BASE = "https://api.jsonbin.io/v3/b/";
 
 // Stock Depósito Alejandro
 var stockAlejandro = [
@@ -378,24 +381,44 @@ var movsIniciales = [
 ];
 
 
-// ── STORAGE ──
+// ── STORAGE (JSONBin.io — funciona fuera de Claude) ──
 async function getStock(){
   try{
-    var r = await window.storage.get(STOCK_KEY);
-    return r ? JSON.parse(r.value) : JSON.parse(JSON.stringify(stockInicial));
+    var r = await fetch(JSONBIN_BASE + STOCK_BIN_ID + "/latest", {
+      headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
+    });
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    var j = await r.json();
+    return j.record;
   }catch(e){ return JSON.parse(JSON.stringify(stockInicial)); }
 }
 async function saveStock(s){
-  try{ await window.storage.set(STOCK_KEY, JSON.stringify(s), true); }catch(e){}
+  try{
+    await fetch(JSONBIN_BASE + STOCK_BIN_ID, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Master-Key": JSONBIN_MASTER_KEY },
+      body: JSON.stringify(s)
+    });
+  }catch(e){}
 }
 async function getMov(){
   try{
-    var r = await window.storage.get(MOV_KEY, true);
-    return r ? JSON.parse(r.value) : [];
+    var r = await fetch(JSONBIN_BASE + MOV_BIN_ID + "/latest", {
+      headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
+    });
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    var j = await r.json();
+    return (j.record && j.record.movs) ? j.record.movs : [];
   }catch(e){ return []; }
 }
 async function saveMov(movs){
-  try{ await window.storage.set(MOV_KEY, JSON.stringify(movs), true); }catch(e){}
+  try{
+    await fetch(JSONBIN_BASE + MOV_BIN_ID, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Master-Key": JSONBIN_MASTER_KEY },
+      body: JSON.stringify({movs: movs})
+    });
+  }catch(e){}
 }
 
 // ── HELPERS ──
@@ -791,7 +814,10 @@ async function initMovsRomero(){
 // Sync badge
 async function checkSync(){
   try{
-    await window.storage.get(STOCK_KEY,true);
+    var r = await fetch(JSONBIN_BASE + STOCK_BIN_ID + "/latest", {
+      headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
+    });
+    if(!r.ok) throw new Error("HTTP "+r.status);
     document.getElementById('sync-badge').textContent='● ONLINE';
     document.getElementById('sync-badge').className='sync-badge';
   }catch(e){
