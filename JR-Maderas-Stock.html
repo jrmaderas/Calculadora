@@ -154,9 +154,10 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
 </div>
 
 <!-- TABS ALEJANDRO -->
-<div class="tabs t2" id="tabs-alejandro" style="display:none;grid-template-columns:1fr 1fr;">
+<div class="tabs t2" id="tabs-alejandro" style="display:none;grid-template-columns:1fr 1fr 1fr;">
   <button class="tab-btn act" onclick="setTab('stock',this)">📦 Stock</button>
   <button class="tab-btn" onclick="setTab('vender',this)">🛒 Registrar venta</button>
+  <button class="tab-btn" onclick="setTab('misventas',this)">📊 Mis ventas</button>
 </div>
 
 <!-- TABS VENDEDOR -->
@@ -289,6 +290,23 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
     <div class="fg full"><label>Nombre del cliente (opcional)</label><input type="text" id="ale-cliente" placeholder="Ej: Martínez obra Sarmiento"></div>
   </div>
   <button class="btn btn-verde" onclick="registrarMov('alejandro')">✅ REGISTRAR VENTA</button>
+</div>
+
+<!-- ══ MIS VENTAS (por depósito) ══ -->
+<div class="panel" id="t-misventas">
+  <div class="stitle">Cuánto vendí</div>
+  <div class="res-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="res-card principal">
+      <div class="res-n" id="mv-hoy">$0</div>
+      <div class="res-l">Vendido hoy</div>
+    </div>
+    <div class="res-card">
+      <div class="res-n" id="mv-mes">$0</div>
+      <div class="res-l">Vendido este mes</div>
+    </div>
+  </div>
+  <div class="stitle">Detalle por día</div>
+  <div id="mv-lista"><div class="loading">Cargando...</div></div>
 </div>
 
 <!-- ══ HISTORIAL ══ -->
@@ -496,6 +514,7 @@ async function renderAll(){
   renderStock(stock);
   renderSelectProd(stock);
   renderHist(movs);
+  renderMisVentas(movs);
 }
 
 function renderResumen(stock, movs){
@@ -617,6 +636,50 @@ function renderHist(movs){
   });
 }
 
+// Resumen de ventas propias por depósito (Alejandro, Romero, Local, Quintana)
+function renderMisVentas(movs){
+  var elHoy = document.getElementById('mv-hoy');
+  if(!elHoy) return; // no aplica al rol actual (admin/consulta)
+
+  var tipoRol = ROL==='alejandro'?'venta_ale':ROL==='romero'?'venta_rom':ROL==='local'?'venta_loc':ROL==='quintana'?'venta_qui':null;
+  if(!tipoRol){ return; }
+
+  var propias = movs.filter(m=>m.tipo===tipoRol);
+  var hoy = new Date();
+  var hoyStr = hoy.toISOString().slice(0,10);
+  var mesActualStr = hoy.getMonth()+'-'+hoy.getFullYear();
+
+  var totalHoy=0, totalMes=0, porDia={};
+  propias.forEach(m=>{
+    var f = new Date(m.fecha);
+    var fStr = f.toISOString().slice(0,10);
+    var mStr = f.getMonth()+'-'+f.getFullYear();
+    if(fStr===hoyStr) totalHoy += m.valor;
+    if(mStr===mesActualStr){
+      totalMes += m.valor;
+      porDia[fStr] = (porDia[fStr]||0) + m.valor;
+    }
+  });
+
+  document.getElementById('mv-hoy').textContent = fmt(totalHoy);
+  document.getElementById('mv-mes').textContent = fmt(totalMes);
+
+  var dias = Object.keys(porDia).sort().reverse();
+  var cont = document.getElementById('mv-lista');
+  if(!dias.length){
+    cont.innerHTML = '<div class="empty">Todavía no registraste ventas este mes.</div>';
+    return;
+  }
+  cont.innerHTML = dias.map(function(d){
+    var p = d.split('-');
+    var fLegible = p[2]+'/'+p[1]+'/'+p[0];
+    return '<div class="mov-item"><div class="mi-top">'+
+      '<div><div class="mi-prod">'+fLegible+'</div></div>'+
+      '<div><div class="mi-val">'+fmt(porDia[d])+'</div></div>'+
+      '</div></div>';
+  }).join('');
+}
+
 // ── ACCIONES ──
 async function registrarMov(origen){
   var prodIdEl = origen==='alejandro' ? 'ale-prod' : 'mov-prod';
@@ -645,8 +708,12 @@ async function registrarMov(origen){
     valor = m2mov*p.precioMay;
     if(tipo!=='ingreso') p.m2 = Math.max(0,p.m2-m2mov);
     else p.m2 += m2mov;
-  } else {
+  } else if(p.piesUnid>0){
     valor = unid*p.piesUnid*p.precioMay;
+    if(tipo!=='ingreso') p.unid = Math.max(0,p.unid-unid);
+    else p.unid += unid;
+  } else {
+    valor = unid*p.precioMay;
     if(tipo!=='ingreso') p.unid = Math.max(0,p.unid-unid);
     else p.unid += unid;
   }
