@@ -38,6 +38,7 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
 .tabs.t3{grid-template-columns:repeat(3,1fr);}
 .tabs.t4{grid-template-columns:repeat(4,1fr);}
 .tabs.t5{grid-template-columns:repeat(5,1fr);}
+.tabs.t6{grid-template-columns:repeat(6,1fr);}
 .tab-btn{background:var(--rojo);border:none;padding:10px 4px;font-family:'Barlow',sans-serif;font-size:10px;font-weight:800;color:rgba(255,255,255,.45);cursor:pointer;letter-spacing:.5px;text-transform:uppercase;transition:all .2s;}
 .tab-btn.act{background:var(--amarillo);color:var(--rojo);}
 
@@ -147,12 +148,13 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
 </div>
 
 <!-- TABS ADMIN -->
-<div class="tabs t5" id="tabs-admin" style="display:none;">
+<div class="tabs t6" id="tabs-admin" style="display:none;">
   <button class="tab-btn act" onclick="setTab('resumen',this)">📊 Resumen</button>
   <button class="tab-btn" onclick="setTab('stock',this)">📦 Stock</button>
   <button class="tab-btn" onclick="setTab('mover',this)">🔄 Mover</button>
   <button class="tab-btn" onclick="setTab('historial',this)">📋 Historial</button>
   <button class="tab-btn" onclick="setTab('precios',this)">💲 Precios</button>
+  <button class="tab-btn" onclick="setTab('saldos',this)">🧾 Saldos</button>
 </div>
 
 <!-- TABS ALEJANDRO -->
@@ -163,9 +165,11 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
 </div>
 
 <!-- TABS VENDEDOR -->
-<div class="tabs t2" id="tabs-consulta" style="display:none;grid-template-columns:1fr 1fr;">
-  <button class="tab-btn act" onclick="setTab('stock',this)">📦 Stock disponible</button>
+<div class="tabs t4" id="tabs-consulta" style="display:none;">
+  <button class="tab-btn act" onclick="setTab('stock',this)">📦 Stock</button>
   <button class="tab-btn" onclick="setTab('resumen',this)">📊 Resumen</button>
+  <button class="tab-btn" onclick="setTab('historial',this)">📋 Movimientos</button>
+  <button class="tab-btn" onclick="setTab('saldos',this)">🧾 Saldos</button>
 </div>
 
 <div class="tabs t2" id="tabs-vendedor" style="display:none;grid-template-columns:1fr 1fr;">
@@ -198,13 +202,18 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
     </div>
     <div class="res-card">
       <div class="res-n" id="r-vendido">$0</div>
-      <div class="res-l">Vendido Alejandro</div>
+      <div class="res-l" id="r-vendido-label">Vendido</div>
       <div class="res-sub">Este mes</div>
     </div>
     <div class="res-card">
       <div class="res-n" id="r-retirado">$0</div>
       <div class="res-l">Retirado por Ricardo</div>
       <div class="res-sub">Este mes</div>
+    </div>
+    <div class="res-card" id="r-saldo-rendir-card" style="display:none;">
+      <div class="res-n" id="r-saldo-rendir" style="color:var(--rojo-bajo)">$0</div>
+      <div class="res-l">Saldo a rendir</div>
+      <div class="res-sub">Histórico total</div>
     </div>
   </div>
 
@@ -285,6 +294,16 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
         <option value="gasto_campo">⛽ Gasto de campo (Monte)</option>
         <option value="baja_defecto">❌ Baja por defecto (Monte)</option>
         <option value="reclasif">🔁 Reclasificación — ingreso a otra medida (Monte)</option>
+        <option value="rendicion">💰 Rendición entregada (depósito)</option>
+      </select>
+    </div>
+    <div class="fg" id="fg-mov-dep-rend">
+      <label>Depósito que rinde</label>
+      <select id="mov-dep-rend">
+        <option value="alejandro">Alejandro</option>
+        <option value="romero">J. Romero</option>
+        <option value="quintana">Quintana</option>
+        <option value="local">Local</option>
       </select>
     </div>
     <div class="fg"><label>Unidades</label><input type="number" id="mov-unid" placeholder="0" min="1"></div>
@@ -294,7 +313,7 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
     <div class="fg"><label>Chofer/Camión</label><input type="text" id="mov-chofer" placeholder="Ej: David"></div>
     <div class="fg">
       <label>Forma de pago</label>
-      <select id="mov-pago">
+      <select id="mov-pago" onchange="document.getElementById('fg-mov-cheque').style.display=this.value==='cheque'?'block':'none';">
         <option value="">-- N/A --</option>
         <option value="efectivo">💵 Efectivo</option>
         <option value="cheque">🧾 Cheque</option>
@@ -302,10 +321,37 @@ body{font-family:'Barlow',sans-serif;background:#1a1a1a;min-height:100vh;padding
         <option value="transferencia">🏦 Transferencia</option>
       </select>
     </div>
-    <div class="fg full"><label>Monto real cobrado (opcional — si no lo llenás, usa el precio de catálogo)</label><input type="number" id="mov-monto" placeholder="Ej: 50000" min="0"></div>
+    <div class="fg" id="fg-mov-cheque" style="display:none;"><label>N° de cheque</label><input type="text" id="mov-cheque" placeholder="Ej: 00012345"></div>
+    <div class="fg full"><label>Monto total de la venta / rendición (opcional en ventas — si no lo llenás, usa el precio de catálogo)</label><input type="number" id="mov-monto" placeholder="Ej: 50000" min="0"></div>
+    <div class="fg full"><label>Cobrado ahora (si es distinto al monto total — el resto queda como saldo pendiente)</label><input type="number" id="mov-cobrado" placeholder="Ej: 20000" min="0"></div>
+    <div class="fg"><label>Costo del flete (si hubo)</label><input type="number" id="mov-flete" placeholder="0" min="0"></div>
+    <div class="fg">
+      <label>¿Quién paga el flete?</label>
+      <select id="mov-flete-quien">
+        <option value="nosotros">Nosotros (gasto aparte)</option>
+        <option value="cliente">Se descuenta al cliente del saldo</option>
+      </select>
+    </div>
     <div class="fg full"><label>Notas</label><input type="text" id="mov-notas" placeholder="Ej: Obra calle San Martín / concepto del gasto"></div>
   </div>
   <button class="btn btn-rojo" onclick="registrarMov('admin')">REGISTRAR</button>
+</div>
+
+<!-- ══ COBRAR SALDO PENDIENTE (Monte) ══ -->
+<div class="panel" id="t-saldos">
+  <div class="stitle">Cobrar saldo pendiente</div>
+  <div id="sd-form-cobro">
+    <div class="form-grid">
+      <div class="fg full">
+        <label>Despacho con saldo pendiente</label>
+        <select id="sd-mov"><option value="">-- Seleccionar --</option></select>
+      </div>
+      <div class="fg full"><label>Monto que se cobra ahora</label><input type="number" id="sd-monto" placeholder="0" min="0"></div>
+    </div>
+    <button class="btn btn-verde" onclick="cobrarSaldo()">💲 REGISTRAR COBRO</button>
+  </div>
+  <div class="stitle" style="margin-top:16px;">Despachos con saldo pendiente</div>
+  <div id="sd-lista"><div class="loading">Cargando...</div></div>
 </div>
 
 <!-- ══ AJUSTE DE PRECIOS (Admin) ══ -->
@@ -463,7 +509,16 @@ async function getStock(){
     });
     if(!r.ok) throw new Error("HTTP "+r.status);
     var j = await r.json();
-    return j.record;
+    var stock = j.record;
+    // Auto-fusión: si el código tiene productos nuevos (ej: depósito Monte) que todavía
+    // no están guardados en JSONBin, los sumamos sin pisar lo que ya está guardado.
+    var idsExistentes = stock.map(p=>p.id);
+    var faltantes = stockInicial.filter(p=>idsExistentes.indexOf(p.id)===-1);
+    if(faltantes.length){
+      stock = stock.concat(JSON.parse(JSON.stringify(faltantes)));
+      saveStock(stock); // persistimos el merge para que quede así para todos
+    }
+    return stock;
   }catch(e){ return JSON.parse(JSON.stringify(stockInicial)); }
 }
 async function saveStock(s){
@@ -511,6 +566,7 @@ var TIPOS_MOV = {
   gasto_campo:'⛽ Gasto de campo (Monte)',
   baja_defecto:'❌ Baja por defecto (Monte)',
   reclasif:'🔁 Reclasificación (Monte)',
+  rendicion:'💰 Rendición entregada',
   retiro_yo:'🔄 Retiro Ricardo',
   retiro_sec:'👤 Retiro secretario',
   ingreso:'📦 Ingreso stock'
@@ -556,6 +612,9 @@ function verificarClave(){
     // Monto real cobrado: no aplica a Alejandro (revende a precio fijo)
     var fgMonto = document.getElementById('fg-ale-monto');
     if(fgMonto) fgMonto.style.display = ROL==='alejandro' ? 'none' : 'block';
+    // Cobrar saldo: solo Admin puede registrar cobros; Eliel/Consulta solo ven la lista
+    var formCobro = document.getElementById('sd-form-cobro');
+    if(formCobro) formCobro.style.display = ROL==='admin' ? 'block' : 'none';
     var avisoVender = document.getElementById('vender-aviso');
     if(avisoVender) avisoVender.textContent = '📱 ' + (acceso.nombre.replace(/^[^ ]+ /,'')) + ' — registrá acá cada venta que hacés del stock de J&R Maderas.';
     // Tab inicial
@@ -604,7 +663,10 @@ function setRol(rol, btn){
 
 function setTab(t, btn){
   setTabSilent(t);
-  var tabsEl = ROL==='admin'?'tabs-admin':ROL==='alejandro'?'tabs-alejandro':'tabs-vendedor';
+  var tabsEl = ROL==='admin' ? 'tabs-admin'
+    : (ROL==='alejandro'||ROL==='romero'||ROL==='local'||ROL==='quintana') ? 'tabs-alejandro'
+    : (ROL==='consulta'||ROL==='monte_ro') ? 'tabs-consulta'
+    : 'tabs-vendedor';
   document.getElementById(tabsEl).querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('act'));
   btn.classList.add('act');
 }
@@ -624,6 +686,7 @@ async function renderAll(){
   renderSelectProd(stock);
   renderHist(movs);
   renderMisVentas(movs);
+  renderSaldos(movs);
 }
 
 function renderResumen(stock, movs){
@@ -635,10 +698,34 @@ function renderResumen(stock, movs){
 
   var mc = mesActual();
   var movMes = movs.filter(m=>{ var d=new Date(m.fecha); return (d.getMonth()+'-'+d.getFullYear())===mc; });
-  var vendAle  = movMes.filter(m=>m.tipo==='venta_ale').reduce((a,m)=>a+m.valor,0);
-  var retRic   = movMes.filter(m=>m.tipo==='retiro_yo'||m.tipo==='retiro_sec').reduce((a,m)=>a+m.valor,0);
-  document.getElementById('r-vendido').textContent  = fmt(vendAle);
+
+  var mapaTipo = {alejandro:'venta_ale', romero:'venta_rom', local:'venta_loc', quintana:'venta_qui', monte:'venta_mte'};
+  var mapaLabel = {alejandro:'Vendido Alejandro', romero:'Vendido J. Romero', local:'Vendido Local', quintana:'Vendido Quintana', monte:'Vendido/Cargado Monte', todos:'Vendido (todos)'};
+
+  var vendAle;
+  if(FILTRO_DEP==='todos'){
+    vendAle = movMes.filter(m=>m.tipo && m.tipo.indexOf('venta_')===0).reduce((a,m)=>a+m.valor,0);
+  }else{
+    vendAle = movMes.filter(m=>m.tipo===mapaTipo[FILTRO_DEP]).reduce((a,m)=>a+m.valor,0);
+  }
+  var retRic = movMes.filter(m=>m.tipo==='retiro_yo'||m.tipo==='retiro_sec').reduce((a,m)=>a+m.valor,0);
+  document.getElementById('r-vendido').textContent = fmt(vendAle);
+  document.getElementById('r-vendido-label').textContent = mapaLabel[FILTRO_DEP] || 'Vendido';
   document.getElementById('r-retirado').textContent = fmt(retRic);
+
+  // Saldo a rendir (todo lo vendido histórico del depósito menos lo ya rendido) — no aplica a "todos" ni al Monte
+  var elSaldoCard = document.getElementById('r-saldo-rendir-card');
+  if(elSaldoCard){
+    if(FILTRO_DEP!=='todos' && FILTRO_DEP!=='monte'){
+      var totalVendidoHist = movs.filter(m=>m.tipo===mapaTipo[FILTRO_DEP]).reduce((a,m)=>a+m.valor,0);
+      var totalRendidoHist = movs.filter(m=>m.tipo==='rendicion' && m.deposito===FILTRO_DEP).reduce((a,m)=>a+m.valor,0);
+      var saldoRendir = totalVendidoHist - totalRendidoHist;
+      document.getElementById('r-saldo-rendir').textContent = fmt(saldoRendir);
+      elSaldoCard.style.display='block';
+    } else {
+      elSaldoCard.style.display='none';
+    }
+  }
 
   // Lista resumen
   var cont = document.getElementById('resumen-lista');
@@ -718,15 +805,31 @@ function renderSelectProd(stock){
   });
 }
 
+function depOfMov(m){
+  if(m.deposito) return m.deposito;
+  var mapa = {venta_ale:'alejandro',venta_rom:'romero',venta_loc:'local',venta_qui:'quintana',venta_mte:'monte',gasto_campo:'monte',baja_defecto:'monte',reclasif:'monte'};
+  return mapa[m.tipo] || null;
+}
+
 function renderHist(movs){
   var cont = document.getElementById('lista-hist');
   if(!cont) return;
+  if(USUARIO_ACTUAL && USUARIO_ACTUAL.deposito!=='todos'){
+    movs = movs.filter(m=>depOfMov(m)===USUARIO_ACTUAL.deposito);
+  }
   var filtrado = FILTRO_HIST==='todos' ? movs : movs.filter(m=>m.tipo===FILTRO_HIST);
   filtrado = filtrado.slice().reverse();
   if(!filtrado.length){cont.innerHTML='<div class="empty">Sin movimientos todavía</div>';return;}
   cont.innerHTML='';
   filtrado.forEach(m=>{
     var esEgreso = m.tipo!=='ingreso';
+    var detalles = [];
+    if(m.cliente) detalles.push('👤 '+m.cliente);
+    if(m.destino) detalles.push('📍 '+m.destino);
+    if(m.chofer)  detalles.push('🚚 '+m.chofer);
+    if(m.medioPago) detalles.push({efectivo:'💵 Efectivo',cheque:'🧾 Cheque'+(m.nroCheque?' #'+m.nroCheque:''),mp:'📱 MP',transferencia:'🏦 Transf.'}[m.medioPago]||'');
+    if(m.saldo>0) detalles.push('⚠️ Saldo: '+fmt(m.saldo));
+    if(m.flete>0) detalles.push('🚚 Flete: '+fmt(m.flete)+(m.fleteQuien==='cliente'?' (descontado al cliente)':m.fleteQuien==='nosotros'?' (a nuestro cargo)':''));
     var div = document.createElement('div');
     div.className='mov-item';
     div.innerHTML=
@@ -734,6 +837,7 @@ function renderHist(movs){
         '<div>'+
           '<div class="mi-prod">'+m.prod+'</div>'+
           '<div class="mi-tipo">'+TIPOS_MOV[m.tipo]+(m.notas?' · '+m.notas:'')+'</div>'+
+          (detalles.length?'<div class="mi-tipo">'+detalles.join(' · ')+'</div>':'')+
           '<div class="mi-fecha">'+new Date(m.fecha).toLocaleDateString('es-AR')+' '+new Date(m.fecha).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})+'</div>'+
         '</div>'+
         '<div>'+
@@ -789,6 +893,39 @@ function renderMisVentas(movs){
   }).join('');
 }
 
+function renderSaldos(movs){
+  var sel = document.getElementById('sd-mov');
+  var cont = document.getElementById('sd-lista');
+  if(!sel || !cont) return;
+
+  if(USUARIO_ACTUAL && USUARIO_ACTUAL.deposito!=='todos'){
+    movs = movs.filter(m=>depOfMov(m)===USUARIO_ACTUAL.deposito);
+  }
+  var pendientes = movs.filter(m=>m.saldo>0);
+  var v = sel.value;
+  sel.innerHTML = '<option value="">-- Seleccionar --</option>';
+  pendientes.forEach(m=>{
+    var opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = (m.cliente||'Sin cliente')+' — '+new Date(m.fecha).toLocaleDateString('es-AR')+' — Saldo: '+fmt(m.saldo);
+    sel.appendChild(opt);
+  });
+  if(v) sel.value=v;
+
+  if(!pendientes.length){
+    cont.innerHTML = '<div class="empty">No hay saldos pendientes 🎉</div>';
+    return;
+  }
+  cont.innerHTML = pendientes.slice().reverse().map(m=>
+    '<div class="mov-item"><div class="mi-top">'+
+      '<div><div class="mi-prod">'+(m.cliente||'Sin cliente')+(m.destino?' · '+m.destino:'')+'</div>'+
+      '<div class="mi-tipo">'+m.prod+' · '+new Date(m.fecha).toLocaleDateString('es-AR')+'</div></div>'+
+      '<div><div class="mi-val" style="color:var(--rojo-bajo)">'+fmt(m.saldo)+'</div>'+
+      '<div class="mi-tipo">de '+fmt(m.valor)+'</div></div>'+
+    '</div></div>'
+  ).join('');
+}
+
 // ── ACCIONES ──
 async function registrarMov(origen){
   var prodIdEl = origen==='alejandro' ? 'ale-prod' : 'mov-prod';
@@ -808,7 +945,30 @@ async function registrarMov(origen){
   var destino = document.getElementById('mov-destino') ? document.getElementById('mov-destino').value.trim() : '';
   var chofer  = document.getElementById('mov-chofer')  ? document.getElementById('mov-chofer').value.trim()  : '';
   var pago    = document.getElementById('mov-pago')    ? document.getElementById('mov-pago').value            : '';
+  var nroCheque = document.getElementById('mov-cheque') ? document.getElementById('mov-cheque').value.trim()  : '';
   var notas   = document.getElementById('mov-notas')   ? document.getElementById('mov-notas').value.trim()    : cliente;
+  var cobradoAhora = document.getElementById('mov-cobrado') ? (parseFloat(document.getElementById('mov-cobrado').value)||0) : 0;
+  var fleteMonto = document.getElementById('mov-flete') ? (parseFloat(document.getElementById('mov-flete').value)||0) : 0;
+  var fleteQuien = document.getElementById('mov-flete-quien') ? document.getElementById('mov-flete-quien').value : 'nosotros';
+
+  // ── Rendición: entrega de plata de un depósito a Ricardo, no toca stock ──
+  if(tipo === 'rendicion'){
+    var depRend = document.getElementById('mov-dep-rend').value;
+    if(!montoReal){ alert('Ingresá el monto entregado en "Monto total".'); return; }
+    var movsR = await getMov();
+    movsR.push({
+      id:Date.now(), prod:'Rendición — '+depRend, prodId:0,
+      tipo:tipo, unid:0, pies:0, valor:montoReal,
+      notas:notas, cliente:'', destino:'', chofer:'', medioPago:pago, nroCheque:nroCheque,
+      deposito:depRend, origen:origen, fecha:new Date().toISOString()
+    });
+    await saveMov(movsR);
+    document.getElementById('mov-notas').value='';
+    document.getElementById(montoEl).value='';
+    await renderAll();
+    alert('✅ Rendición registrada: '+fmt(montoReal)+' de '+depRend);
+    return;
+  }
 
   // ── Gasto de campo: no descuenta stock, es un registro de gasto ──
   if(tipo === 'gasto_campo'){
@@ -818,8 +978,8 @@ async function registrarMov(origen){
     movsG.push({
       id:Date.now(), prod:'Gasto de campo (Monte)', prodId:0,
       tipo:tipo, unid:0, pies:0, valor:montoReal,
-      notas:notas, cliente:'', destino:'', chofer:'', medioPago:pago,
-      origen:origen, fecha:new Date().toISOString()
+      notas:notas, cliente:'', destino:'', chofer:'', medioPago:pago, nroCheque:nroCheque,
+      deposito:'monte', origen:origen, fecha:new Date().toISOString()
     });
     await saveMov(movsG);
     document.getElementById('mov-notas').value='';
@@ -858,14 +1018,32 @@ async function registrarMov(origen){
   var esVenta = tipo.indexOf('venta_')===0;
   if(esVenta && montoReal>0){ valor = montoReal; }
 
+  // Cobrado ahora / saldo pendiente (aplica sobre todo a Monte, pero sirve para cualquier venta)
+  var cobrado = esVenta ? (cobradoAhora>0 ? cobradoAhora : valor) : valor;
+  var descuentoFlete = (esVenta && fleteMonto>0 && fleteQuien==='cliente') ? fleteMonto : 0;
+  var saldo = esVenta ? Math.max(0, valor - cobrado - descuentoFlete) : 0;
+
   var movs = await getMov();
   movs.push({
     id:Date.now(), prod:p.nombre, prodId:prodId,
     tipo:tipo, unid:unid, pies:pies||(unid*p.piesUnid),
-    valor:valor, notas:notas, cliente:cliente, destino:destino,
-    chofer:chofer, medioPago:pago, origen:origen,
+    valor:valor, cobrado:cobrado, saldo:saldo,
+    notas:notas, cliente:cliente, destino:destino,
+    chofer:chofer, medioPago:pago, nroCheque:nroCheque, deposito:p.deposito, origen:origen,
+    flete:fleteMonto, fleteQuien:(esVenta&&fleteMonto>0)?fleteQuien:'',
     fecha:new Date().toISOString()
   });
+
+  // Si el flete lo pagamos nosotros, queda como gasto aparte (no afecta el saldo del cliente)
+  if(esVenta && fleteMonto>0 && fleteQuien==='nosotros'){
+    movs.push({
+      id:Date.now()+1, prod:'Flete a destino', prodId:0,
+      tipo:'gasto_campo', unid:0, pies:0, valor:fleteMonto, cobrado:fleteMonto, saldo:0,
+      notas:'Flete propio — '+(cliente||'cliente')+(destino?' → '+destino:''),
+      cliente:cliente, destino:destino, chofer:chofer, medioPago:'', nroCheque:'',
+      deposito:p.deposito, origen:origen, fecha:new Date().toISOString()
+    });
+  }
 
   await saveStock(stock);
   await saveMov(movs);
@@ -875,12 +1053,35 @@ async function registrarMov(origen){
   document.getElementById(piesEl).value='';
   document.getElementById(clienteEl).value='';
   document.getElementById(montoEl).value='';
+  if(document.getElementById('mov-cobrado')) document.getElementById('mov-cobrado').value='';
+  if(document.getElementById('mov-flete')) document.getElementById('mov-flete').value='';
+  if(document.getElementById('mov-flete-quien')) document.getElementById('mov-flete-quien').value='nosotros';
+  if(document.getElementById('mov-cheque')) document.getElementById('mov-cheque').value='';
+  if(document.getElementById('fg-mov-cheque')) document.getElementById('fg-mov-cheque').style.display='none';
   if(document.getElementById('mov-destino')) document.getElementById('mov-destino').value='';
   if(document.getElementById('mov-chofer'))  document.getElementById('mov-chofer').value='';
   if(document.getElementById('mov-notas') && origen!=='alejandro') document.getElementById('mov-notas').value='';
 
   await renderAll();
-  alert('✅ Registrado: '+fmt(valor));
+  var msg = '✅ Registrado: '+fmt(valor);
+  if(saldo>0) msg += '\n⚠️ Saldo pendiente: '+fmt(saldo);
+  alert(msg);
+}
+
+async function cobrarSaldo(){
+  var movId = parseInt(document.getElementById('sd-mov').value);
+  var monto = parseFloat(document.getElementById('sd-monto').value)||0;
+  if(!movId){ alert('Seleccioná un despacho.'); return; }
+  if(!monto){ alert('Ingresá el monto que se cobra.'); return; }
+  var movs = await getMov();
+  var m = movs.find(x=>x.id===movId);
+  if(!m){ alert('No se encontró el despacho.'); return; }
+  m.cobrado = (m.cobrado||0) + monto;
+  m.saldo   = Math.max(0, (m.saldo||0) - monto);
+  await saveMov(movs);
+  document.getElementById('sd-monto').value='';
+  await renderAll();
+  alert(m.saldo>0 ? '✅ Cobro registrado. Saldo restante: '+fmt(m.saldo) : '✅ Saldo saldado por completo.');
 }
 
 async function aumentarPrecios(){
