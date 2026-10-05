@@ -40,6 +40,7 @@
   --bg:#16100b; --surface:#211912; --ink:#f3eadf; --ink2:#bba893; --line:#3a2e23;
   --brand:#9c2620; --brand-dk:#5a0f0c; --wood:#dc9452; --wa:#22a15a; --pz1:#a8682e; --pz2:#b3a12a; --est:#ff7a6b; color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);-webkit-text-size-adjust:100%}
@@ -358,16 +359,16 @@ track("visita",{});
 function waUrl(text,code){return "https://wa.me/"+WA+"?text="+encodeURIComponent(text+"\n\nRef: WEB-"+code+"-"+ORIG)}
 
 var T={
- GEN:"Hola J&R Maderas. Quiero pedir un presupuesto.\nProducto: ___\nMedidas: ___",
- MACH:"Hola J&R Maderas. Estoy interesado en machimbre.\nMi proyecto mide ___ x ___ m.\nEs para (techo / cielorraso / otro): ___",
- TIR:"Hola J&R Maderas. Quisiera presupuesto por tirantes.\nSección: ___\nLargo: ___\nCantidad: ___\nEs para (techo / entrepiso / otro): ___",
- POST:"Hola J&R Maderas. Quisiera presupuesto por postes de eucalipto.\nLargo: ___\nDiámetro: ___\nCantidad: ___\nLocalidad: ___",
- FEN:"Hola J&R Maderas. Quisiera presupuesto por fenólicos.\nEspesor: ___\nCantidad de placas: ___\nEs para: ___",
- AISL:"Hola J&R Maderas. Quisiera presupuesto por aislante.\nSuperficie: ___ m²\nEs para (techo / cielorraso / otro): ___",
- CORN:"Hola J&R Maderas. Quisiera presupuesto por cornisas.\nMetros lineales: ___\nMedida o modelo: ___",
- CLAV:"Hola J&R Maderas. Necesito clavos / accesorios.\nDetalle: ___",
- QUIN:"Hola J&R Maderas. Quiero hacer un quincho.\nMedidas: ___ x ___ m\nTipo de techo: ___",
- PERG:"Hola J&R Maderas. Quiero hacer una pérgola.\nMedidas: ___ x ___ m\nAltura: ___ m"
+ GEN:"Hola J&R Maderas. Quiero pedir un presupuesto.\nProducto: …\nMedidas: …",
+ MACH:"Hola J&R Maderas. Estoy interesado en machimbre.\nMi proyecto mide … x … m.\nEs para (techo / cielorraso / otro): …",
+ TIR:"Hola J&R Maderas. Quisiera presupuesto por tirantes.\nSección: …\nLargo: …\nCantidad: …\nEs para (techo / entrepiso / otro): …",
+ POST:"Hola J&R Maderas. Quisiera presupuesto por postes de eucalipto.\nLargo: …\nDiámetro: …\nCantidad: …\nLocalidad: …",
+ FEN:"Hola J&R Maderas. Quisiera presupuesto por fenólicos.\nEspesor: …\nCantidad de placas: …\nEs para: …",
+ AISL:"Hola J&R Maderas. Quisiera presupuesto por aislante.\nSuperficie: … m²\nEs para (techo / cielorraso / otro): …",
+ CORN:"Hola J&R Maderas. Quisiera presupuesto por cornisas.\nMetros lineales: …\nMedida o modelo: …",
+ CLAV:"Hola J&R Maderas. Necesito clavos / accesorios.\nDetalle: …",
+ QUIN:"Hola J&R Maderas. Quiero hacer un quincho.\nMedidas: … x … m\nTipo de techo: …",
+ PERG:"Hola J&R Maderas. Quiero hacer una pérgola.\nMedidas: … x … m\nAltura: … m"
 };
 document.querySelectorAll("[data-wa]").forEach(function(a){var c=a.getAttribute("data-wa");a.href=waUrl(T[c],c);a.addEventListener("click",function(){track("whatsapp_click",{producto:c})})});
 document.addEventListener("click",function(e){
