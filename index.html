@@ -1,14 +1,554 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=JR-Maderas-Cliente.html">
-  <title>J&R Maderas - Calculadora</title>
-  <link rel="canonical" href="JR-Maderas-Cliente.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>J&amp;R Maderas | Machimbre, tirantes y postes de eucalipto en Corrientes</title>
+<meta name="description" content="Maderera en Corrientes: machimbre, tirantes, fenólicos, aislantes, cornisas y postes de eucalipto. Venta por menor y por mayor. Calculá tu techo o cielorraso y pedí presupuesto por WhatsApp.">
+<link rel="canonical" href="https://jrmaderas.com.ar/">
+<meta name="theme-color" content="#5e0f0f">
+<link rel="icon" href="logo-jr-maderas.jpg" type="image/jpeg">
+<link rel="apple-touch-icon" href="logo-jr-maderas.jpg">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="J&amp;R Maderas">
+<meta property="og:title" content="J&amp;R Maderas – Maderera en Corrientes">
+<meta property="og:description" content="Machimbre, tirantes y postes de eucalipto. Calculá tu proyecto y pedí presupuesto por WhatsApp.">
+<meta property="og:url" content="https://jrmaderas.com.ar/">
+<meta property="og:image" content="https://jrmaderas.com.ar/og-jr-maderas.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HardwareStore","name":"J&R Maderas","url":"https://jrmaderas.com.ar/","image":"https://jrmaderas.com.ar/og-jr-maderas.jpg","logo":"https://jrmaderas.com.ar/logo-jr-maderas.jpg","telephone":"+5493794504145","address":{"@type":"PostalAddress","streetAddress":"La Madrid y Chacabuco","addressLocality":"Corrientes","addressRegion":"Corrientes","addressCountry":"AR"},"areaServed":["Corrientes","Resistencia"],"sameAs":["https://www.instagram.com/jr_maderas/","https://www.facebook.com/people/J-R-Maderas/61558830798066/"]}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una columna mobile-first. Arriba qué vendemos + WhatsApp; productos; calculadora; postes; mayoristas; confianza; ubicación. Barra de WhatsApp fija abajo en el celular. */
+:root{
+  --bg:#f7f3ed; --surface:#fffdf9; --ink:#24180f; --ink2:#67543f; --line:#e4d9ca;
+  --brand:#8b1a1a; --brand-dk:#5e0f0f; --on-brand:#fff7ef; --wood:#c4762a; --lime:#d4e600;
+  --wa:#1e8f4e; --wa-ink:#fff; --pz1:#d9a066; --pz2:#e8d24a; --est:#8b1a1a;
+  --display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  --body:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16100b; --surface:#211912; --ink:#f3eadf; --ink2:#bba893; --line:#3a2e23;
+  --brand:#9c2620; --brand-dk:#5a0f0c; --wood:#dc9452; --wa:#22a15a; --pz1:#a8682e; --pz2:#b3a12a; --est:#ff7a6b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16100b; --surface:#211912; --ink:#f3eadf; --ink2:#bba893; --line:#3a2e23;
+  --brand:#9c2620; --brand-dk:#5a0f0c; --wood:#dc9452; --wa:#22a15a; --pz1:#a8682e; --pz2:#b3a12a; --est:#ff7a6b; color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);-webkit-text-size-adjust:100%}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);line-height:1.08;text-wrap:balance;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:3px solid var(--wood);outline-offset:2px}
+
+/* barra superior */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--brand-dk);color:var(--on-brand)}
+.top .wrap{display:flex;align-items:center;gap:10px;padding-block:8px}
+.top img{width:40px;height:40px;border-radius:50%}
+.top .name{font:800 20px/1 var(--display);letter-spacing:.02em}
+.top .name small{display:block;font:500 12px/1.2 var(--body);opacity:.8;letter-spacing:.04em}
+.top nav{margin-left:auto;display:flex;gap:4px}
+.top nav a{font:600 14px/1 var(--body);text-decoration:none;padding:8px 9px;border-radius:6px;opacity:.9}
+.top nav a:hover{background:rgba(255,255,255,.12)}
+@media (max-width:560px){.top nav{display:none}}
+
+/* hero */
+.hero{background:var(--brand);color:var(--on-brand);padding-block:28px 32px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:260px;height:260px;border-radius:50%;
+  background:repeating-radial-gradient(circle,rgba(255,255,255,.07) 0 6px,transparent 6px 16px);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;display:flex;flex-direction:column;gap:14px}
+.kicker{font:700 13px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.hero h1{font-size:clamp(34px,9vw,52px);font-weight:800}
+.hero p{margin:0;font-size:17px;max-width:34em;opacity:.95}
+.facts{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.facts li{font:600 14px/1 var(--body);padding:8px 11px;border-radius:99px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.2)}
+.facts li b{color:var(--lime);font-weight:700}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font:700 17px/1 var(--body);text-decoration:none;
+  padding:15px 20px;border-radius:10px;border:2px solid transparent;cursor:pointer;min-height:52px}
+.btn svg{width:22px;height:22px;flex-shrink:0}
+.btn-wa{background:var(--wa);color:var(--wa-ink)}
+.btn-wa:hover{filter:brightness(1.08)}
+.btn-ghost{background:transparent;color:inherit;border-color:currentColor}
+.btn-brand{background:var(--brand);color:var(--on-brand)}
+.btn-block{width:100%}
+
+/* secciones */
+section.block{padding-block:36px}
+.block h2{font-size:clamp(28px,7vw,38px);font-weight:800;margin-bottom:6px}
+.lead{color:var(--ink2);margin:0 0 18px;max-width:36em}
+
+/* productos */
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.prod h3{font-size:22px;font-weight:700}
+.prod p{margin:0;color:var(--ink2);font-size:15px;flex:1}
+.prod .plink{margin-top:6px;align-self:flex-start;font:700 15px/1 var(--body);color:var(--wa);background:none;border:none;padding:6px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.prod.star{border-color:var(--wood);background:color-mix(in srgb,var(--wood) 8%,var(--surface))}
+.sols{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.sols span{font-weight:600;color:var(--ink2);font-size:15px;align-self:center;margin-right:2px}
+.sols button,.sols a{text-decoration:none;font:600 15px/1 var(--body);padding:10px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+
+/* calculadora */
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label,.field .lbl{font:600 14px/1.2 var(--body);color:var(--ink2)}
+.field small{font-size:13px;color:var(--ink2)}
+input,select,textarea{font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:12px;width:100%;min-width:0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg label{display:inline-flex}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg span{font:600 15px/1 var(--body);padding:11px 13px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;color:var(--ink)}
+.seg input:checked+span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg input:focus-visible+span{outline:3px solid var(--wood);outline-offset:2px}
+.result{border-top:2px dashed var(--line);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.result h3{font-size:22px}
+.rows{display:flex;flex-direction:column}
+.rows div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.rows div b{text-align:right;white-space:nowrap}
+.rows div span small{display:block;color:var(--ink2);font-size:13px}
+.note{font-size:14px;color:var(--ink2);margin:0}
+
+/* postes */
+.postes{background:var(--brand-dk);color:var(--on-brand)}
+.postes .lead{color:inherit;opacity:.88}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.pcard{border:1px solid rgba(255,255,255,.22);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:6px}
+.pcard h3{font-size:24px;color:var(--lime)}
+.pcard p{margin:0;font-size:15px;opacity:.92}
+.pcard .btn{margin-top:auto}
+.tag{display:inline-block;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;background:var(--lime);color:#24180f;padding:5px 8px;border-radius:4px}
+
+/* mayoristas */
+.form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form .full{grid-column:1/-1}
+.err{color:var(--brand);font-size:14px;font-weight:600;margin:0}
+
+/* confianza y ubicación */
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.trust a,.trust div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:4px}
+.trust b{font:700 20px/1.1 var(--display)}
+.trust span{font-size:15px;color:var(--ink2)}
+
+footer{background:var(--brand-dk);color:var(--on-brand);padding-block:28px 110px;font-size:15px}
+footer .wrap{display:flex;flex-direction:column;gap:6px}
+footer b{font:800 22px/1 var(--display)}
+footer a{text-decoration:underline;text-underline-offset:3px}
+
+/* barra fija WhatsApp (celular) */
+.wa-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
+  background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-top:1px solid var(--line)}
+@media (min-width:761px){.wa-bar{left:auto;right:20px;bottom:20px;border:none;background:none;padding:0;backdrop-filter:none}
+  .wa-bar .btn{box-shadow:0 6px 22px rgba(0,0,0,.25);width:auto}}
+@media (max-width:480px){.grid2,.pgrid,.form{grid-template-columns:1fr}}
+
+/* dibujo a escala */
+.plano{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;overflow-x:auto}
+.plano svg{width:100%;height:auto;max-height:340px;display:block}
+.plano .fondo{fill:var(--surface)} .plano .borde{fill:none;stroke:var(--ink);stroke-width:1.5}
+.plano .pz1{fill:var(--pz1)} .plano .pz2{fill:var(--pz2)}
+.plano .est{stroke:var(--est);stroke-width:2;stroke-dasharray:5 3}
+.plano .poste{fill:var(--wood);stroke:var(--ink);stroke-width:1}
+.plano .cota{stroke:var(--ink2);stroke-width:1} .plano .ar{fill:var(--ink2)}
+.plano .tx{fill:var(--ink2);font:600 12px var(--body)}
+.plano figcaption{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--ink2);margin-top:6px}
+.plano figcaption i{display:inline-block;width:14px;height:10px;margin-right:5px;vertical-align:-1px;border-radius:2px}
+.plano figcaption i.pz1{background:var(--pz1)} .plano figcaption i.pz2{background:var(--pz2)}
+.plano figcaption i.est{background:none;border-top:2px dashed var(--est);height:0;vertical-align:3px}
+.plano figcaption i.poste{background:var(--wood);border-radius:50%;width:10px}
+</style>
 </head>
 <body>
-  <p>Redirigiendo a la calculadora de J&amp;R Maderas...</p>
-  <p>Si no sos redirigido automáticamente, <a href="JR-Maderas-Cliente.html">hacé clic acá</a>.</p>
+<header class="top">
+  <div class="wrap">
+    <img src="logo-jr-maderas.jpg" alt="Logo de J&amp;R Maderas" width="40" height="40">
+    <div class="name">J&amp;R Maderas<small>Corrientes</small></div>
+    <nav aria-label="Secciones">
+      <a href="#productos">Productos</a>
+      <a href="#calculadora">Calculadora</a>
+      <a href="#postes">Postes</a>
+      <a href="#mayoristas">Mayoristas</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">Maderera en Corrientes</div>
+    <h1>Machimbre, tirantes y postes de eucalipto</h1>
+    <p>Todo para techos, cielorrasos, quinchos y pérgolas. Mandanos las medidas de tu obra y te pasamos el presupuesto por WhatsApp.</p>
+    <ul class="facts">
+      <li><b>Stock</b> disponible</li>
+      <li>Venta por menor y <b>por mayor</b></li>
+      <li>La Madrid y Chacabuco</li>
+    </ul>
+    <div class="ctas">
+      <a class="btn btn-wa" data-wa="GEN" href="https://wa.me/5493794504145" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Pedir presupuesto</a>
+      <a class="btn btn-ghost" href="#calculadora">Calcular materiales</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="productos">
+  <div class="wrap">
+    <h2>¿Qué necesitás?</h2>
+    <p class="lead">Tocá el producto y se abre WhatsApp con el mensaje listo. Completá los datos y envialo.</p>
+    <div class="prods">
+      <div class="prod"><h3>Machimbre</h3><p>Para techos y cielorrasos. Medidas ½" × 5" y ½" × 4", en largos de 3 a 4 m.</p><a class="plink" data-wa="MACH" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar machimbre</a></div>
+      <div class="prod"><h3>Tirantes y madera estructural</h3><p>Para techos, entrepisos, quinchos y pérgolas.</p><a class="plink" data-wa="TIR" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar tirantes</a></div>
+      <div class="prod star"><h3>Postes de eucalipto</h3><p>Pelados, sin tratar. Por menor y por camión.</p><a class="plink" data-wa="POST" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar postes</a></div>
+      <div class="prod"><h3>Fenólicos y tableros</h3><p>Para losas, encofrados y obra.</p><a class="plink" data-wa="FEN" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar fenólicos</a></div>
+      <div class="prod"><h3>Aislantes</h3><p>Para techos y cielorrasos.</p><a class="plink" data-wa="AISL" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar aislantes</a></div>
+      <div class="prod"><h3>Cornisas</h3><p>Para terminar el cielorraso.</p><a class="plink" data-wa="CORN" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar cornisas</a></div>
+      <div class="prod"><h3>Clavos y accesorios</h3><p>Lo que hace falta para colocar.</p><a class="plink" data-wa="CLAV" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar accesorios</a></div>
+    </div>
+    <div class="sols">
+      <span>Proyectos:</span>
+      <button data-calc="techo">Techo</button>
+      <button data-calc="cielo">Cielorraso</button>
+      <button data-calc="entrepiso">Entrepiso</button>
+      <a class="plink" data-wa="QUIN" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Quincho</a>
+      <a class="plink" data-wa="PERG" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Pérgola</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="calculadora" style="padding-top:8px">
+  <div class="wrap">
+    <h2>Calculá tu proyecto</h2>
+    <p class="lead">Poné las medidas del lugar. Te damos una cantidad orientativa y la mandás por WhatsApp para recibir el precio.</p>
+    <form class="calc" id="calcForm" novalidate>
+      <div class="field">
+        <span class="lbl" id="lblTipo">¿Qué vas a hacer?</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblTipo">
+          <label><input type="radio" name="tipo" value="cielo" checked><span>Cielorraso</span></label>
+          <label><input type="radio" name="tipo" value="techo"><span>Techo con machimbre</span></label>
+          <label><input type="radio" name="tipo" value="rustico"><span>Techo solo tirantes</span></label>
+          <label><input type="radio" name="tipo" value="entrepiso"><span>Entrepiso</span></label>
+          <label><input type="radio" name="tipo" value="cerco"><span>Cerco con postes</span></label>
+          <label><input type="radio" name="tipo" value="otro"><span>Quincho / pérgola</span></label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="cLargo" id="lblLargo">Largo (m)</label><input id="cLargo" type="number" inputmode="decimal" min="0.5" step="0.1" placeholder="Ej.: 6"></div>
+        <div class="field" id="fSep" hidden><label for="cSep">Postes cada (m)</label><input id="cSep" type="number" inputmode="decimal" min="0.5" step="0.1" value="2.5"><small>Recomendamos cada 2,5 m.</small></div>
+        <div class="field" id="fAncho"><label for="cAncho">Ancho (m)</label><input id="cAncho" type="number" inputmode="decimal" min="0.5" step="0.1" placeholder="Ej.: 5"></div>
+      </div>
+      <div class="grid2" id="optMach">
+        <div class="field"><label for="cMach">Machimbre</label>
+          <select id="cMach"><option value="m5">½" × 5" (cubre 11 cm)</option><option value="m4">½" × 4" (cubre 9 cm)</option></select></div>
+        <div class="field"><label for="cLHoja">Largo de la hoja</label>
+          <select id="cLHoja"><option value="auto" selected>Automático (menos sobrante)</option><option value="3">3 m</option><option value="3.3">3,30 m</option><option value="3.6">3,60 m</option><option value="4">4 m</option></select></div>
+      </div>
+      <div class="field" id="optClav"><span class="lbl" id="lblClav">Clavaderas cada</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblClav">
+          <label><input type="radio" name="clav" value="0.65" checked><span>65 cm</span></label>
+          <label><input type="radio" name="clav" value="0.8"><span>80 cm</span></label>
+        </div><small>La mayoría de los constructores usa una de estas dos.</small></div>
+      <div class="field" id="optTir"><span class="lbl" id="lblTir">Tirantes cada</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblTir" id="tirSeg"></div><small id="tirNote"></small></div>
+      <button class="btn btn-brand btn-block" type="submit">Calcular</button>
+      <p class="err" id="calcErr" hidden></p>
+      <div class="result" id="calcRes" hidden>
+        <h3 id="resTitle"></h3>
+        <figure class="plano" id="plano"></figure>
+        <div class="rows" id="resRows"></div>
+        <p class="note" id="resNote"></p>
+        <a class="btn btn-wa btn-block" id="calcWa" target="_blank" rel="noopener" href="https://wa.me/5493794504145"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Pedir precio por WhatsApp</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="block postes" id="postes">
+  <div class="wrap">
+    <span class="tag">Stock disponible</span>
+    <h2 style="margin-top:10px">Postes de eucalipto</h2>
+    <p class="lead">Somos productores forestales. Postes de eucalipto pelados, sin tratar, en varios largos.</p>
+    <div class="pgrid">
+      <div class="pcard"><h3>Por menor</h3><p>Venta en Corrientes y Resistencia.</p>
+        <a class="btn btn-wa" data-wa="POST" href="https://wa.me/5493794504145" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Consultar</a></div>
+      <div class="pcard"><h3>Por camión</h3><p>Venta mayorista desde Corrientes para corralones, productores, constructoras y distribuidores.</p>
+        <a class="btn btn-ghost" href="#mayoristas">Pedir cotización</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="mayoristas">
+  <div class="wrap">
+    <h2>Empresas y ventas mayoristas</h2>
+    <p class="lead">¿Sos corralón, productor, constructora o distribuidor? Completá lo que sepas y te mandamos la cotización.</p>
+    <form class="form" id="mayForm" novalidate>
+      <div class="field full"><label for="mProd">Producto *</label>
+        <select id="mProd"><option value="">Elegí…</option><option>Postes de eucalipto</option><option>Otros productos de eucalipto</option><option>Tirantes / madera estructural</option><option>Machimbre</option><option>Otro</option></select></div>
+      <div class="field"><label for="mLargo">Largo</label><input id="mLargo" placeholder="Ej.: 2,20 m"></div>
+      <div class="field"><label for="mDiam">Diámetro / sección</label><input id="mDiam" placeholder="Ej.: 10-12 cm"></div>
+      <div class="field"><label for="mCant">Cantidad *</label><input id="mCant" placeholder="Ej.: 500 postes / 1 camión"></div>
+      <div class="field"><label for="mLoc">Localidad de entrega *</label><input id="mLoc" placeholder="Ej.: Charata, Chaco"></div>
+      <div class="field"><label for="mFrec">Frecuencia de compra</label>
+        <select id="mFrec"><option value="">Elegí…</option><option>Compra única</option><option>Mensual</option><option>Cada 2 o 3 meses</option><option>Por temporada</option></select></div>
+      <div class="field"><label for="mRubro">Rubro</label>
+        <select id="mRubro"><option value="">Elegí…</option><option>Corralón / maderera</option><option>Productor agropecuario</option><option>Constructora</option><option>Distribuidor</option><option>Cooperativa</option><option>Otro</option></select></div>
+      <div class="field full"><label for="mNom">Nombre y empresa *</label><input id="mNom" autocomplete="organization" placeholder="Ej.: Juan Pérez – Corralón El Ceibo"></div>
+      <div class="field full"><label for="mObs">Algo más</label><textarea id="mObs" rows="2" placeholder="Forma de pago, plazos, si retirás o necesitás flete…"></textarea></div>
+      <p class="err full" id="mayErr" hidden></p>
+      <button class="btn btn-wa btn-block full" type="submit"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Enviar pedido por WhatsApp</button>
+      <a class="btn btn-ghost btn-block full" id="mayWa" hidden target="_blank" rel="noopener" href="https://wa.me/5493794504145">Si no se abrió WhatsApp, tocá acá</a>
+    </form>
+  </div>
+</section>
+
+<section class="block" id="confianza" style="padding-top:8px">
+  <div class="wrap">
+    <h2>Mirá cómo trabajamos</h2>
+    <p class="lead">Obras, envíos y stock, en nuestras redes.</p>
+    <div class="trust">
+      <a href="https://www.instagram.com/jr_maderas/" target="_blank" rel="noopener" data-track="instagram"><b>Instagram @jr_maderas</b><span>Obras y envíos en las historias destacadas.</span></a>
+      <a href="https://www.facebook.com/people/J-R-Maderas/61558830798066/" target="_blank" rel="noopener" data-track="facebook"><b>Facebook J &amp; R Maderas</b><span>Publicaciones y opiniones de clientes.</span></a>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=La+Madrid+y+Chacabuco%2C+Corrientes%2C+Argentina" target="_blank" rel="noopener" data-track="mapa"><b>La Madrid y Chacabuco</b><span>Corrientes capital. Ver en el mapa.</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>J&amp;R Maderas</b>
+    <div>La Madrid y Chacabuco, Corrientes</div>
+    <div>WhatsApp: <a data-wa="GEN" href="https://wa.me/5493794504145" target="_blank" rel="noopener">+54 9 3794 504145</a></div>
+    <div><a href="https://www.instagram.com/jr_maderas/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/people/J-R-Maderas/61558830798066/" target="_blank" rel="noopener">Facebook</a></div>
+    <div style="opacity:.7;margin-top:8px">© 2026 J&amp;R Maderas · jrmaderas.com.ar</div>
+  </div>
+</footer>
+
+<div class="wa-bar"><a class="btn btn-wa btn-block" data-wa="GEN" href="https://wa.me/5493794504145" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Escribinos por WhatsApp</a></div>
+
+<script>
+(function(){
+var WA="5493794504145";
+var $=function(id){return document.getElementById(id)};
+
+/* Origen de la visita: ?o=ig en el link de la bio, utm_source, o el sitio de donde viene */
+function origen(){
+  var q=new URLSearchParams(location.search), o=(q.get("o")||q.get("utm_source")||"").toLowerCase(), r=(document.referrer||"").toLowerCase();
+  if(o) return o.slice(0,12).toUpperCase().replace(/[^A-Z0-9]/g,"");
+  if(/instagram/.test(r)) return "IG";
+  if(/facebook|fb\./.test(r)) return "FB";
+  if(/google/.test(r)) return "GOOGLE";
+  if(r && r.indexOf(location.hostname)<0) return "OTRO";
+  return "DIRECTO";
+}
+var ORIG=origen();
+/* Medición: queda listo para conectar Google Analytics o Clarity cuando quieras */
+function track(ev,data){window.dataLayer=window.dataLayer||[];var d={event:ev,origen:ORIG};for(var k in data)d[k]=data[k];window.dataLayer.push(d)}
+track("visita",{});
+function waUrl(text,code){return "https://wa.me/"+WA+"?text="+encodeURIComponent(text+"\n\nRef: WEB-"+code+"-"+ORIG)}
+
+var T={
+ GEN:"Hola J&R Maderas. Quiero pedir un presupuesto.\nProducto: ___\nMedidas: ___",
+ MACH:"Hola J&R Maderas. Estoy interesado en machimbre.\nMi proyecto mide ___ x ___ m.\nEs para (techo / cielorraso / otro): ___",
+ TIR:"Hola J&R Maderas. Quisiera presupuesto por tirantes.\nSección: ___\nLargo: ___\nCantidad: ___\nEs para (techo / entrepiso / otro): ___",
+ POST:"Hola J&R Maderas. Quisiera presupuesto por postes de eucalipto.\nLargo: ___\nDiámetro: ___\nCantidad: ___\nLocalidad: ___",
+ FEN:"Hola J&R Maderas. Quisiera presupuesto por fenólicos.\nEspesor: ___\nCantidad de placas: ___\nEs para: ___",
+ AISL:"Hola J&R Maderas. Quisiera presupuesto por aislante.\nSuperficie: ___ m²\nEs para (techo / cielorraso / otro): ___",
+ CORN:"Hola J&R Maderas. Quisiera presupuesto por cornisas.\nMetros lineales: ___\nMedida o modelo: ___",
+ CLAV:"Hola J&R Maderas. Necesito clavos / accesorios.\nDetalle: ___",
+ QUIN:"Hola J&R Maderas. Quiero hacer un quincho.\nMedidas: ___ x ___ m\nTipo de techo: ___",
+ PERG:"Hola J&R Maderas. Quiero hacer una pérgola.\nMedidas: ___ x ___ m\nAltura: ___ m"
+};
+document.querySelectorAll("[data-wa]").forEach(function(a){var c=a.getAttribute("data-wa");a.href=waUrl(T[c],c);a.addEventListener("click",function(){track("whatsapp_click",{producto:c})})});
+document.addEventListener("click",function(e){
+  var k=e.target.closest("[data-calc]");
+  if(k){var r=document.querySelector('input[name=tipo][value="'+k.getAttribute("data-calc")+'"]');if(r){r.checked=true;sync()}$("calculadora").scrollIntoView();$("cLargo").focus({preventScroll:true});return}
+  var t=e.target.closest("[data-track]");if(t)track("link_click",{destino:t.getAttribute("data-track")});
+});
+
+/* ── Calculadora: criterios confirmados por J&R Maderas ── */
+var MACH={ /* cobertura útil por hoja y m² por hoja según largo */
+  m5:{nombre:'½" × 5"',cubre:0.11,m2:{"3":0.39,"3.3":0.43,"3.6":0.47,"4":0.51}},
+  m4:{nombre:'½" × 4"',cubre:0.09,m2:{"3":0.31,"3.3":0.34,"3.6":0.37,"4":0.40}}
+};
+var TIR={ /* separación entre tirantes (m) */
+  techo:{op:[0.6,0.8,1],def:0.8,nota:"En techo es a gusto, de 60 cm a 1 m. Se recomienda cada 80 cm."},
+  rustico:{op:[0.6,0.8,1],def:0.8,nota:"En techo es a gusto, de 60 cm a 1 m. Se recomienda cada 80 cm."},
+  entrepiso:{op:[0.5,0.6],def:0.5,nota:"En entrepiso se recomienda cada 50 cm, hasta 60 cm como máximo."}
+};
+var NOMBRE={cielo:"Cielorraso de machimbre",techo:"Techo con machimbre a la vista",rustico:"Techo de tirantes",entrepiso:"Entrepiso",cerco:"Cerco con postes",otro:"Quincho / pérgola"};
+function tipo(){return document.querySelector("input[name=tipo]:checked").value}
+function fmt(n,d){return n.toLocaleString("es-AR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
+function m(n){return fmt(n,Math.abs(n-Math.round(n))<0.005?0:2)}
+function up(x){return Math.ceil(x-1e-9)}
+function cm(v){return Math.round(v*100)+" cm"}
+function num(id){return parseFloat(String($(id).value).replace(",","."))}
+
+/* Plan de corte: cada fila = hojas enteras + un recorte; el recorte sale de la hoja que menos sobra.
+   Se elige la combinación con menos metros comprados. Sin desperdicio agregado. */
+var LARGOS=[3,3.3,3.6,4];
+function r3(x){return Math.round(x*1000)/1000}
+function candidatos(R,fijo){
+  var out=[],mains=fijo?[fijo]:LARGOS;
+  mains.forEach(function(H){
+    var n=Math.floor(r3(R/H)),r=r3(R-n*H);
+    if(n>0&&r<0.005){out.push({H:H,n:n,r:0,S:null,k:0});return}
+    LARGOS.forEach(function(S){var k=Math.floor(r3(S/r));if(k>=1)out.push({H:n?H:null,n:n,r:r,S:S,k:k})});
+  });
+  return out;
+}
+function planMachimbre(recorrido,cubrir,cubre,fijo){
+  var filas=up(r3(cubrir/cubre)),best=null;
+  candidatos(recorrido,fijo).forEach(function(c){
+    var h={};
+    function add(l,q,u){if(!q)return;h[l]=h[l]||{largo:l,cant:0,usos:[]};h[l].cant+=q;h[l].usos.push(u)}
+    if(c.n)add(c.H,filas*c.n,filas*c.n+" enteras");
+    if(c.r){var q=up(filas/c.k);
+      if(c.k===1&&Math.abs(c.S-c.r)<0.005)add(c.S,q,q+" enteras");
+      else add(c.S,q,q+(c.k>1?" cortadas en "+c.k+" pedazos de "+m(c.r)+" m":" cortadas a "+m(c.r)+" m"));}
+    var lista=Object.keys(h).map(function(k){return h[k]}).sort(function(a,b){return b.largo-a.largo});
+    var metros=r3(lista.reduce(function(s,x){return s+x.cant*x.largo},0));
+    var p={filas:filas,c:c,hojas:lista,metros:metros,piezas:c.n+(c.r?1:0)};
+    if(!best||metros<best.metros-0.001||(Math.abs(metros-best.metros)<0.001&&(p.piezas<best.piezas||(p.piezas===best.piezas&&(c.H||0)>(best.c.H||0)))))best=p;
+  });
+  return best;
+}
+
+/* Dibujo a escala (vista desde abajo). Horizontal = sentido del machimbre. Líneas = clavaderas o tirantes. */
+function plano(o){
+  var W=o.w,Hh=o.h,sc=Math.min(320/W,260/Hh),vw=W*sc,vh=Hh*sc,ox=o.lh?30:10,oy=10;
+  var s='<svg viewBox="0 0 '+(vw+ox+14)+' '+(vh+oy+44)+'" role="img" aria-label="'+o.alt+'">';
+  s+='<defs><marker id="ar" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" class="ar"/></marker></defs>';
+  s+='<rect x="'+ox+'" y="'+oy+'" width="'+vw+'" height="'+vh+'" class="fondo"/>';
+  if(o.plan){ /* filas de machimbre */
+    var c=o.plan.c,fh=vh/o.plan.filas,ys=o.plan.filas;
+    for(var i=0;i<ys;i++){
+      var y=oy+i*fh,x=ox,piezas=[];
+      for(var j=0;j<c.n;j++)piezas.push({l:c.H,t:"pz1"});
+      if(c.r)piezas.push({l:c.r,t:(c.k===1&&Math.abs(c.S-c.r)<0.005)?"pz1":"pz2"});
+      if(i%2)piezas.reverse(); /* trabado: alterna el lado del recorte */
+      piezas.forEach(function(p){var w=Math.min(p.l*sc,ox+vw-x);s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+Math.max(fh-0.6,0.6).toFixed(1)+'" class="'+p.t+'"/>';x+=w});
+    }
+  }
+  (o.lineas||[]).forEach(function(xm){var x=ox+xm*sc;s+='<line x1="'+x.toFixed(1)+'" y1="'+(oy-4)+'" x2="'+x.toFixed(1)+'" y2="'+(oy+vh+4)+'" class="est"/>'});
+  (o.postes||[]).forEach(function(xm){s+='<circle cx="'+(ox+xm*sc).toFixed(1)+'" cy="'+(oy+vh/2)+'" r="4" class="poste"/>'});
+  s+='<rect x="'+ox+'" y="'+oy+'" width="'+vw+'" height="'+vh+'" class="borde"/>';
+  /* cotas */
+  s+='<line x1="'+ox+'" y1="'+(oy+vh+16)+'" x2="'+(ox+vw)+'" y2="'+(oy+vh+16)+'" class="cota" marker-start="url(#ar)" marker-end="url(#ar)"/>';
+  s+='<text x="'+(ox+vw/2)+'" y="'+(oy+vh+34)+'" text-anchor="middle" class="tx">'+o.lw+'</text>';
+  if(o.lh){s+='<line x1="'+(ox-10)+'" y1="'+oy+'" x2="'+(ox-10)+'" y2="'+(oy+vh)+'" class="cota" marker-start="url(#ar)" marker-end="url(#ar)"/>';
+    s+='<text transform="translate('+(ox-15)+' '+(oy+vh/2)+') rotate(-90)" text-anchor="middle" class="tx">'+o.lh+'</text>';}
+  s+='</svg>';
+  var ley=(o.ley||[]).map(function(l){return '<span><i class="'+l[0]+'"></i>'+l[1]+'</span>'}).join("");
+  return s+(ley?'<figcaption>'+ley+'</figcaption>':'');
+}
+
+function sync(){
+  var t=tipo();
+  $("fAncho").hidden=(t==="cerco");$("fSep").hidden=(t!=="cerco");
+  $("lblLargo").textContent=t==="cerco"?"Largo del cerco (m)":"Largo (m)";
+  $("optMach").hidden=!(t==="cielo"||t==="techo");
+  $("optClav").hidden=(t!=="cielo");
+  $("optTir").hidden=!TIR[t];
+  if(TIR[t]){
+    $("tirSeg").innerHTML=TIR[t].op.map(function(v){return '<label><input type="radio" name="tir" value="'+v+'"'+(v===TIR[t].def?" checked":"")+'><span>'+cm(v)+'</span></label>'}).join("");
+    $("tirNote").textContent=TIR[t].nota;
+  }
+  $("calcRes").hidden=true;$("calcErr").hidden=true;
+}
+document.querySelectorAll("input[name=tipo]").forEach(function(r){r.addEventListener("change",sync)});
+["cLargo","cAncho","cMach","cLHoja","cSep"].forEach(function(id){$(id).addEventListener("input",function(){$("calcRes").hidden=true})});
+sync();
+
+$("calcForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var t=tipo(),L=num("cLargo"),A=num("cAncho");
+  var need=t==="cerco"?[L,num("cSep")]:[L,A];
+  if(need.some(function(v){return !(v>0)})){$("calcErr").textContent=t==="cerco"?"Poné el largo del cerco y cada cuántos metros van los postes.":"Poné el largo y el ancho en metros.";$("calcErr").hidden=false;$("calcRes").hidden=true;return}
+  $("calcErr").hidden=true;
+  var rows=[],note="Cantidades sin desperdicio. Te confirmamos todo al pasarte el precio.",sup=L*A,fig="";
+  if(t!=="cerco")rows.push(["Superficie",fmt(sup,1)+" m²",m(L)+" × "+m(A)+" m"]);
+  if(t==="cielo"||t==="techo"){
+    /* cielorraso: machimbre en sentido del ancho, filas a lo largo; techo: machimbre a lo largo, cruzando los tirantes */
+    var mm=MACH[$("cMach").value],fijo=$("cLHoja").value==="auto"?null:parseFloat($("cLHoja").value);
+    var rec=t==="cielo"?A:L,cub=t==="cielo"?L:A,p=planMachimbre(rec,cub,mm.cubre,fijo),m2=0;
+    p.hojas.forEach(function(h){m2+=h.cant*mm.m2[String(h.largo)]});
+    var fila=(p.c.n?(p.c.n>1?p.c.n+" hojas de ":"1 hoja de ")+m(p.c.H)+" m":"")+(p.c.r&&p.c.n?" + ":"")+(p.c.r?"un pedazo de "+m(p.c.r)+" m":"");
+    rows.push(["Filas de machimbre "+mm.nombre,p.filas+" filas","Cada fila de "+m(rec)+" m: "+fila]);
+    p.hojas.forEach(function(h){rows.push(["Hojas de "+m(h.largo)+" m",h.cant+" hojas",h.usos.join(" + ")])});
+    rows.push(["Total machimbre",fmt(m2,2)+" m²",fmt(p.metros,1)+" m lineales"]);
+    var lineas=[],ley=[["pz1","Hoja entera"]];
+    if(p.c.r&&!(p.c.k===1&&Math.abs(p.c.S-p.c.r)<0.005))ley.push(["pz2","Pedazo de "+m(p.c.r)+" m"]);
+    if(t==="cielo"){
+      var s=parseFloat(document.querySelector("input[name=clav]:checked").value),lin=up(A/s)+1;
+      for(var i=0;i<lin;i++)lineas.push(Math.min(i*s,A));
+      rows.push(["Clavaderas cada "+cm(s),fmt(lin*L,1)+" m lineales",lin+" líneas de "+m(L)+" m, cruzando el machimbre"]);
+      rows.push(["Cornisa (perímetro)",fmt(2*(L+A),1)+" m",""]);
+      ley.push(["est","Clavadera"]);
+    }else{
+      var st=parseFloat(document.querySelector("input[name=tir]:checked").value),n=up(L/st)+1;
+      for(var k=0;k<n;k++)lineas.push(Math.min(k*st,L));
+      rows.push(["Tirantes cada "+cm(st),n+" tirantes","de "+m(A)+" m de luz, más alero y pendiente"]);
+      ley.push(["est","Tirante"]);
+      note="Cantidades sin desperdicio. El largo final del tirante depende del alero y la pendiente; la sección te la recomendamos según la luz.";
+    }
+    fig=plano({w:rec,h:cub,plan:p,lineas:lineas,lw:m(rec)+" m",lh:m(cub)+" m",ley:ley,alt:"Dibujo de cómo se arman las filas de machimbre"});
+  }
+  if(t==="rustico"||t==="entrepiso"){
+    var st2=parseFloat(document.querySelector("input[name=tir]:checked").value),n2=up(L/st2)+1,ls=[];
+    for(var q=0;q<n2;q++)ls.push(Math.min(q*st2,L));
+    rows.push(["Tirantes cada "+cm(st2),n2+" tirantes","de "+m(A)+" m de luz"+(t==="entrepiso"?"":", más alero y pendiente")]);
+    note=t==="entrepiso"?"Cantidades sin desperdicio. La sección del tirante y el piso del entrepiso te los recomendamos según la luz.":"Cantidades sin desperdicio. El largo final del tirante depende del alero y la pendiente; la sección te la recomendamos según la luz.";
+    fig=plano({w:L,h:A,lineas:ls,lw:m(L)+" m",lh:m(A)+" m",ley:[["est","Tirante"]],alt:"Dibujo de la ubicación de los tirantes"});
+  }
+  if(t==="cerco"){
+    var sp=num("cSep"),np=up(L/sp)+1,ps=[];
+    for(var z=0;z<np;z++)ps.push(Math.min(z*sp,L));
+    rows.push(["Postes cada "+m(sp)+" m",np+" postes","para "+m(L)+" m de cerco"]);
+    note="Cantidad sin desperdicio. Contanos la altura del cerco y te decimos qué largo de poste te conviene.";
+    fig=plano({w:L,h:Math.max(L*0.06,0.3),postes:ps,lw:m(L)+" m",ley:[["poste","Poste"]],alt:"Dibujo de la ubicación de los postes"});
+  }
+  if(t==="otro"){note="Mandanos las medidas y el tipo de techo que querés, y te armamos la lista de materiales."}
+  $("resTitle").textContent=NOMBRE[t];
+  $("plano").innerHTML=fig;$("plano").hidden=!fig;
+  $("resRows").innerHTML=rows.map(function(r){return "<div><span>"+r[0]+(r[2]?"<small>"+r[2]+"</small>":"")+"</span><b>"+r[1]+"</b></div>"}).join("");
+  $("resNote").textContent=note;
+  var txt="Hola J&R Maderas. Usé la calculadora de la web.\nProyecto: "+NOMBRE[t]+"\nMedidas: "+(t==="cerco"?m(L)+" m de largo":m(L)+" x "+m(A)+" m")+"\n"+rows.map(function(r){return "• "+r[0]+": "+r[1]+(r[2]&&r[0].indexOf("Hojas")===0?" ("+r[2]+")":"")}).join("\n")+"\n¿Me pasás el precio?";
+  var code="CALC-"+t.toUpperCase();
+  $("calcWa").href=waUrl(txt,code);
+  $("calcWa").onclick=function(){track("whatsapp_click",{producto:code})};
+  $("calcRes").hidden=false;
+  track("calculadora_uso",{tipo:t,superficie:Math.round(sup*10)/10});
+  $("calcRes").scrollIntoView({block:"nearest"});
+});
+
+/* ── Mayoristas ── */
+$("mayForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var v=function(id){return $(id).value.trim()};
+  var falta=[];if(!v("mProd"))falta.push("producto");if(!v("mCant"))falta.push("cantidad");if(!v("mLoc"))falta.push("localidad");if(!v("mNom"))falta.push("nombre y empresa");
+  if(falta.length){$("mayErr").textContent="Falta completar: "+falta.join(", ")+".";$("mayErr").hidden=false;return}
+  $("mayErr").hidden=true;
+  var L=[["Producto","mProd"],["Largo","mLargo"],["Diámetro / sección","mDiam"],["Cantidad","mCant"],["Localidad de entrega","mLoc"],["Frecuencia","mFrec"],["Rubro","mRubro"],["Nombre y empresa","mNom"],["Observaciones","mObs"]];
+  var txt="Hola J&R Maderas. Pedido de cotización mayorista:\n"+L.filter(function(x){return v(x[1])}).map(function(x){return "• "+x[0]+": "+v(x[1])}).join("\n");
+  var code="MAY-"+(/poste/i.test(v("mProd"))?"POST":"OTRO");
+  track("presupuesto_mayorista",{producto:v("mProd"),localidad:v("mLoc")});
+  var url=waUrl(txt,code),w=null;
+  try{w=window.open(url,"_blank","noopener")}catch(err){}
+  var a=$("mayWa");a.href=url;a.hidden=false;
+});
+})();
+</script>
+
 </body>
 </html>
- 
