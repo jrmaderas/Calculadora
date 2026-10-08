@@ -169,6 +169,10 @@ footer a{text-decoration:underline;text-underline-offset:3px}
 .plano figcaption i.pz1{background:var(--pz1)} .plano figcaption i.pz2{background:var(--pz2)}
 .plano figcaption i.est{background:none;border-top:2px dashed var(--est);height:0;vertical-align:3px}
 .plano figcaption i.poste{background:var(--wood);border-radius:50%;width:10px}
+.plano .viga{fill:var(--est)} .plano .fino{stroke:var(--pz1);stroke-width:1.6} .plano .col{fill:var(--ink)}
+.plano figcaption i.viga{background:var(--est);height:6px;vertical-align:1px}
+.plano figcaption i.fino{background:var(--pz1);width:3px;height:12px;border-radius:1px}
+.plano figcaption i.col{background:var(--ink);width:10px;height:10px}
 </style>
 </head>
 <body>
@@ -222,7 +226,7 @@ footer a{text-decoration:underline;text-underline-offset:3px}
       <button data-calc="cielo">Cielorraso</button>
       <button data-calc="entrepiso">Entrepiso</button>
       <a class="plink" data-wa="QUIN" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Quincho</a>
-      <a class="plink" data-wa="PERG" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Pérgola</a>
+      <button data-calc="pergola">Pérgola</button>
     </div>
   </div>
 </section>
@@ -240,7 +244,8 @@ footer a{text-decoration:underline;text-underline-offset:3px}
           <label><input type="radio" name="tipo" value="rustico"><span>Techo solo tirantes</span></label>
           <label><input type="radio" name="tipo" value="entrepiso"><span>Entrepiso</span></label>
           <label><input type="radio" name="tipo" value="cerco"><span>Cerco con postes</span></label>
-          <label><input type="radio" name="tipo" value="otro"><span>Quincho / pérgola</span></label>
+          <label><input type="radio" name="tipo" value="pergola"><span>Pérgola</span></label>
+          <label><input type="radio" name="tipo" value="otro"><span>Quincho</span></label>
         </div>
       </div>
       <div class="grid2">
@@ -261,6 +266,16 @@ footer a{text-decoration:underline;text-underline-offset:3px}
         </div><small>La mayoría de los constructores usa una de estas dos.</small></div>
       <div class="field" id="optTir"><span class="lbl" id="lblTir">Tirantes cada</span>
         <div class="seg" role="radiogroup" aria-labelledby="lblTir" id="tirSeg"></div><small id="tirNote"></small></div>
+      <div class="field" id="optMat" hidden><span class="lbl" id="lblMat">Techo de la pérgola</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblMat">
+          <label><input type="radio" name="techmat" value="euca" checked><span>Finos de eucalipto</span></label>
+          <label><input type="radio" name="techmat" value="pino"><span>Tablas de pino 1″ × 3″</span></label>
+        </div></div>
+      <div class="field" id="optFin" hidden><span class="lbl" id="lblFin">Techo cada</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblFin">
+          <label><input type="radio" name="finsep" value="0.2" checked><span>20 cm</span></label>
+          <label><input type="radio" name="finsep" value="0.5"><span>50 cm</span></label>
+        </div><small>Cada 20 cm da más sombra (la más elegida). Cada 50 cm es lo mínimo recomendado.</small></div>
       <button class="btn btn-brand btn-block" type="submit">Calcular</button>
       <p class="err" id="calcErr" hidden></p>
       <div class="result" id="calcRes" hidden>
@@ -387,7 +402,7 @@ var TIR={ /* separación entre tirantes (m) */
   rustico:{op:[0.6,0.8,1],def:0.8,nota:"En techo es a gusto, de 60 cm a 1 m. Se recomienda cada 80 cm."},
   entrepiso:{op:[0.5,0.6],def:0.5,nota:"En entrepiso se recomienda cada 50 cm, hasta 60 cm como máximo."}
 };
-var NOMBRE={cielo:"Cielorraso de machimbre",techo:"Techo con machimbre a la vista",rustico:"Techo de tirantes",entrepiso:"Entrepiso",cerco:"Cerco con postes",otro:"Quincho / pérgola"};
+var NOMBRE={cielo:"Cielorraso de machimbre",techo:"Techo con machimbre a la vista",rustico:"Techo de tirantes",entrepiso:"Entrepiso",cerco:"Cerco con postes",pergola:"Pérgola de postes de eucalipto",otro:"Quincho"};
 function tipo(){return document.querySelector("input[name=tipo]:checked").value}
 function fmt(n,d){return n.toLocaleString("es-AR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
 function m(n){return fmt(n,Math.abs(n-Math.round(n))<0.005?0:2)}
@@ -454,6 +469,22 @@ function plano(o){
   return s+(ley?'<figcaption>'+ley+'</figcaption>':'');
 }
 
+/* Pérgola vista desde arriba: vigas horizontales, finos cruzando, columnas cuadradas. */
+function pergolaPlano(PL,PW,pos,lin,fs,nom){
+  var sc=Math.min(320/PL,240/PW),vw=PL*sc,vh=PW*sc,ox=34,oy=12,s='<svg viewBox="0 0 '+(vw+ox+16)+' '+(vh+oy+46)+'" role="img" aria-label="Dibujo de la pérgola vista desde arriba">';
+  s+='<defs><marker id="ar2" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" class="ar"/></marker></defs>';
+  s+='<rect x="'+ox+'" y="'+oy+'" width="'+vw+'" height="'+vh+'" class="fondo"/>';
+  var n=Math.round(PL/fs)+1;
+  for(var i=0;i<n;i++){var x=ox+Math.min(i*fs,PL)*sc;s+='<line x1="'+x.toFixed(1)+'" y1="'+oy+'" x2="'+x.toFixed(1)+'" y2="'+(oy+vh)+'" class="fino"/>'}
+  for(var j=0;j<lin;j++){var y=oy+j*vh/(lin-1);s+='<rect x="'+(ox-4)+'" y="'+(y-3).toFixed(1)+'" width="'+(vw+8)+'" height="6" rx="3" class="viga"/>';
+    for(var k=0;k<pos;k++){var cx=ox+k*vw/(pos-1);s+='<rect x="'+(cx-5).toFixed(1)+'" y="'+(y-5).toFixed(1)+'" width="10" height="10" rx="2" class="col"/>'}}
+  s+='<line x1="'+ox+'" y1="'+(oy+vh+18)+'" x2="'+(ox+vw)+'" y2="'+(oy+vh+18)+'" class="cota" marker-start="url(#ar2)" marker-end="url(#ar2)"/>';
+  s+='<text x="'+(ox+vw/2)+'" y="'+(oy+vh+36)+'" text-anchor="middle" class="tx">'+m(PL)+' m</text>';
+  s+='<line x1="'+(ox-16)+'" y1="'+oy+'" x2="'+(ox-16)+'" y2="'+(oy+vh)+'" class="cota" marker-start="url(#ar2)" marker-end="url(#ar2)"/>';
+  s+='<text transform="translate('+(ox-21)+' '+(oy+vh/2)+') rotate(-90)" text-anchor="middle" class="tx">'+m(PW)+' m</text></svg>';
+  return s+'<figcaption><span><i class="col"></i>Columna</span><span><i class="viga"></i>Viga</span><span><i class="fino"></i>'+nom+' cada '+cm(fs)+'</span></figcaption>';
+}
+
 function sync(){
   var t=tipo();
   $("fAncho").hidden=(t==="cerco");$("fSep").hidden=(t!=="cerco");
@@ -461,6 +492,7 @@ function sync(){
   $("optMach").hidden=!(t==="cielo"||t==="techo");
   $("optClav").hidden=(t!=="cielo");
   $("optTir").hidden=!TIR[t];
+  $("optFin").hidden=(t!=="pergola");$("optMat").hidden=(t!=="pergola");
   if(TIR[t]){
     $("tirSeg").innerHTML=TIR[t].op.map(function(v){return '<label><input type="radio" name="tir" value="'+v+'"'+(v===TIR[t].def?" checked":"")+'><span>'+cm(v)+'</span></label>'}).join("");
     $("tirNote").textContent=TIR[t].nota;
@@ -469,6 +501,7 @@ function sync(){
 }
 document.querySelectorAll("input[name=tipo]").forEach(function(r){r.addEventListener("change",sync)});
 ["cLargo","cAncho","cMach","cLHoja","cSep"].forEach(function(id){$(id).addEventListener("input",function(){$("calcRes").hidden=true})});
+document.querySelectorAll("input[name=finsep],input[name=techmat]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
 sync();
 
 $("calcForm").addEventListener("submit",function(e){
@@ -518,6 +551,25 @@ $("calcForm").addEventListener("submit",function(e){
     rows.push(["Postes cada "+m(sp)+" m",np+" postes","para "+m(L)+" m de cerco"]);
     note="Cantidad sin desperdicio. Contanos la altura del cerco y te decimos qué largo de poste te conviene.";
     fig=plano({w:L,h:Math.max(L*0.06,0.3),postes:ps,lw:m(L)+" m",ley:[["poste","Poste"]],alt:"Dibujo de la ubicación de los postes"});
+  }
+  if(t==="pergola"){
+    /* Reglas J&R: vigas a lo largo del lado mayor; finos cruzan el lado menor (máx. 3 m entre vigas).
+       Columnas de 3 m, cada 3,5 m como máximo. Vigas de 3/4/5 m; si pasa de 5 m, una viga por tramo, empalmada sobre columna. */
+    var PL=Math.max(L,A),PW=Math.min(L,A),fs=parseFloat(document.querySelector("input[name=finsep]:checked").value);
+    var pos=PL<=4?2:up(PL/3.5)+1,lin=up(PW/3)+1,tramo=PW/(lin-1),fl=tramo<=2.5?2.5:3;
+    var porFila=Math.round(PL/fs)+1,nf=porFila*(lin-1),nc=pos*lin;
+    function largoViga(x){return [3,4,5].filter(function(v){return v>=x-1e-9})[0]}
+    var vl,nv,vsub;
+    if(PL<=5){vl=largoViga(PL);nv=lin;vsub=lin+" líneas de vigas, una pieza entera cada una"}
+    else{vl=largoViga(PL/(pos-1));nv=lin*(pos-1);vsub=lin+" líneas de vigas, "+(pos-1)+" piezas por línea empalmadas sobre columna"}
+    rows.push(["Columnas: postes de 3 m",nc+" postes",pos+" por línea, "+lin+" líneas"]);
+    rows.push(["Vigas: postes de "+m(vl)+" m",nv+" postes",vsub]);
+    var pino=document.querySelector("input[name=techmat]:checked").value==="pino",filas=porFila+" por fila, "+(lin-1)+(lin-1>1?" filas":" fila");
+    if(pino)rows.push(['Tablas de pino 1" × 3" de 3 m, cada '+cm(fs),nf+" tablas",filas+(tramo<2.995?", cortadas a "+m(tramo)+" m":"")]);
+    else rows.push(["Finos de "+m(fl)+" m, cada "+cm(fs),nf+" finos",filas]);
+    rows.push(["Anclajes",nc+" anclajes","uno por columna"]);
+    note="Cantidades sin desperdicio. Es un bosquejo orientativo: te confirmamos medidas y diámetros al pasarte el precio.";
+    fig=pergolaPlano(PL,PW,pos,lin,fs,pino?"Tabla de pino":"Fino");
   }
   if(t==="otro"){note="Mandanos las medidas y el tipo de techo que querés, y te armamos la lista de materiales."}
   $("resTitle").textContent=NOMBRE[t];
