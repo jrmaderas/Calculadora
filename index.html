@@ -173,6 +173,8 @@ footer a{text-decoration:underline;text-underline-offset:3px}
 .plano figcaption i.viga{background:var(--est);height:6px;vertical-align:1px}
 .plano figcaption i.fino{background:var(--pz1);width:3px;height:12px;border-radius:1px}
 .plano figcaption i.col{background:var(--ink);width:10px;height:10px}
+
+.btn-x{margin-left:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:6px;padding:2px 7px;cursor:pointer;font:600 13px var(--body)}
 </style>
 </head>
 <body>
@@ -184,6 +186,7 @@ footer a{text-decoration:underline;text-underline-offset:3px}
       <a href="#productos">Productos</a>
       <a href="#calculadora">Calculadora</a>
       <a href="#postes">Postes</a>
+      <a href="#madera">Pedido</a>
       <a href="#mayoristas">Mayoristas</a>
     </nav>
   </div>
@@ -212,8 +215,8 @@ footer a{text-decoration:underline;text-underline-offset:3px}
     <h2>¿Qué necesitás?</h2>
     <p class="lead">Tocá el producto y se abre WhatsApp con el mensaje listo. Completá los datos y envialo.</p>
     <div class="prods">
-      <div class="prod"><h3>Machimbre</h3><p>Para techos y cielorrasos. Medidas ½" × 5" y ½" × 4", en largos de 3 a 4 m.</p><a class="plink" data-wa="MACH" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar machimbre</a></div>
-      <div class="prod"><h3>Tirantes y madera estructural</h3><p>Para techos, entrepisos, quinchos y pérgolas.</p><a class="plink" data-wa="TIR" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar tirantes</a></div>
+      <div class="prod"><h3>Machimbre</h3><p>Para techos y cielorrasos. Medidas ½" × 5" y ½" × 4", en largos de 3 a 4 m.</p><a class="plink" href="#madera">Armar pedido de machimbre</a></div>
+      <div class="prod"><h3>Tirantes y madera estructural</h3><p>Para techos, entrepisos, quinchos y pérgolas.</p><a class="plink" href="#madera">Armar pedido de tirantes</a></div>
       <div class="prod star"><h3>Postes de eucalipto</h3><p>Pelados, sin tratar. Por menor y por camión.</p><a class="plink" data-wa="POST" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar postes</a></div>
       <div class="prod"><h3>Fenólicos y tableros</h3><p>Para losas, encofrados y obra.</p><a class="plink" data-wa="FEN" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar fenólicos</a></div>
       <div class="prod"><h3>Aislantes</h3><p>Para techos y cielorrasos.</p><a class="plink" data-wa="AISL" href="https://wa.me/5493794504145" target="_blank" rel="noopener">Consultar aislantes</a></div>
@@ -269,7 +272,8 @@ footer a{text-decoration:underline;text-underline-offset:3px}
       <div id="optQuin" hidden style="display:flex;flex-direction:column;gap:14px">
 <div class="field"><span class="lbl" id="lbl_qmod">Tipo de quincho</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qmod"><label><input type="radio" name="qmod" value="dosB" checked><span>Dos aguas, centro libre (cabreadas)</span></label><label><input type="radio" name="qmod" value="dosA"><span>Dos aguas con columna central</span></label><label><input type="radio" name="qmod" value="agua1"><span>A un agua</span></label></div></div>
 <div class="field"><span class="lbl" id="lbl_qcol">Columnas</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qcol"><label><input type="radio" name="qcol" value="poste" checked><span>Postes redondos de eucalipto</span></label><label><input type="radio" name="qcol" value="e66"><span>Eucalipto 6″ × 6″</span></label><label><input type="radio" name="qcol" value="e88"><span>Eucalipto 8″ × 8″</span></label><label><input type="radio" name="qcol" value="q66"><span>Quebracho 6″ × 6″</span></label><label><input type="radio" name="qcol" value="q88"><span>Quebracho 8″ × 8″</span></label></div></div>
-<div id="fQviga"><div class="field"><span class="lbl" id="lbl_qviga">Vigas</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qviga"><label><input type="radio" name="qviga" value="38" checked><span>Escuadradas 3″ × 8″</span></label><label><input type="radio" name="qviga" value="poste"><span>Postes redondos</span></label></div></div></div>
+<div id="fQviga"><div class="field"><span class="lbl" id="lbl_qviga">Vigas</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qviga"><label><input type="radio" name="qviga" value="36"><span>3″ × 6″</span></label><label><input type="radio" name="qviga" value="38" checked><span>3″ × 8″</span></label><label><input type="radio" name="qviga" value="310"><span>3″ × 10″</span></label><label><input type="radio" name="qviga" value="poste"><span>Postes redondos</span></label></div></div></div>
+<div class="field"><span class="lbl" id="lbl_qtir">Tirantes del techo</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qtir"><label><input type="radio" name="qtir" value="auto" checked><span>Según la luz (recomendado)</span></label><label><input type="radio" name="qtir" value="26"><span>2″ × 6″</span></label><label><input type="radio" name="qtir" value="36"><span>3″ × 6″</span></label></div></div>
 <div class="grid2"><div class="field"><span class="lbl" id="lbl_qmach">Machimbre</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qmach"><label><input type="radio" name="qmach" value="m5" checked><span>½″ × 5″</span></label><label><input type="radio" name="qmach" value="m4"><span>½″ × 4″</span></label></div></div><div class="field"><span class="lbl" id="lbl_qaisl">Aislante con aluminio</span><div class="seg" role="radiogroup" aria-labelledby="lbl_qaisl"><label><input type="radio" name="qaisl" value="a5" checked><span>5 mm</span></label><label><input type="radio" name="qaisl" value="a10"><span>10 mm</span></label></div></div></div>
       </div>
       <div class="field" id="optMat" hidden><span class="lbl" id="lblMat">Techo de la pérgola</span>
@@ -306,6 +310,37 @@ footer a{text-decoration:underline;text-underline-offset:3px}
       <div class="pcard"><h3>Por camión</h3><p>Venta mayorista desde Corrientes para corralones, productores, constructoras y distribuidores.</p>
         <a class="btn btn-ghost" href="#mayoristas">Pedir cotización</a></div>
     </div>
+  </div>
+</section>
+
+<section class="block" id="madera">
+  <div class="wrap">
+    <h2>Hacé tu pedido</h2>
+    <p class="lead">Tablas, tirantes, puntales, machimbre, fenólicos, aislantes, clavos y alambre. Armá tu pedido y te confirmamos stock y precio por WhatsApp.</p>
+    <form class="calc" id="pedForm" novalidate>
+      <div class="field"><label for="pProd">Producto</label><select id="pProd"></select></div>
+      <div class="grid2">
+        <div class="field" id="fLargo"><label for="pLargo">Largo</label><select id="pLargo"></select></div>
+        <div class="field" id="fOtro" hidden><label for="pOtro">¿Qué largo necesitás? (m)</label><input id="pOtro" type="number" inputmode="decimal" min="0.5" step="0.1" placeholder="Ej.: 4,5"></div>
+        <div class="field" id="fDet" hidden><label for="pDet" id="lblDet">Detalle</label><input id="pDet" type="text"></div>
+        <div class="field"><label for="pCant" id="lblCant">Cantidad</label><input id="pCant" type="number" inputmode="decimal" min="0.5" step="any" value="1"></div>
+      </div>
+      <div class="field" id="fTerm"><span class="lbl" id="lblTerm">Terminación</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblTerm">
+          <label><input type="radio" name="pterm" value="b" checked><span>Sin cepillar</span></label>
+          <label><input type="radio" name="pterm" value="c"><span>Cepillado</span></label>
+        </div></div>
+      <p class="note" id="pAviso" hidden></p>
+      <p class="note">Los largos disponibles cambian según el stock. Al responderte te confirmamos qué medidas hay.</p>
+      <button class="btn btn-brand btn-block" type="submit">Agregar al pedido</button>
+      <p class="err" id="pErr" hidden></p>
+      <div class="result" id="pRes" hidden>
+        <h3>Tu pedido</h3>
+        <div class="rows" id="pRows"></div>
+        <div class="field"><label for="pLoc">Localidad (opcional)</label><input id="pLoc" placeholder="Ej.: Corrientes capital"></div>
+        <a class="btn btn-wa btn-block" id="pWa" target="_blank" rel="noopener" href="https://wa.me/5493794504145"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Consultar stock y precio</a>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -409,6 +444,8 @@ var TIR={ /* separación entre tirantes (m) */
   entrepiso:{op:[0.5,0.6],def:0.5,nota:"En entrepiso se recomienda cada 50 cm, hasta 60 cm como máximo."}
 };
 var NOMBRE={cielo:"Cielorraso de machimbre",techo:"Techo con machimbre a la vista",rustico:"Techo de tirantes",entrepiso:"Entrepiso",cerco:"Cerco con postes",pergola:"Pérgola de postes de eucalipto",quincho:"Quincho"};
+/* Clavaderas 2″ × 2″ cada 80 cm, cruzando los tirantes, en listones de 3 m (criterio J&R, sin desperdicio). */
+function clav2x2(largo,luz){var l=up(luz/0.8)+1,p=up(largo/3);return ["Clavaderas 2″ × 2″ cada 80 cm",l*p+" listones de 3 m",l+" líneas de "+m(largo)+" m, cruzando los tirantes"]}
 function tipo(){return document.querySelector("input[name=tipo]:checked").value}
 function fmt(n,d){return n.toLocaleString("es-AR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
 function m(n){return fmt(n,Math.abs(n-Math.round(n))<0.005?0:2)}
@@ -486,7 +523,7 @@ function m(n){return fm(n,Math.abs(n-Math.round(n))<0.005?0:2)}
 function $$(n){return "$ "+fm(Math.round(n))}
 function posteLen(x){return [3,4,5].filter(function(v){return v>=x-1e-9})[0]||null}
 function pies(e,a,l){return e*a*l*0.2734}
-function pieKey(a,l){return a>=8?"pie38":(l>4+1e-9?"pieLargo":"pieCorto")}
+function pieKey(a,l){return a>=10?"pie310":a>=8?"pie38":(l>4+1e-9?"pieLargo":"pieCorto")}
 
 /* Machimbre: mismo plan de corte que la calculadora de la web (sin desperdicio). */
 var MACH={m5:{n:'½″ × 5″',cubre:0.11,m2:{"3":0.39,"3.3":0.43,"3.6":0.47,"4":0.51}},m4:{n:'½″ × 4″',cubre:0.09,m2:{"3":0.31,"3.3":0.34,"3.6":0.37,"4":0.40}}};
@@ -504,7 +541,7 @@ function planMach(rec,cub,mm){
 
 /* ── modelos ── */
 var MODELOS=[
- {id:"perg",n:"Pérgola",d:"Columnas y vigas de postes redondos. Techo de finos de eucalipto o pino 1″ × 3″, cada 20 o 50 cm."},
+ {id:"perg",n:"Pérgola",d:"Columnas y vigas de postes redondos. Techo de finos de eucalipto o pino 1″ × 3″, cada 20 o 50 cm. De 3 a 5 m de ancho usa el sistema de columnas solo en los lados largos."},
  {id:"agua1",n:"Quincho a un agua",d:"Columnas de postes redondos; las de atrás más altas para dar 15 % de pendiente. Tirantes cada 80 cm, machimbre y aislante. Hasta 4,5 m de ancho."},
  {id:"dosA",n:"Dos aguas con columna central",d:"Columnas de postes redondos a los costados y en el centro bajo la cumbrera. Pendiente 20 %. Tirantes 2″ × 6″ cada 80 cm."},
  {id:"dosB",n:"Dos aguas con cabreadas",d:"Centro libre. Una cabreada de 3″ × 6″ en cada fila de columnas, cumbrera 3″ × 8″ y tirantes 2″ × 6″ cada 80 cm. Pendiente 30 %."}
@@ -512,10 +549,11 @@ var MODELOS=[
 
 function calc(mod,L0,W0,o){
   var L=Math.max(L0,W0),W=Math.min(L0,W0),items=[],warn=[];
+  var VA={"36":6,"38":8,"310":10}[o.viga]||8,VSP={"36":2.5,"38":3,"310":3.5,"poste":3.5}[o.viga]||3;
   function it(g,key,desc,cant,pu,sub,unidad){items.push({g:g,key:key,desc:desc,cant:cant,pu:pu,sub:sub||"",u:unidad||""})}
   function poste(g,len,cant,sub){it(g,"poste"+len,"Postes de eucalipto de "+len+" m",cant,P["poste"+len],sub)}
-  function escu(g,e,a,len,cant,sub){var pk=pieKey(a,len),pp=pies(e,a,len);
-    it(g,pk+"|"+e+"x"+a+"|"+len,(e===1?"Tabla ":a>=8?"Viga ":"Tirante ")+e+"″ × "+a+"″ de "+m(len)+" m",cant,pp*P[pk],(sub?sub+" · ":"")+fm(pp,1)+" pies c/u")}
+  function escu(g,e,a,len,cant,sub,nom){var pk=pieKey(a,len),pp=pies(e,a,len);
+    it(g,pk+"|"+e+"x"+a+"|"+len,(nom?nom+" ":e===1?"Tabla ":a>=8?"Viga ":"Tirante ")+e+"″ × "+a+"″ de "+m(len)+" m",cant,pp*P[pk],(sub?sub+" · ":"")+fm(pp,1)+" pies c/u")}
   function col(g,len,cant,sub){
     if(o.col==="poste"){var pl=posteLen(len);if(!pl){warn.push("La columna necesita más de 5 m: usá columnas escuadradas.");return}
       poste(g,pl,cant,sub+(pl-len>0.05?", se cortan a "+m(r1(len))+" m":""));return}
@@ -526,18 +564,42 @@ function calc(mod,L0,W0,o){
     if(o.viga==="poste"){
       if(L<=5){var pl=posteLen(L);poste(g,pl,lines,lines+" líneas, una pieza entera cada una")}
       else{var pl2=posteLen(bay);poste(g,pl2,lines*(pos-1),lines+" líneas, "+(pos-1)+" piezas empalmadas sobre columna")}
-    }else escu(g,3,8,r1(bay),lines*(pos-1),lines+" líneas, "+(pos-1)+" tramos de "+m(bay)+" m");
+    }else escu(g,3,VA,r1(bay),lines*(pos-1),lines+" líneas, "+(pos-1)+" tramos de "+m(bay)+" m","Viga");
+  }
+  function cumbrera(g,pos,bay,sub){
+    if(o.viga==="poste"){if(L<=5)poste(g,posteLen(L),1,sub);else poste(g,posteLen(bay),pos-1,sub+", empalmada sobre columna")}
+    else escu(g,3,VA,r1(bay),pos-1,sub,"Viga");
+  }
+  function tirSec(luz){
+    if(luz>4.5)warn.push("Los tirantes cubren más de 4,5 m: necesita cálculo de un profesional.");
+    if(o.tir==="26"){if(luz>3)warn.push("Con tirantes 2″ × 6″ conviene hasta 3 m de luz; para "+m(luz)+" m se recomienda 3″ × 6″.");return 2}
+    if(o.tir==="36")return 3;
+    return luz<=3?2:3;
   }
   function techo(g,rec,cub,lados){
     var mm=MACH[o.mach],p=planMach(rec,cub,mm),sup=rec*cub*lados,partes=[];
     Object.keys(p.h).sort().reverse().forEach(function(l){partes.push(p.h[l]*lados+" hojas de "+m(+l)+" m")});
     it(g,"machM2","Machimbre "+mm.n,Math.round(p.m2*lados*100)/100,P.machM2,partes.join(" + "),"m²");
     it(g,o.aisl==="a10"?"aisl10":"aisl5","Aislante "+(o.aisl==="a10"?"10":"5")+" mm con aluminio",Math.round(sup*10)/10,P[o.aisl==="a10"?"aisl10":"aisl5"],"superficie del techo","m²");
+    var cl=up(cub/0.8)+1,cp=up(rec/3);
+    escu(g,2,2,3,lados*cl*cp,"cada 80 cm sobre el aislante, "+lados*cl+" líneas de "+m(rec)+" m","Clavadera");
+    it(g,"apreta","Apreta membrana de 3 m",lados*cl*cp,P.apreta,"una sobre cada clavadera");
+    it(g,"autoperf","Autoperforantes",up(lados*cl*rec*3),P.autoperf,"3 por metro de clavadera");
     return sup;
   }
   if(!(L>0&&W>0))return {items:[],warn:["Poné el largo y el ancho."],L:L,W:W};
 
-  if(mod==="perg"){
+  if(mod==="perg"&&W>3&&W<=5){
+    /* Sistema J&R (cobertizo de Nicolás): columnas solo en los lados largos, transversales sobre cada par, finos a lo largo. */
+    var fsN=o.psep,pn=up(L/3)+1,bayN=L/(pn-1),porT=up(W/fsN)+1,nfN=porT*(pn-1);
+    poste("Estructura",3,pn*2,"columnas, "+pn+" por lado");
+    poste("Estructura",posteLen(bayN),2*(pn-1),"vigas laterales, "+(pn-1)+" tramos por lado");
+    poste("Estructura",posteLen(W),pn,"vigas transversales, una sobre cada par de columnas");
+    if(o.pmat==="pino")it("Techo","pino13","Pino 1″ × 3″ de 3 m",nfN,P.pino13,"cada "+Math.round(fsN*100)+" cm, "+porT+" por tramo"+(bayN<2.995?", cortadas a "+m(bayN)+" m":""));
+    else{var flN=bayN<=2.5?"25":"3";it("Techo","fino"+flN,"Finos de eucalipto de "+(flN==="25"?"2,5":"3")+" m",nfN,P["fino"+flN],"cada "+Math.round(fsN*100)+" cm, "+porT+" por tramo")}
+    it("Estructura","anclaje","Anclajes",pn*2,P.anclaje,"uno por columna");
+  }
+  else if(mod==="perg"){
     var fs=o.psep,pos=L<=4?2:up(L/3.5)+1,lin=up(W/3)+1,tramo=W/(lin-1),porFila=Math.round(L/fs)+1,nf=porFila*(lin-1),nc=pos*lin;
     poste("Estructura",3,nc,"columnas, "+pos+" por línea, "+lin+" líneas");
     var vl,nv;if(L<=5){vl=posteLen(L);nv=lin}else{vl=posteLen(L/(pos-1));nv=lin*(pos-1)}
@@ -549,11 +611,11 @@ function calc(mod,L0,W0,o){
 
   if(mod==="agua1"){
     if(W>4.5)warn.push("A un agua conviene hasta 4,5 m de ancho. Para más, usá dos aguas.");
-    var sp=o.viga==="poste"?3.5:3,pos1=up(L/sp)+1,bay1=L/(pos1-1),rise=W*0.15,back=posteLen(3+rise);
+    var sp=VSP,pos1=up(L/sp)+1,bay1=L/(pos1-1),rise=W*0.15,back=posteLen(3+rise);
     col("Estructura",3,pos1,"columnas de adelante");
     col("Estructura",3+rise,pos1,"columnas de atrás");
     vigas("Estructura",2,pos1,bay1);
-    var nt=up(L/0.8)+1,ts=W<=3?2:3,tl=r1(hyp(W,rise)+0.8);
+    var nt=up(L/0.8)+1,ts=tirSec(W),tl=r1(hyp(W,rise)+0.8);
     escu("Techo",ts,6,tl,nt,"tirantes cada 80 cm, con 40 cm de alero de cada lado");
     techo("Techo",L+0.6,tl,1);
     it("Estructura","anclaje","Anclajes",pos1*2,P.anclaje,"uno por columna");
@@ -562,17 +624,15 @@ function calc(mod,L0,W0,o){
 
   if(mod==="dosA"||mod==="dosB"||mod==="dosC"){
     var pend=mod==="dosA"?0.2:0.3,half=W/2,rs=half*pend,sl=hyp(half,rs);
-    var spq=(o.viga==="poste"&&mod==="dosA")?3.5:3,pq=up(L/spq)+1,bq=L/(pq-1);
+    var spq=VSP,pq=up(L/spq)+1,bq=L/(pq-1);
     if(W>8)warn.push("Más de 8 m de ancho necesita cálculo de un profesional.");
     col("Estructura",3,pq*2,"columnas de los costados");
     vigas("Estructura",2,pq,bq);
     var nt2=up(L/(mod==="dosC"?o.csep:0.8))+1;
     if(mod==="dosA"){
       col("Estructura",3+rs,pq,"columnas centrales bajo la cumbrera");
-      if(o.viga==="poste"){if(L<=5)poste("Estructura",posteLen(L),1,"cumbrera");else poste("Estructura",posteLen(bq),pq-1,"cumbrera, empalmada sobre columna")}
-      else escu("Estructura",3,8,r1(bq),pq-1,"cumbrera");
-      if(half>4.5)warn.push("Cada lado pasa de 4,5 m: el tirante necesita cálculo de un profesional.");
-      escu("Techo",half<=3?2:3,6,r1(sl+0.4),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado");
+      cumbrera("Estructura",pq,bq,"cumbrera");
+      escu("Techo",tirSec(half),6,r1(sl+0.4),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado");
     }
     if(mod==="dosB"){
       var jb=hyp(half/2,rs/2);
@@ -581,8 +641,8 @@ function calc(mod,L0,W0,o){
       escu("Cabreadas ("+pq+")",3,6,1,pq,"pendolón, se corta en obra");
       escu("Cabreadas ("+pq+")",2,6,r1(jb+0.05),pq*2,"jabalcones");
       it("Cabreadas ("+pq+")","fenolico","Fenólico 18 mm para cartelas",up(pq*12*0.12/2.97),P.fenolico,pq*12+" cartelas de 30 × 40 cm","placas");
-      escu("Estructura",3,8,r1(bq),pq-1,"cumbrera, de cabreada a cabreada");
-      escu("Techo",half<=3?2:3,6,r1(sl+0.4),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado");
+      cumbrera("Estructura",pq,bq,"cumbrera, de cabreada a cabreada");
+      escu("Techo",tirSec(half),6,r1(sl+0.4),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado");
     }
     if(mod==="dosC"){
       var g="Cabreadas de tablas ("+nt2+")",d1=hyp(W/3-W/4,rs/2)+0.08,d2=hyp(W/2-W/3,rs)+0.1;
@@ -618,6 +678,23 @@ function pergolaPlano(PL,PW,pos,lin,fs,nom){
   return s+'<figcaption><span><i class="col"></i>Columna</span><span><i class="viga"></i>Viga</span><span><i class="fino"></i>'+nom+' cada '+cm(fs)+'</span></figcaption>';
 }
 
+/* Pérgola de 3 a 5 m de ancho: vigas laterales arriba y abajo, transversales sobre cada par de columnas, finos a lo largo. */
+function pergolaPlano2(PL,PW,pn,fs,nom){
+  var sc=Math.min(320/PL,240/PW),vw=PL*sc,vh=PW*sc,ox=34,oy=12,s='<svg viewBox="0 0 '+(vw+ox+16)+' '+(vh+oy+46)+'" role="img" aria-label="Dibujo de la pérgola vista desde arriba">';
+  s+='<defs><marker id="ar3" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" class="ar"/></marker></defs>';
+  s+='<rect x="'+ox+'" y="'+oy+'" width="'+vw+'" height="'+vh+'" class="fondo"/>';
+  var n=up(PW/fs)+1;
+  for(var i=0;i<n;i++){var y=oy+Math.min(i*fs,PW)*sc;s+='<line x1="'+ox+'" y1="'+y.toFixed(1)+'" x2="'+(ox+vw)+'" y2="'+y.toFixed(1)+'" class="fino"/>'}
+  [0,vh].forEach(function(dy){s+='<rect x="'+(ox-4)+'" y="'+(oy+dy-3).toFixed(1)+'" width="'+(vw+8)+'" height="6" rx="3" class="viga"/>'});
+  for(var k=0;k<pn;k++){var cx=ox+k*vw/(pn-1);s+='<rect x="'+(cx-3).toFixed(1)+'" y="'+(oy-4)+'" width="6" height="'+(vh+8)+'" rx="3" class="viga"/>';
+    [0,vh].forEach(function(dy){s+='<rect x="'+(cx-5).toFixed(1)+'" y="'+(oy+dy-5).toFixed(1)+'" width="10" height="10" rx="2" class="col"/>'})}
+  s+='<line x1="'+ox+'" y1="'+(oy+vh+18)+'" x2="'+(ox+vw)+'" y2="'+(oy+vh+18)+'" class="cota" marker-start="url(#ar3)" marker-end="url(#ar3)"/>';
+  s+='<text x="'+(ox+vw/2)+'" y="'+(oy+vh+36)+'" text-anchor="middle" class="tx">'+m(PL)+' m</text>';
+  s+='<line x1="'+(ox-16)+'" y1="'+oy+'" x2="'+(ox-16)+'" y2="'+(oy+vh)+'" class="cota" marker-start="url(#ar3)" marker-end="url(#ar3)"/>';
+  s+='<text transform="translate('+(ox-21)+' '+(oy+vh/2)+') rotate(-90)" text-anchor="middle" class="tx">'+m(PW)+' m</text></svg>';
+  return s+'<figcaption><span><i class="col"></i>Columna</span><span><i class="viga"></i>Viga</span><span><i class="fino"></i>'+nom+' cada '+cm(fs)+'</span></figcaption>';
+}
+
 function sync(){
   var t=tipo();
   $("fAncho").hidden=(t==="cerco");$("fSep").hidden=(t!=="cerco");
@@ -625,7 +702,7 @@ function sync(){
   $("optMach").hidden=!(t==="cielo"||t==="techo");
   $("optClav").hidden=(t!=="cielo");
   $("optTir").hidden=!TIR[t];
-  $("optFin").hidden=(t!=="pergola");$("optQuin").hidden=(t!=="quincho");$("fQviga").hidden=(t!=="quincho"||document.querySelector("input[name=qmod]:checked").value==="dosB");$("optMat").hidden=(t!=="pergola");
+  $("optFin").hidden=(t!=="pergola");$("optQuin").hidden=(t!=="quincho");$("fQviga").hidden=(t!=="quincho");$("optMat").hidden=(t!=="pergola");
   if(TIR[t]){
     $("tirSeg").innerHTML=TIR[t].op.map(function(v){return '<label><input type="radio" name="tir" value="'+v+'"'+(v===TIR[t].def?" checked":"")+'><span>'+cm(v)+'</span></label>'}).join("");
     $("tirNote").textContent=TIR[t].nota;
@@ -634,8 +711,7 @@ function sync(){
 }
 document.querySelectorAll("input[name=tipo]").forEach(function(r){r.addEventListener("change",sync)});
 ["cLargo","cAncho","cMach","cLHoja","cSep"].forEach(function(id){$(id).addEventListener("input",function(){$("calcRes").hidden=true})});
-document.querySelectorAll("input[name=qmod]").forEach(function(r){r.addEventListener("change",function(){$("fQviga").hidden=(r.value==="dosB")})});
-document.querySelectorAll("input[name=finsep],input[name=techmat],input[name=qmod],input[name=qcol],input[name=qviga],input[name=qmach],input[name=qaisl]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
+document.querySelectorAll("input[name=finsep],input[name=techmat],input[name=qmod],input[name=qcol],input[name=qviga],input[name=qtir],input[name=qmach],input[name=qaisl]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
 sync();
 
 $("calcForm").addEventListener("submit",function(e){
@@ -667,6 +743,11 @@ $("calcForm").addEventListener("submit",function(e){
       var st=parseFloat(document.querySelector("input[name=tir]:checked").value),n=up(L/st)+1;
       for(var k=0;k<n;k++)lineas.push(Math.min(k*st,L));
       rows.push(["Tirantes cada "+cm(st),n+" tirantes","de "+m(A)+" m de luz, más alero y pendiente"]);
+      rows.push(clav2x2(L,A));
+      var cl2=up(A/0.8)+1,cp2=up(L/3);
+      rows.push(["Membrana",up(L*A/20)+(up(L*A/20)>1?" rollos":" rollo"),"rollos de 20 m², para "+fmt(L*A,1)+" m²"]);
+      rows.push(["Apreta membrana de 3 m",cl2*cp2+" piezas","una sobre cada clavadera"]);
+      rows.push(["Autoperforantes",up(cl2*L*3)+" unidades","3 por metro de clavadera"]);
       ley.push(["est","Tirante"]);
       note="Cantidades sin desperdicio. El largo final del tirante depende del alero y la pendiente; la sección te la recomendamos según la luz.";
     }
@@ -676,6 +757,7 @@ $("calcForm").addEventListener("submit",function(e){
     var st2=parseFloat(document.querySelector("input[name=tir]:checked").value),n2=up(L/st2)+1,ls=[];
     for(var q=0;q<n2;q++)ls.push(Math.min(q*st2,L));
     rows.push(["Tirantes cada "+cm(st2),n2+" tirantes","de "+m(A)+" m de luz"+(t==="entrepiso"?"":", más alero y pendiente")]);
+    if(t==="rustico")rows.push(clav2x2(L,A));
     note=t==="entrepiso"?"Cantidades sin desperdicio. La sección del tirante y el piso del entrepiso te los recomendamos según la luz.":"Cantidades sin desperdicio. El largo final del tirante depende del alero y la pendiente; la sección te la recomendamos según la luz.";
     fig=plano({w:L,h:A,lineas:ls,lw:m(L)+" m",lh:m(A)+" m",ley:[["est","Tirante"]],alt:"Dibujo de la ubicación de los tirantes"});
   }
@@ -690,6 +772,22 @@ $("calcForm").addEventListener("submit",function(e){
     /* Reglas J&R: vigas a lo largo del lado mayor; finos cruzan el lado menor (máx. 3 m entre vigas).
        Columnas de 3 m, cada 3,5 m como máximo. Vigas de 3/4/5 m; si pasa de 5 m, una viga por tramo, empalmada sobre columna. */
     var PL=Math.max(L,A),PW=Math.min(L,A),fs=parseFloat(document.querySelector("input[name=finsep]:checked").value);
+    var pino=document.querySelector("input[name=techmat]:checked").value==="pino";
+    if(PW>3&&PW<=5){
+      /* Sistema J&R (cobertizo de Nicolás): columnas solo en los lados largos, cada 3 m como máximo; vigas transversales
+         sobre cada par de columnas; finos de 3 m a lo largo, apoyados sobre las transversales. */
+      var pn=up(PL/3)+1,bay=PL/(pn-1),flN=bay<=2.5?2.5:3,porT=up(PW/fs)+1,nfN=porT*(pn-1);
+      function lv(x){return [3,4,5].filter(function(v){return v>=x-1e-9})[0]}
+      rows.push(["Columnas: postes de 3 m",pn*2+" postes",pn+" por lado, en los dos lados largos"]);
+      rows.push(["Vigas laterales: postes de "+m(lv(bay))+" m",2*(pn-1)+" postes",(pn-1)+" tramos por lado"]);
+      rows.push(["Vigas transversales: postes de "+m(lv(PW))+" m",pn+" postes","una sobre cada par de columnas"]);
+      var filasN=porT+" por tramo, "+(pn-1)+" tramos";
+      if(pino)rows.push(['Tablas de pino 1" × 3" de 3 m, cada '+cm(fs),nfN+" tablas",filasN+(bay<2.995?", cortadas a "+m(bay)+" m":"")]);
+      else rows.push(["Finos de "+m(flN)+" m, cada "+cm(fs),nfN+" finos",filasN]);
+      rows.push(["Anclajes",pn*2+" anclajes","uno por columna"]);
+      note="Cantidades sin desperdicio. Es un bosquejo orientativo: te confirmamos medidas y diámetros al pasarte el precio.";
+      fig=pergolaPlano2(PL,PW,pn,fs,pino?"Tabla de pino":"Fino");
+    }else{
     var pos=PL<=4?2:up(PL/3.5)+1,lin=up(PW/3)+1,tramo=PW/(lin-1),fl=tramo<=2.5?2.5:3;
     var porFila=Math.round(PL/fs)+1,nf=porFila*(lin-1),nc=pos*lin;
     function largoViga(x){return [3,4,5].filter(function(v){return v>=x-1e-9})[0]}
@@ -698,18 +796,19 @@ $("calcForm").addEventListener("submit",function(e){
     else{vl=largoViga(PL/(pos-1));nv=lin*(pos-1);vsub=lin+" líneas de vigas, "+(pos-1)+" piezas por línea empalmadas sobre columna"}
     rows.push(["Columnas: postes de 3 m",nc+" postes",pos+" por línea, "+lin+" líneas"]);
     rows.push(["Vigas: postes de "+m(vl)+" m",nv+" postes",vsub]);
-    var pino=document.querySelector("input[name=techmat]:checked").value==="pino",filas=porFila+" por fila, "+(lin-1)+(lin-1>1?" filas":" fila");
+    var filas=porFila+" por fila, "+(lin-1)+(lin-1>1?" filas":" fila");
     if(pino)rows.push(['Tablas de pino 1" × 3" de 3 m, cada '+cm(fs),nf+" tablas",filas+(tramo<2.995?", cortadas a "+m(tramo)+" m":"")]);
     else rows.push(["Finos de "+m(fl)+" m, cada "+cm(fs),nf+" finos",filas]);
     rows.push(["Anclajes",nc+" anclajes","uno por columna"]);
     note="Cantidades sin desperdicio. Es un bosquejo orientativo: te confirmamos medidas y diámetros al pasarte el precio.";
     fig=pergolaPlano(PL,PW,pos,lin,fs,pino?"Tabla de pino":"Fino");
+    }
   }
   var pedido="";
   if(t==="pergola"){pedido="P-perg-"+L+"x"+A+"-"+document.querySelector("input[name=techmat]:checked").value+"-"+Math.round(parseFloat(document.querySelector("input[name=finsep]:checked").value)*100)}
   if(t==="quincho"){
     var qv=function(n){return document.querySelector("input[name="+n+"]:checked").value};
-    var qo={col:qv("qcol"),viga:qv("qviga"),mach:qv("qmach"),aisl:qv("qaisl")},qm=qv("qmod");
+    var qo={tir:qv("qtir"),col:qv("qcol"),viga:qv("qviga"),mach:qv("qmach"),aisl:qv("qaisl")},qm=qv("qmod");
     var qr=QE.calc(qm,L,A,qo),qn=QE.MODELOS.filter(function(x){return x.id===qm})[0];
     rows.push(["Tipo",qn.n,""]);
     var lastG="";
@@ -717,7 +816,7 @@ $("calcForm").addEventListener("submit",function(e){
       var sub=String(x.sub||"").replace(/\s*·\s*[\d.,]+ pies c\/u/,"");
       rows.push([x.desc,(x.u==="m²"?m(x.cant)+" m²":x.u==="placas"?x.cant+" placas":x.cant+(x.cant===1?" unidad":" unidades")),(x.g!==lastG?x.g+": ":"")+sub]);lastG=x.g});
     note=(qr.warn.length?qr.warn.join(" ")+" ":"")+"Cantidades orientativas, sin desperdicio. Te confirmamos la estructura, la pendiente y la cubierta al pasarte el precio.";
-    pedido="Q-"+qm+"-"+L+"x"+A+"-"+qo.col+"-"+qo.viga+"-"+qo.mach+"-"+qo.aisl;
+    pedido="Q-"+qm+"-"+L+"x"+A+"-"+qo.col+"-"+qo.viga+"-"+qo.mach+"-"+qo.aisl+"-t"+qo.tir;
   }
   $("resTitle").textContent=NOMBRE[t];
   $("plano").innerHTML=fig;$("plano").hidden=!fig;
@@ -730,6 +829,69 @@ $("calcForm").addEventListener("submit",function(e){
   $("calcRes").hidden=false;
   track("calculadora_uso",{tipo:t,superficie:Math.round(sup*10)/10});
   $("calcRes").scrollIntoView({block:"nearest"});
+});
+
+/* ── Pedido de madera: medidas que maneja J&R ── */
+var CAT=[
+ {id:"PU33",g:"Puntales",n:"Puntal 3″ × 3″",L:[3],t:1,u:"puntales"},
+ {id:"TB13",g:"Tablas",n:"Tabla 1″ × 3″",L:[3],t:1,u:"tablas"},
+ {id:"TB14",g:"Tablas",n:"Tabla 1″ × 4″",L:[3],t:1,u:"tablas"},
+ {id:"TB15",g:"Tablas",n:"Tabla 1″ × 5″",L:[3],t:1,u:"tablas"},
+ {id:"TB16",g:"Tablas",n:"Tabla 1″ × 6″",L:[3],t:1,u:"tablas"},
+ {id:"TB18",g:"Tablas",n:"Tabla 1″ × 8″",L:[3],t:1,u:"tablas"},
+ {id:"TI22",g:"Tirantes",n:"Tirante 2″ × 2″",L:[3,3.6,4,4.2],t:1,u:"tirantes"},
+ {id:"TI23",g:"Tirantes",n:"Tirante 2″ × 3″",L:[3,3.6,4,4.2],t:1,u:"tirantes"},
+ {id:"TI24",g:"Tirantes",n:"Tirante 2″ × 4″",L:[3,3.6,4,4.2],t:1,u:"tirantes"},
+ {id:"TI25",g:"Tirantes",n:"Tirante 2″ × 5″",L:[3,3.6,4,4.2],t:1,u:"tirantes"},
+ {id:"TI26",g:"Tirantes",n:"Tirante 2″ × 6″",L:[3,3.6,4,4.2,4.8,5.8],t:1,u:"tirantes"},
+ {id:"TI36",g:"Tirantes",n:"Tirante 3″ × 6″",L:[3,3.6,4,4.2,4.8,5.8],t:1,u:"tirantes"},
+ {id:"MH4",g:"Machimbre",n:"Machimbre ½″ × 4″",L:[3,3.6],t:0,u:"hojas"},
+ {id:"MH5",g:"Machimbre",n:"Machimbre ½″ × 5″",L:[3,3.6],t:0,u:"hojas"},
+ {id:"MU1",g:"Machimbre",n:"Machimbre 1″ × 6″ (cubre 13 cm)",L:[3,3.6],t:0,u:"hojas"},
+ {id:"FE18",g:"Fenólicos",n:"Fenólico 18 mm",L:null,t:0,u:"placas"},
+ {id:"AI5",g:"Aislantes",n:"Aislante 5 mm con aluminio",L:null,t:0,u:"m²"},
+ {id:"AI10",g:"Aislantes",n:"Aislante 10 mm con aluminio",L:null,t:0,u:"m²"},
+ {id:"CLA",g:"Clavos y alambre",n:"Clavos",L:null,t:0,u:"",det:"Medida y cantidad (ej.: 2½″, 2 kg)"},
+ {id:"ALA",g:"Clavos y alambre",n:"Alambre",L:null,t:0,u:"",det:"Tipo y cantidad (ej.: alambre de atar, 1 rollo)"}
+];
+var PED=[];
+function catBy(id){return CAT.filter(function(c){return c.id===id})[0]}
+(function(){var gs=[],h="";CAT.forEach(function(c){if(gs.indexOf(c.g)<0)gs.push(c.g)});
+  gs.forEach(function(g){h+='<optgroup label="'+g+'">'+CAT.filter(function(c){return c.g===g}).map(function(c){return '<option value="'+c.id+'">'+c.n+'</option>'}).join("")+'</optgroup>'});
+  $("pProd").innerHTML=h;})();
+function pSync(){var c=catBy($("pProd").value);
+  $("fLargo").hidden=!c.L;$("fDet").hidden=!c.det;if(c.det){$("pDet").placeholder=c.det;$("pDet").value=""}
+  if(!c.L){$("pLargo").innerHTML="";$("fTerm").hidden=true;$("lblCant").textContent=c.u?"Cantidad ("+c.u+")":"Cantidad";$("fOtro").hidden=true;$("pAviso").hidden=true;$("pErr").hidden=true;return}
+  $("pLargo").innerHTML=c.L.map(function(l){return '<option value="'+l+'">'+m(l)+' m</option>'}).join("")+(c.L.length>1||c.t?'<option value="otro">Otro largo…</option>':'');
+  $("fTerm").hidden=!c.t;$("lblCant").textContent="Cantidad ("+c.u+")";$("fOtro").hidden=true;$("pAviso").hidden=true;$("pErr").hidden=true}
+function largoStock(c,pedido){var ok=c.L.filter(function(l){return l>=pedido-1e-9});return ok.length?ok[0]:c.L[c.L.length-1]}
+$("pProd").addEventListener("change",pSync);
+$("pLargo").addEventListener("change",function(){$("fOtro").hidden=$("pLargo").value!=="otro";$("pAviso").hidden=true});
+$("pOtro").addEventListener("input",function(){var c=catBy($("pProd").value),v=num("pOtro");if(!(v>0)){$("pAviso").hidden=true;return}
+  var l=largoStock(c,v);$("pAviso").textContent=Math.abs(l-v)<0.005?"Lo tenemos de "+m(l)+" m.":"No tenemos de "+m(v)+" m. Te cotizamos el largo disponible más cercano: "+m(l)+" m"+(l>v?" (se puede cortar a medida).":".");$("pAviso").hidden=false});
+pSync();
+function pRender(){
+  function nom(x,c){return c.n+(x.l?" de "+m(x.l)+" m":"")+(x.det?" ("+x.det+")":"")}
+  $("pRows").innerHTML=PED.map(function(x,i){var c=catBy(x.id);return '<div><span>'+nom(x,c)+(c.t?(x.f==="c"?", cepillado":", sin cepillar"):"")+(x.pide?'<small>Pediste '+m(x.pide)+' m</small>':'')+'</span><b>'+m(x.q)+(c.u?' '+c.u:'')+' <button type="button" class="btn-x" data-del="'+i+'" aria-label="Quitar">✕</button></b></div>'}).join("");
+  $("pRes").hidden=!PED.length;
+  var txt="Hola J&R Maderas. Quiero comprar:\n"+PED.map(function(x){var c=catBy(x.id);return "• "+x.q+(c.u?" "+c.u:"")+": "+nom(x,c)+(c.t?(x.f==="c"?", cepillado":", sin cepillar"):"")+(x.pide?" (pedí "+m(x.pide)+" m)":"")}).join("\n")+
+    ($("pLoc").value.trim()?"\nLocalidad: "+$("pLoc").value.trim():"")+"\n¿Tienen stock? ¿Me pasan el precio?\nCódigo: M-"+PED.map(function(x){return x.id+"-"+x.l+"-"+(x.f||"x")+"-"+x.q}).join("_");
+  $("pWa").href=waUrl(txt,"PEDIDO");
+}
+$("pLoc").addEventListener("input",pRender);
+$("pRows").addEventListener("click",function(e){var d=e.target.closest("[data-del]");if(d){PED.splice(+d.getAttribute("data-del"),1);pRender()}});
+$("pWa").addEventListener("click",function(){track("whatsapp_click",{producto:"PEDIDO",items:PED.length})});
+$("pedForm").addEventListener("submit",function(e){e.preventDefault();
+  var c=catBy($("pProd").value),q=parseFloat(String($("pCant").value).replace(",",".")),lv=$("pLargo").value,pide=null,l=0,det=c.det?$("pDet").value.trim():"";
+  if(c.det&&!det){$("pErr").textContent="Contanos la medida o el tipo.";$("pErr").hidden=false;return}
+  if(!c.L){}
+  else if(lv==="otro"){var v=num("pOtro");if(!(v>0)){$("pErr").textContent="Poné el largo que necesitás.";$("pErr").hidden=false;return}l=largoStock(c,v);if(Math.abs(l-v)>0.005)pide=v}else l=parseFloat(lv);
+  if(!(q>0)){$("pErr").textContent="Poné la cantidad.";$("pErr").hidden=false;return}
+  $("pErr").hidden=true;
+  var f=c.t?document.querySelector("input[name=pterm]:checked").value:null;
+  var ex=c.det?null:PED.filter(function(x){return x.id===c.id&&x.l===l&&x.f===f&&x.pide===pide})[0];
+  if(ex)ex.q+=q;else PED.push({id:c.id,l:l,f:f,q:q,pide:pide,det:det});
+  $("pCant").value=1;pRender();track("pedido_agregar",{producto:c.id});
 });
 
 /* ── Mayoristas ── */
