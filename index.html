@@ -175,6 +175,7 @@ footer a{text-decoration:underline;text-underline-offset:3px}
 .plano figcaption i.col{background:var(--ink);width:10px;height:10px}
 
 .btn-x{margin-left:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:6px;padding:2px 7px;cursor:pointer;font:600 13px var(--body)}
+.plano .muro{fill:var(--line);stroke:var(--ink2);stroke-width:1}.plano .col{stroke:var(--wood);stroke-linecap:round}.plano .tir{stroke:var(--est);stroke-width:5;stroke-linecap:round}.plano .cab{stroke:var(--pz1)}
 </style>
 </head>
 <body>
@@ -267,6 +268,19 @@ footer a{text-decoration:underline;text-underline-offset:3px}
           <label><input type="radio" name="clav" value="0.65" checked><span>65 cm</span></label>
           <label><input type="radio" name="clav" value="0.8"><span>80 cm</span></label>
         </div><small>La mayoría de los constructores usa una de estas dos.</small></div>
+      <div class="grid2" id="optApoyo" hidden>
+        <div class="field" id="fApoyo"><span class="lbl" id="lblApoyo">¿Dónde apoya el techo?</span>
+          <div class="seg" role="radiogroup" aria-labelledby="lblApoyo">
+            <label><input type="radio" name="apoyo" value="paredes" checked><span>Sobre paredes existentes</span></label>
+            <label><input type="radio" name="apoyo" value="pared"><span>Contra una pared, con columnas al frente</span></label>
+          </div></div>
+        <div class="field"><span class="lbl" id="lblAlero">Alero</span>
+          <div class="seg" role="radiogroup" aria-labelledby="lblAlero">
+            <label><input type="radio" name="alero" value="0.4"><span>40 cm</span></label>
+            <label><input type="radio" name="alero" value="0.5" checked><span>50 cm</span></label>
+            <label><input type="radio" name="alero" value="0.6"><span>60 cm</span></label>
+          </div></div>
+      </div>
       <div class="field" id="optTir"><span class="lbl" id="lblTir">Tirantes cada</span>
         <div class="seg" role="radiogroup" aria-labelledby="lblTir" id="tirSeg"></div><small id="tirNote"></small></div>
       <div id="optQuin" hidden style="display:flex;flex-direction:column;gap:14px">
@@ -446,6 +460,55 @@ var TIR={ /* separación entre tirantes (m) */
 var NOMBRE={cielo:"Cielorraso de machimbre",techo:"Techo con machimbre a la vista",rustico:"Techo de tirantes",entrepiso:"Entrepiso",cerco:"Cerco con postes",pergola:"Pérgola de postes de eucalipto",quincho:"Quincho"};
 /* Clavaderas 2″ × 2″ cada 80 cm, cruzando los tirantes, en listones de 3 m (criterio J&R, sin desperdicio). */
 function clav2x2(largo,luz){var l=up(luz/0.8)+1,p=up(largo/3);return ["Clavaderas 2″ × 2″ cada 80 cm",l*p+" listones de 3 m",l+" líneas de "+m(largo)+" m, cruzando los tirantes"]}
+/* Techo a un agua (15 % de pendiente): largo del tirante con alero, estructura de frente si apoya contra una pared,
+   clavaderas 2″ × 2″ cada 80 cm (metros lineales y listones de 3 m, los sobrantes se usan en otras líneas). */
+var LTIR=[3,3.6,4,4.2,4.8,5.8];
+function techoDatos(L,A){
+  var ap=document.querySelector("input[name=apoyo]:checked").value,al=parseFloat(document.querySelector("input[name=alero]:checked").value);
+  var need=Math.round((Math.sqrt(A*A+Math.pow(A*0.15,2))+(ap==="pared"?al:2*al))*100)/100;
+  var tlen=LTIR.filter(function(v){return v>=need-1e-9})[0],sec=A<=3?"2″ × 6″":(A<=4.5?"3″ × 6″":null);
+  var st=parseFloat(document.querySelector("input[name=tir]:checked").value),n=up(L/st)+1,rows=[],warn="";
+  rows.push(["Tirantes "+(sec||"")+(tlen?" de "+m(tlen)+" m":""),n+" tirantes","cada "+cm(st)+": "+m(A)+" m de luz + alero de "+cm(al)+(ap==="pared"?" al frente":" de cada lado")+" y 15 % de pendiente"+(tlen&&tlen-need>0.05?" (se cortan a "+m(need)+" m)":"")]);
+  if(!sec)warn+="Más de 4,5 m de luz necesita un apoyo intermedio o cálculo de un profesional. ";
+  if(!tlen)warn+="El tirante necesita más de 5,8 m: hace falta un apoyo intermedio. ";
+  if(ap==="pared"){
+    var pos=up(L/3)+1,bay=L/(pos-1);
+    rows.push(["Columnas: postes de eucalipto de 3 m",pos+" postes","al frente, cada "+m(bay)+" m"]);
+    rows.push(["Viga del frente 3″ × 8″ de 3 m",(pos-1)+" vigas","sobre las columnas, empalmadas en cada columna"+(bay<2.995?" (se cortan a "+m(bay)+" m)":"")]);
+    rows.push(["Solera en la pared, tirante 2″ × 6″ de 3 m",up(L/3)+" tirantes",m(L)+" m amurados a la pared con brocas, ahí apoyan los tirantes"]);
+    rows.push(["Anclajes",pos+" anclajes","uno por columna"]);
+    warn+="La pared tiene que quedar unos "+cm(A*0.15)+" más alta que la viga del frente para la pendiente del 15 %.";
+  }
+  var lin=up(need/0.8)+1,ml=lin*L,lis=up(ml/3-1e-9);
+  return {need:need,rows:rows,warn:warn,clav:["Clavaderas 2″ × 2″ cada 80 cm",lis+" listones de 3 m",lin+" líneas de "+m(L)+" m = "+fmt(ml,1)+" m lineales"],lis:lis,ml:ml};
+}
+/* Corte lateral: para que el cliente entienda cómo queda armado. Dibujo orientativo, sin escala exacta de alturas. */
+function corte(o){ /* o: tipo pared|paredes|agua1|dosA|dosB, A luz, al alero, pend */
+  var A=o.A,al=o.al,H=2.6,dos=o.tipo==="dosA"||o.tipo==="dosB",rise=dos?A/2*o.pend:A*o.pend,
+      W=A+2*al+0.8,Ht=H+rise+0.7,sc=Math.min(330/W,210/Ht),ox=20+(al+0.3)*sc,gy=12+Ht*sc,s='';
+  function X(x){return (ox+x*sc).toFixed(1)}function Y(y){return (gy-y*sc).toFixed(1)}
+  function ln(x1,y1,x2,y2,c,w){return '<line x1="'+X(x1)+'" y1="'+Y(y1)+'" x2="'+X(x2)+'" y2="'+Y(y2)+'" class="'+c+'"'+(w?' stroke-width="'+w+'"':'')+'/>'}
+  function tx(x,y,t,a){return '<text x="'+X(x)+'" y="'+Y(y)+'" text-anchor="'+(a||"middle")+'" class="tx">'+t+'</text>'}
+  var yL,yR;
+  if(dos){yL=H;yR=H}else if(o.tipo==="paredes"){yL=H;yR=H+rise}else{yL=H+rise;yR=H}
+  s+='<line x1="0" y1="'+gy+'" x2="'+(W*sc+40)+'" y2="'+gy+'" class="cota"/>';
+  /* apoyos */
+  if(o.tipo==="paredes"){s+='<rect x="'+X(-0.12)+'" y="'+Y(yL)+'" width="'+(0.24*sc)+'" height="'+(yL*sc)+'" class="muro"/><rect x="'+X(A-0.12)+'" y="'+Y(yR)+'" width="'+(0.24*sc)+'" height="'+(yR*sc)+'" class="muro"/>';s+=tx(A/2,0.35,"Paredes existentes")}
+  else if(o.tipo==="pared"){s+='<rect x="'+X(-0.25)+'" y="'+Y(yL+0.3)+'" width="'+(0.25*sc)+'" height="'+((yL+0.3)*sc)+'" class="muro"/>'+tx(-0.12,yL+0.45,"Pared")+ln(A,0,A,yR,"col",7)+'<rect x="'+X(A-0.1)+'" y="'+Y(yR+0.2)+'" width="'+(0.2*sc)+'" height="'+(0.2*sc)+'" class="viga"/>'+'<rect x="'+X(0)+'" y="'+Y(yL+0.12)+'" width="'+(0.08*sc)+'" height="'+(0.15*sc)+'" class="viga"/>'+tx(A+0.15,yR/2,"Columna","start")+tx(0.15,yL-0.35,"Solera","start")}
+  else{ln;s+=ln(0,0,0,yL,"col",7)+ln(A,0,A,yR,"col",7)+'<rect x="'+X(-0.1)+'" y="'+Y(yL+0.2)+'" width="'+(0.2*sc)+'" height="'+(0.2*sc)+'" class="viga"/><rect x="'+X(A-0.1)+'" y="'+Y(yR+0.2)+'" width="'+(0.2*sc)+'" height="'+(0.2*sc)+'" class="viga"/>';
+    if(o.tipo==="dosA")s+=ln(A/2,0,A/2,H+rise,"col",7);
+    if(o.tipo==="dosB")s+=ln(0,H+0.2,A,H+0.2,"cab",3)+ln(A/2,H+0.2,A/2,H+rise+0.2,"cab",3)+ln(A/2,H+0.2,A/4,H+0.2+rise/2,"cab",2)+ln(A/2,H+0.2,3*A/4,H+0.2+rise/2,"cab",2)+tx(A/2,H-0.15,"Cabreada");
+    s+=tx(0.12,yL/2,"Columna","start")}
+  /* tirantes */
+  if(dos){var k=rise/(A/2);s+=ln(-al,H+0.2-al*k,A/2,H+0.2+rise,"tir")+ln(A+al,H+0.2-al*k,A/2,H+0.2+rise,"tir")+tx(A/4,H+0.2+rise/2+0.35,"Tirante")}
+  else{var x0=o.tipo==="pared"?0:-al,x1=A+al,k2=(yR-yL)/A,y0=yL+0.2+(x0)*k2,y1=yL+0.2+x1*k2;s+=ln(x0,y0,x1,y1,"tir")+tx(A/2,yL+0.2+(A/2)*k2+0.3,"Tirante")}
+  /* cotas */
+  s+='<line x1="'+X(0)+'" y1="'+(gy+14)+'" x2="'+X(A)+'" y2="'+(gy+14)+'" class="cota" marker-start="url(#ar4)" marker-end="url(#ar4)"/><text x="'+X(A/2)+'" y="'+(gy+30)+'" text-anchor="middle" class="tx">Luz '+m(A)+' m</text>';
+  var ya=dos?(H+0.2-al*(rise/(A/2))):(yL+0.2+(A+al)*((yR-yL)/A));
+  s+=ln(A,ya+0.3,A+al,ya+0.3,"cota")+'<text x="'+X(A+al)+'" y="'+Y(ya+0.42)+'" text-anchor="end" class="tx">Alero '+Math.round(al*100)+' cm</text>';
+  s+='<text x="'+X(dos?A/2:A/2)+'" y="'+(12)+'" text-anchor="middle" class="tx">Pendiente '+Math.round(o.pend*100)+' %</text>';
+  return '<svg viewBox="0 0 '+(W*sc+40).toFixed(0)+' '+(gy+40).toFixed(0)+'" role="img" aria-label="Corte lateral del techo"><defs><marker id="ar4" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" class="ar"/></marker></defs>'+s+'</svg><figcaption><span>Corte de costado: así queda armado</span></figcaption>';
+}
 function tipo(){return document.querySelector("input[name=tipo]:checked").value}
 function fmt(n,d){return n.toLocaleString("es-AR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
 function m(n){return fmt(n,Math.abs(n-Math.round(n))<0.005?0:2)}
@@ -549,6 +612,9 @@ var MODELOS=[
 
 function calc(mod,L0,W0,o){
   var L=Math.max(L0,W0),W=Math.min(L0,W0),items=[],warn=[];
+  var AL=o.alero||0.5,LTIR=[3,3.6,4,4.2,4.8,5.8];
+  function stk(x){var v=LTIR.filter(function(l){return l>=x-1e-9})[0];if(!v){warn.push("El tirante necesita "+m(x)+" m y el más largo es de 5,8 m: hace falta un apoyo intermedio.");return r1(x)}return v}
+  function cortes(x){var v=stk(x);return v-x>0.05?", se cortan a "+m(x)+" m":""}
   var VA={"36":6,"38":8,"310":10}[o.viga]||8,VSP={"36":2.5,"38":3,"310":3.5,"poste":3.5}[o.viga]||3;
   function it(g,key,desc,cant,pu,sub,unidad){items.push({g:g,key:key,desc:desc,cant:cant,pu:pu,sub:sub||"",u:unidad||""})}
   function poste(g,len,cant,sub){it(g,"poste"+len,"Postes de eucalipto de "+len+" m",cant,P["poste"+len],sub)}
@@ -615,9 +681,9 @@ function calc(mod,L0,W0,o){
     col("Estructura",3,pos1,"columnas de adelante");
     col("Estructura",3+rise,pos1,"columnas de atrás");
     vigas("Estructura",2,pos1,bay1);
-    var nt=up(L/0.8)+1,ts=tirSec(W),tl=r1(hyp(W,rise)+0.8);
-    escu("Techo",ts,6,tl,nt,"tirantes cada 80 cm, con 40 cm de alero de cada lado");
-    techo("Techo",L+0.6,tl,1);
+    var nt=up(L/0.8)+1,ts=tirSec(W),tlN=Math.round((hyp(W,rise)+2*AL)*100)/100,tl=stk(tlN);
+    escu("Techo",ts,6,tl,nt,"tirantes cada 80 cm, con "+Math.round(AL*100)+" cm de alero de cada lado"+cortes(tlN));
+    techo("Techo",L+0.6,tlN,1);
     it("Estructura","anclaje","Anclajes",pos1*2,P.anclaje,"uno por columna");
     it("Herrajes","escuadra","Escuadras o flejes",nt*2,P.escuadra,"para atar cada tirante a las vigas");
   }
@@ -632,7 +698,7 @@ function calc(mod,L0,W0,o){
     if(mod==="dosA"){
       col("Estructura",3+rs,pq,"columnas centrales bajo la cumbrera");
       cumbrera("Estructura",pq,bq,"cumbrera");
-      escu("Techo",tirSec(half),6,r1(sl+0.4),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado");
+      escu("Techo",tirSec(half),6,stk(Math.round((sl+AL)*100)/100),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado, alero de "+Math.round(AL*100)+" cm"+cortes(Math.round((sl+AL)*100)/100));
     }
     if(mod==="dosB"){
       var jb=hyp(half/2,rs/2);
@@ -642,7 +708,7 @@ function calc(mod,L0,W0,o){
       escu("Cabreadas ("+pq+")",2,6,r1(jb+0.05),pq*2,"jabalcones");
       it("Cabreadas ("+pq+")","fenolico","Fenólico 18 mm para cartelas",up(pq*12*0.12/2.97),P.fenolico,pq*12+" cartelas de 30 × 40 cm","placas");
       cumbrera("Estructura",pq,bq,"cumbrera, de cabreada a cabreada");
-      escu("Techo",tirSec(half),6,r1(sl+0.4),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado");
+      escu("Techo",tirSec(half),6,stk(Math.round((sl+AL)*100)/100),nt2*2,"tirantes cada 80 cm, "+nt2+" por lado, alero de "+Math.round(AL*100)+" cm"+cortes(Math.round((sl+AL)*100)/100));
     }
     if(mod==="dosC"){
       var g="Cabreadas de tablas ("+nt2+")",d1=hyp(W/3-W/4,rs/2)+0.08,d2=hyp(W/2-W/3,rs)+0.1;
@@ -652,7 +718,7 @@ function calc(mod,L0,W0,o){
       escu(g,1,6,r1(6*0.4+8*0.15),nt2,"cartelas y tacos separadores");
       escu("Estructura",1,4,r1(Math.min(L,4)),up((L+4*sl)/4),"riostras y cruces en X");
     }
-    techo("Techo",L+0.6,r1(sl+0.4),2);
+    techo("Techo",L+0.6,Math.round((sl+AL)*100)/100,2);
     it("Estructura","anclaje","Anclajes",(mod==="dosA"?pq*3:pq*2),P.anclaje,"uno por columna");
     it("Herrajes","escuadra","Escuadras o flejes",(mod==="dosC"?nt2*2:nt2*4+pq*2),P.escuadra,"para atar al viento");
   }
@@ -701,7 +767,7 @@ function sync(){
   $("lblLargo").textContent=t==="cerco"?"Largo del cerco (m)":"Largo (m)";
   $("optMach").hidden=!(t==="cielo"||t==="techo");
   $("optClav").hidden=(t!=="cielo");
-  $("optTir").hidden=!TIR[t];
+  $("optTir").hidden=!TIR[t];$("optApoyo").hidden=!(t==="techo"||t==="rustico"||t==="quincho");$("fApoyo").hidden=(t==="quincho");
   $("optFin").hidden=(t!=="pergola");$("optQuin").hidden=(t!=="quincho");$("fQviga").hidden=(t!=="quincho");$("optMat").hidden=(t!=="pergola");
   if(TIR[t]){
     $("tirSeg").innerHTML=TIR[t].op.map(function(v){return '<label><input type="radio" name="tir" value="'+v+'"'+(v===TIR[t].def?" checked":"")+'><span>'+cm(v)+'</span></label>'}).join("");
@@ -712,6 +778,7 @@ function sync(){
 document.querySelectorAll("input[name=tipo]").forEach(function(r){r.addEventListener("change",sync)});
 ["cLargo","cAncho","cMach","cLHoja","cSep"].forEach(function(id){$(id).addEventListener("input",function(){$("calcRes").hidden=true})});
 document.querySelectorAll("input[name=finsep],input[name=techmat],input[name=qmod],input[name=qcol],input[name=qviga],input[name=qtir],input[name=qmach],input[name=qaisl]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
+document.querySelectorAll("input[name=apoyo],input[name=alero]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
 sync();
 
 $("calcForm").addEventListener("submit",function(e){
@@ -725,7 +792,8 @@ $("calcForm").addEventListener("submit",function(e){
   if(t==="cielo"||t==="techo"){
     /* cielorraso: machimbre en sentido del ancho, filas a lo largo; techo: machimbre a lo largo, cruzando los tirantes */
     var mm=MACH[$("cMach").value],fijo=$("cLHoja").value==="auto"?null:parseFloat($("cLHoja").value);
-    var rec=t==="cielo"?A:L,cub=t==="cielo"?L:A,p=planMachimbre(rec,cub,mm.cubre,fijo),m2=0;
+    var TD=t==="techo"?techoDatos(L,A):null;
+    var rec=t==="cielo"?A:L,cub=t==="cielo"?L:TD.need,p=planMachimbre(rec,cub,mm.cubre,fijo),m2=0;
     p.hojas.forEach(function(h){m2+=h.cant*mm.m2[String(h.largo)]});
     var fila=(p.c.n?(p.c.n>1?p.c.n+" hojas de ":"1 hoja de ")+m(p.c.H)+" m":"")+(p.c.r&&p.c.n?" + ":"")+(p.c.r?"un pedazo de "+m(p.c.r)+" m":"");
     rows.push(["Filas de machimbre "+mm.nombre,p.filas+" filas","Cada fila de "+m(rec)+" m: "+fila]);
@@ -742,24 +810,27 @@ $("calcForm").addEventListener("submit",function(e){
     }else{
       var st=parseFloat(document.querySelector("input[name=tir]:checked").value),n=up(L/st)+1;
       for(var k=0;k<n;k++)lineas.push(Math.min(k*st,L));
-      rows.push(["Tirantes cada "+cm(st),n+" tirantes","de "+m(A)+" m de luz, más alero y pendiente"]);
-      rows.push(clav2x2(L,A));
-      var cl2=up(A/0.8)+1,cp2=up(L/3);
-      rows.push(["Membrana",up(L*A/20)+(up(L*A/20)>1?" rollos":" rollo"),"rollos de 20 m², para "+fmt(L*A,1)+" m²"]);
-      rows.push(["Apreta membrana de 3 m",cl2*cp2+" piezas","una sobre cada clavadera"]);
-      rows.push(["Autoperforantes",up(cl2*L*3)+" unidades","3 por metro de clavadera"]);
+      TD.rows.forEach(function(r){rows.push(r)});
+      rows.push(TD.clav);
+      var sup2=L*TD.need;
+      rows.push(["Membrana",up(sup2/20)+(up(sup2/20)>1?" rollos":" rollo"),"rollos de 20 m², para "+fmt(sup2,1)+" m²"]);
+      rows.push(["Apreta membrana de 3 m",TD.lis+" piezas","una sobre cada clavadera"]);
+      rows.push(["Autoperforantes",up(TD.ml*3)+" unidades","3 por metro de clavadera"]);
       ley.push(["est","Tirante"]);
-      note="Cantidades sin desperdicio. El largo final del tirante depende del alero y la pendiente; la sección te la recomendamos según la luz.";
+      note=(TD.warn?TD.warn+" ":"")+"Cantidades sin desperdicio. Te confirmamos la sección del tirante según la luz.";
     }
     fig=plano({w:rec,h:cub,plan:p,lineas:lineas,lw:m(rec)+" m",lh:m(cub)+" m",ley:ley,alt:"Dibujo de cómo se arman las filas de machimbre"});
+    if(t==="techo")fig=corte({tipo:document.querySelector("input[name=apoyo]:checked").value,A:A,al:parseFloat(document.querySelector("input[name=alero]:checked").value),pend:0.15})+'<div style="height:12px"></div>'+fig;
   }
   if(t==="rustico"||t==="entrepiso"){
     var st2=parseFloat(document.querySelector("input[name=tir]:checked").value),n2=up(L/st2)+1,ls=[];
     for(var q=0;q<n2;q++)ls.push(Math.min(q*st2,L));
-    rows.push(["Tirantes cada "+cm(st2),n2+" tirantes","de "+m(A)+" m de luz"+(t==="entrepiso"?"":", más alero y pendiente")]);
-    if(t==="rustico")rows.push(clav2x2(L,A));
-    note=t==="entrepiso"?"Cantidades sin desperdicio. La sección del tirante y el piso del entrepiso te los recomendamos según la luz.":"Cantidades sin desperdicio. El largo final del tirante depende del alero y la pendiente; la sección te la recomendamos según la luz.";
+    if(t==="entrepiso"){rows.push(["Tirantes cada "+cm(st2),n2+" tirantes","de "+m(A)+" m de luz"]);
+      note="Cantidades sin desperdicio. La sección del tirante y el piso del entrepiso te los recomendamos según la luz.";}
+    else{var TR=techoDatos(L,A);TR.rows.forEach(function(r){rows.push(r)});rows.push(TR.clav);
+      note=(TR.warn?TR.warn+" ":"")+"Cantidades sin desperdicio. Te confirmamos la sección del tirante según la luz.";}
     fig=plano({w:L,h:A,lineas:ls,lw:m(L)+" m",lh:m(A)+" m",ley:[["est","Tirante"]],alt:"Dibujo de la ubicación de los tirantes"});
+    if(t==="rustico")fig=corte({tipo:document.querySelector("input[name=apoyo]:checked").value,A:A,al:parseFloat(document.querySelector("input[name=alero]:checked").value),pend:0.15})+'<div style="height:12px"></div>'+fig;
   }
   if(t==="cerco"){
     var sp=num("cSep"),np=up(L/sp)+1,ps=[];
@@ -808,7 +879,7 @@ $("calcForm").addEventListener("submit",function(e){
   if(t==="pergola"){pedido="P-perg-"+L+"x"+A+"-"+document.querySelector("input[name=techmat]:checked").value+"-"+Math.round(parseFloat(document.querySelector("input[name=finsep]:checked").value)*100)}
   if(t==="quincho"){
     var qv=function(n){return document.querySelector("input[name="+n+"]:checked").value};
-    var qo={tir:qv("qtir"),col:qv("qcol"),viga:qv("qviga"),mach:qv("qmach"),aisl:qv("qaisl")},qm=qv("qmod");
+    var qo={alero:parseFloat(qv("alero")),tir:qv("qtir"),col:qv("qcol"),viga:qv("qviga"),mach:qv("qmach"),aisl:qv("qaisl")},qm=qv("qmod");
     var qr=QE.calc(qm,L,A,qo),qn=QE.MODELOS.filter(function(x){return x.id===qm})[0];
     rows.push(["Tipo",qn.n,""]);
     var lastG="";
@@ -816,6 +887,7 @@ $("calcForm").addEventListener("submit",function(e){
       var sub=String(x.sub||"").replace(/\s*·\s*[\d.,]+ pies c\/u/,"");
       rows.push([x.desc,(x.u==="m²"?m(x.cant)+" m²":x.u==="placas"?x.cant+" placas":x.cant+(x.cant===1?" unidad":" unidades")),(x.g!==lastG?x.g+": ":"")+sub]);lastG=x.g});
     note=(qr.warn.length?qr.warn.join(" ")+" ":"")+"Cantidades orientativas, sin desperdicio. Te confirmamos la estructura, la pendiente y la cubierta al pasarte el precio.";
+    fig=corte({tipo:qm,A:Math.min(L,A),al:qo.alero,pend:qm==="agua1"?0.15:(qm==="dosA"?0.2:0.3)});
     pedido="Q-"+qm+"-"+L+"x"+A+"-"+qo.col+"-"+qo.viga+"-"+qo.mach+"-"+qo.aisl+"-t"+qo.tir;
   }
   $("resTitle").textContent=NOMBRE[t];
