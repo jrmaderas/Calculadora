@@ -188,6 +188,7 @@ footer a{text-decoration:underline;text-underline-offset:3px}
       <a href="#calculadora">Calculadora</a>
       <a href="#postes">Postes</a>
       <a href="#madera">Pedido</a>
+      <a href="#cortes">Cortes</a>
       <a href="#mayoristas">Mayoristas</a>
     </nav>
   </div>
@@ -353,6 +354,35 @@ footer a{text-decoration:underline;text-underline-offset:3px}
         <div class="rows" id="pRows"></div>
         <div class="field"><label for="pLoc">Localidad (opcional)</label><input id="pLoc" placeholder="Ej.: Corrientes capital"></div>
         <a class="btn btn-wa btn-block" id="pWa" target="_blank" rel="noopener" href="https://wa.me/5493794504145"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Consultar stock y precio</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="block" id="cortes">
+  <div class="wrap">
+    <h2>Cortes a medida</h2>
+    <p class="lead">Fenólico de pino de 18 mm o tablero finger de pino, cortado a tu medida. Cargá las piezas y te mostramos cómo salen de la placa. Los cortes se cobran por m².</p>
+    <form class="calc" id="corForm" novalidate>
+      <div class="field"><span class="lbl" id="lblPlaca">Placa</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblPlaca">
+          <label><input type="radio" name="cplaca" value="FE18" checked><span>Fenólico de pino 18 mm · 1,22 × 2,44 m</span></label>
+          <label><input type="radio" name="cplaca" value="TAB"><span>Tablero finger de pino · 1,20 × 3,00 m</span></label>
+        </div></div>
+      <div class="grid2">
+        <div class="field"><label for="cAn">Ancho de la pieza (cm)</label><input id="cAn" type="number" inputmode="decimal" min="1" step="0.1" placeholder="Ej.: 50"></div>
+        <div class="field"><label for="cLa">Largo de la pieza (cm)</label><input id="cLa" type="number" inputmode="decimal" min="1" step="0.1" placeholder="Ej.: 50"></div>
+        <div class="field"><label for="cCa">Cantidad</label><input id="cCa" type="number" inputmode="numeric" min="1" step="1" value="1"></div>
+      </div>
+      <button class="btn btn-brand btn-block" type="submit">Agregar pieza</button>
+      <p class="err" id="cErr" hidden></p>
+      <div class="result" id="cRes" hidden>
+        <h3>Tus piezas</h3>
+        <div class="rows" id="cRows"></div>
+        <div class="rows" id="cSum"></div>
+        <div id="cPlano"></div>
+        <p class="note">Dibujo orientativo. Se cuenta unos 4 mm por cada corte de la sierra. Las piezas se pueden girar en la placa.</p>
+        <a class="btn btn-wa btn-block" id="cWa" target="_blank" rel="noopener" href="https://wa.me/5493794504145"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.25.69-1.450 1.33-2.02 1.41-.51.08-1.16.11-1.87-.12-.43-.14-.98-.32-1.69-.62-2.98-1.29-4.92-4.29-5.07-4.49-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.84 2.06.92 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5l-.45.52c-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.06 1.140 1.01 2.09 1.33 2.39 1.48.3.15.47.12.65-.07.17-.2.74-.87.94-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.41z"/></svg>Pedir precio del corte</a>
       </div>
     </form>
   </div>
@@ -964,6 +994,99 @@ $("pedForm").addEventListener("submit",function(e){e.preventDefault();
   var ex=c.det?null:PED.filter(function(x){return x.id===c.id&&x.l===l&&x.f===f&&x.pide===pide})[0];
   if(ex)ex.q+=q;else PED.push({id:c.id,l:l,f:f,q:q,pide:pide,det:det});
   $("pCant").value=1;pRender();track("pedido_agregar",{producto:c.id});
+});
+
+/* ── Cortes a medida ── */
+var CORTE=(function(){
+  /* Optimizador de cortes: guillotina (todos los cortes van de lado a lado, como en la sierra). Medidas en cm. */
+  var BOARDS={
+    FE18:{id:"FE18",n:"Fenólico de pino 18 mm",med:"1,22 × 2,44 m",w:244,h:122,key:"m2Fe18"},
+    TAB:{id:"TAB",n:"Tablero finger de pino",med:"1,20 × 3,00 m",w:300,h:120,key:"m2Tab"}
+  };
+  var COLORS=["#c4762a","#8b4a1c","#d9a066","#a55a22","#b98a4e","#6f8f5a","#5b6770","#9c6b98"];
+  function pack1(bid,pieces,kerf,ord,rule){
+    var B=BOARDS[bid],K=kerf==null?0.4:kerf,list=[],bad=[],sheets=[];
+    pieces.forEach(function(p,pi){for(var i=0;i<p.q;i++)list.push({w:p.w,h:p.h,pi:pi})});
+    var ORD=[function(a,b){return (b.w*b.h-a.w*a.h)||(Math.max(b.w,b.h)-Math.max(a.w,a.h))},
+      function(a,b){return (Math.max(b.w,b.h)-Math.max(a.w,a.h))||(b.w*b.h-a.w*a.h)},
+      function(a,b){return (Math.min(b.w,b.h)-Math.min(a.w,a.h))||(b.w*b.h-a.w*a.h)},
+      function(a,b){return (b.w+b.h-a.w-a.h)||(b.w*b.h-a.w*a.h)}];
+    list.sort(ORD[ord||0]);
+    function fits(w,h){return w<=B.w+1e-9&&h<=B.h+1e-9}
+    list.forEach(function(p){
+      if(!fits(p.w,p.h)&&!fits(p.h,p.w)){bad.push(p);return}
+      var best=null;
+      function tryS(s,si){s.free.forEach(function(f,fi){
+        [[p.w,p.h,false],[p.h,p.w,true]].forEach(function(o){
+          if(!fits(o[0],o[1]))return;
+          var w=o[0]+K,h=o[1]+K;
+          if(w<=f.w+1e-9&&h<=f.h+1e-9){var sc=f.w*f.h-w*h;
+            if(!best||si<best.si||(si===best.si&&sc<best.sc))best={si:si,fi:fi,w:o[0],h:o[1],rot:o[2],sc:sc}}
+        })})}
+      sheets.forEach(tryS);
+      if(!best){sheets.push({free:[{x:0,y:0,w:B.w+K,h:B.h+K}],parts:[]});tryS(sheets[sheets.length-1],sheets.length-1)}
+      var s=sheets[best.si],f=s.free[best.fi],w=best.w+K,h=best.h+K,rw=f.w-w,bh=f.h-h,r1,r2;
+      s.parts.push({x:f.x,y:f.y,w:best.w,h:best.h,pi:p.pi,rot:best.rot});
+      s.free.splice(best.fi,1);
+      var hor=rule===1?rw>bh:rule===2?f.w<=f.h:rule===3?(rw*f.h)>(f.w*bh)?false:true:rw<=bh;
+      if(hor){r1={x:f.x+w,y:f.y,w:rw,h:h};r2={x:f.x,y:f.y+h,w:f.w,h:bh}}
+      else{r1={x:f.x+w,y:f.y,w:rw,h:f.h};r2={x:f.x,y:f.y+h,w:w,h:bh}}
+      [r1,r2].forEach(function(r){if(r.w>1&&r.h>1)s.free.push(r)});
+    });
+    var m2=0;list.forEach(function(p){if(bad.indexOf(p)<0)m2+=p.w*p.h/1e4});
+    var sa=B.w*B.h/1e4,n=sheets.length;
+    var last=0;if(n)sheets[n-1].parts.forEach(function(q){last+=q.w*q.h});
+    return {B:B,K:K,sheets:sheets,bad:bad,m2:m2,placas:n,aprov:n?m2/(n*sa):0,sobra:n*sa-m2,pieces:pieces,last:last};
+  }
+  function pack(bid,pieces,kerf){var best=null;
+    for(var o=0;o<4;o++)for(var r=0;r<4;r++){var x=pack1(bid,pieces,kerf,o,r);
+      if(!best||x.placas<best.placas||(x.placas===best.placas&&x.last<best.last-1e-6))best=x}
+    return best}
+  function f1(v){return (Math.round(v*10)/10).toString().replace(".",",")}
+  function svg(res,i){
+    var B=res.B,s=res.sheets[i],W=600,sc=(W-60)/B.w,H=Math.round(B.h*sc)+60,ox=40,oy=34,g=[];
+    g.push('<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Placa '+(i+1)+' de '+res.placas+'" style="display:block;max-width:640px;font-family:inherit">');
+    g.push('<rect x="'+ox+'" y="'+oy+'" width="'+(B.w*sc).toFixed(1)+'" height="'+(B.h*sc).toFixed(1)+'" fill="#efe6d8" stroke="#8a7458" stroke-width="1.5" stroke-dasharray="5 4"/>');
+    s.parts.forEach(function(p){
+      var x=ox+p.x*sc,y=oy+p.y*sc,w=p.w*sc,h=p.h*sc,c=COLORS[p.pi%COLORS.length];
+      g.push('<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+c+'" fill-opacity=".85" stroke="#24180f" stroke-width="1"/>');
+      var o=res.pieces[p.pi],lbl=f1(o.w)+"×"+f1(o.h);
+      if(w>lbl.length*6.6+6&&h>16)g.push('<text x="'+(x+w/2).toFixed(1)+'" y="'+(y+h/2+4).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">'+lbl+'</text>');
+    });
+    g.push('<text x="'+(ox+B.w*sc/2).toFixed(1)+'" y="'+(oy-12)+'" text-anchor="middle" font-size="13" font-weight="600" fill="#67543f">'+f1(B.w)+' cm</text>');
+    g.push('<text x="'+(ox-10)+'" y="'+(oy+B.h*sc/2).toFixed(1)+'" text-anchor="middle" font-size="13" font-weight="600" fill="#67543f" transform="rotate(-90 '+(ox-10)+' '+(oy+B.h*sc/2).toFixed(1)+')">'+f1(B.h)+' cm</text>');
+    g.push('<text x="'+ox+'" y="'+(H-8)+'" font-size="12" fill="#67543f">Placa '+(i+1)+' de '+res.placas+' · lo que queda en beige es sobrante</text>');
+    g.push('</svg>');return g.join("");
+  }
+  function code(bid,pieces){return "C-"+bid+"-"+pieces.map(function(p){return p.w+"x"+p.h+"x"+p.q}).join("_")}
+  function parse(t){var mm=String(t).match(/C-(FE18|TAB)-([\d.x_]+)/);if(!mm)return null;
+    var ps=mm[2].split("_").map(function(s){var a=s.split("x").map(parseFloat);return {w:a[0],h:a[1],q:a[2]}}).filter(function(p){return p.w>0&&p.h>0&&p.q>0});
+    return ps.length?{bid:mm[1],pieces:ps}:null}
+  return {BOARDS:BOARDS,COLORS:COLORS,pack:pack,svg:svg,code:code,parse:parse,f1:f1};
+})();
+var CPZ=[];
+function cPlaca(){return document.querySelector("input[name=cplaca]:checked").value}
+function cRender(){
+  var bid=cPlaca(),B=CORTE.BOARDS[bid];
+  $("cRes").hidden=!CPZ.length;if(!CPZ.length)return;
+  $("cRows").innerHTML=CPZ.map(function(p,i){return '<div><span><i style="display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px;background:'+CORTE.COLORS[i%CORTE.COLORS.length]+'"></i>'+CORTE.f1(p.w)+' × '+CORTE.f1(p.h)+' cm</span><b>'+p.q+' u. <button type="button" class="btn-x" data-cdel="'+i+'" aria-label="Quitar">✕</button></b></div>'}).join("");
+  var r=CORTE.pack(bid,CPZ);
+  $("cSum").innerHTML='<div><span>Placas de '+B.n.toLowerCase()+' que se usan</span><b>'+r.placas+'</b></div><div><span>Superficie de tus piezas</span><b>'+m(r.m2)+' m²</b></div><div><span>Aprovechamiento de la placa</span><b>'+Math.round(r.aprov*100)+' %</b></div>'+(r.bad.length?'<div><span style="color:#8b1a1a">Piezas más grandes que la placa (no entran)</span><b>'+r.bad.length+'</b></div>':'');
+  $("cPlano").innerHTML=r.sheets.map(function(s,i){return CORTE.svg(r,i)}).join("");
+  var txt="Hola J&R Maderas. Quiero un corte a medida:\nPlaca: "+B.n+" ("+B.med+")\n"+CPZ.map(function(p){return "• "+p.q+" u. de "+CORTE.f1(p.w)+" × "+CORTE.f1(p.h)+" cm"}).join("\n")+"\nSuperficie: "+m(r.m2)+" m² · "+r.placas+" placa"+(r.placas>1?"s":"")+"\n¿Me pasan el precio?\nCódigo: "+CORTE.code(bid,CPZ);
+  $("cWa").href=waUrl(txt,"CORTE");
+}
+document.querySelectorAll("input[name=cplaca]").forEach(function(x){x.addEventListener("change",cRender)});
+$("cRows").addEventListener("click",function(e){var d=e.target.closest("[data-cdel]");if(d){CPZ.splice(+d.getAttribute("data-cdel"),1);cRender()}});
+$("cWa").addEventListener("click",function(){track("whatsapp_click",{producto:"CORTE",piezas:CPZ.length})});
+$("corForm").addEventListener("submit",function(e){e.preventDefault();
+  var a=num("cAn"),l=num("cLa"),q=Math.round(num("cCa")),B=CORTE.BOARDS[cPlaca()];
+  if(!(a>0)||!(l>0)){$("cErr").textContent="Poné el ancho y el largo de la pieza en centímetros.";$("cErr").hidden=false;return}
+  if(!(q>0)){$("cErr").textContent="Poné la cantidad.";$("cErr").hidden=false;return}
+  if((a>B.w||l>B.h)&&(a>B.h||l>B.w)){$("cErr").textContent="Esa pieza es más grande que la placa ("+B.med+").";$("cErr").hidden=false;return}
+  $("cErr").hidden=true;
+  var ex=CPZ.filter(function(p){return p.w===a&&p.h===l})[0];if(ex)ex.q+=q;else CPZ.push({w:a,h:l,q:q});
+  $("cAn").value="";$("cLa").value="";$("cCa").value=1;cRender();track("corte_agregar",{placa:cPlaca()});
 });
 
 /* ── Mayoristas ── */
