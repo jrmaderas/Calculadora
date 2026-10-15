@@ -340,6 +340,11 @@ footer a{text-decoration:underline;text-underline-offset:3px}
         <div class="field" id="fDet" hidden><label for="pDet" id="lblDet">Detalle</label><input id="pDet" type="text"></div>
         <div class="field"><label for="pCant" id="lblCant">Cantidad</label><input id="pCant" type="number" inputmode="decimal" min="0.5" step="any" value="1"></div>
       </div>
+      <div class="field" id="fModo" hidden><span class="lbl" id="lblModo">¿Cómo lo querés pedir?</span>
+        <div class="seg" role="radiogroup" aria-labelledby="lblModo">
+          <label><input type="radio" name="pmodo" value="m2" checked><span>Por m² a cubrir</span></label>
+          <label><input type="radio" name="pmodo" value="h"><span>Por cantidad de hojas</span></label>
+        </div></div>
       <div class="field" id="fTerm"><span class="lbl" id="lblTerm">Terminación</span>
         <div class="seg" role="radiogroup" aria-labelledby="lblTerm">
           <label><input type="radio" name="pterm" value="b" checked><span>Sin cepillar</span></label>
@@ -935,7 +940,7 @@ $("calcForm").addEventListener("submit",function(e){
 
 /* ── Pedido de madera: medidas que maneja J&R ── */
 var CAT=[
- {id:"PU33",g:"Puntales",n:"Puntal 3″ × 3″",L:[3],t:1,u:"puntales"},
+ {id:"PU33",g:"Puntales",n:"Puntal 3″ × 3″",L:[3,4],t:1,u:"puntales"},
  {id:"TB13",g:"Tablas",n:"Tabla 1″ × 3″",L:[3],t:1,u:"tablas"},
  {id:"TB14",g:"Tablas",n:"Tabla 1″ × 4″",L:[3],t:1,u:"tablas"},
  {id:"TB15",g:"Tablas",n:"Tabla 1″ × 5″",L:[3],t:1,u:"tablas"},
@@ -947,9 +952,9 @@ var CAT=[
  {id:"TI25",g:"Tirantes",n:"Tirante 2″ × 5″",L:[3,3.6,4,4.2],t:1,u:"tirantes"},
  {id:"TI26",g:"Tirantes",n:"Tirante 2″ × 6″",L:[3,3.6,4,4.2,4.8,5.8],t:1,u:"tirantes"},
  {id:"TI36",g:"Tirantes",n:"Tirante 3″ × 6″",L:[3,3.6,4,4.2,4.8,5.8],t:1,u:"tirantes"},
- {id:"MH4",g:"Machimbre",n:"Machimbre ½″ × 4″",L:[3,3.6],t:0,u:"hojas"},
- {id:"MH5",g:"Machimbre",n:"Machimbre ½″ × 5″",L:[3,3.6],t:0,u:"hojas"},
- {id:"MU1",g:"Machimbre",n:"Machimbre 1″ × 6″ (cubre 13 cm)",L:[3,3.6],t:0,u:"hojas"},
+ {id:"MH4",g:"Machimbre",n:"Machimbre ½″ × 4″",L:[3,3.6],t:0,u:"hojas",cub:0.09},
+ {id:"MH5",g:"Machimbre",n:"Machimbre ½″ × 5″",L:[3,3.6],t:0,u:"hojas",cub:0.11},
+ {id:"MU1",g:"Machimbre",n:"Machimbre 1″ × 6″",L:[3,3.6],t:0,u:"hojas",cub:0.13},
  {id:"FE18",g:"Fenólicos",n:"Fenólico 18 mm",L:null,t:0,u:"placas"},
  {id:"AI5",g:"Aislantes",n:"Aislante 5 mm con aluminio",L:null,t:0,u:"m²"},
  {id:"AI10",g:"Aislantes",n:"Aislante 10 mm con aluminio",L:null,t:0,u:"m²"},
@@ -961,22 +966,29 @@ function catBy(id){return CAT.filter(function(c){return c.id===id})[0]}
 (function(){var gs=[],h="";CAT.forEach(function(c){if(gs.indexOf(c.g)<0)gs.push(c.g)});
   gs.forEach(function(g){h+='<optgroup label="'+g+'">'+CAT.filter(function(c){return c.g===g}).map(function(c){return '<option value="'+c.id+'">'+c.n+'</option>'}).join("")+'</optgroup>'});
   $("pProd").innerHTML=h;})();
-function pSync(){var c=catBy($("pProd").value);
+var LAST_L=null;
+function pModo(){return document.querySelector("input[name=pmodo]:checked").value}
+function pLbl(c){$("lblCant").textContent=c.cub&&pModo()==="m2"?"Superficie a cubrir (m²)":(c.u?"Cantidad ("+c.u+")":"Cantidad");$("pCant").step=c.cub&&pModo()==="m2"?"0.5":"any"}
+function pSync(){var c=catBy($("pProd").value);$("fModo").hidden=!c.cub;
   $("fLargo").hidden=!c.L;$("fDet").hidden=!c.det;if(c.det){$("pDet").placeholder=c.det;$("pDet").value=""}
   if(!c.L){$("pLargo").innerHTML="";$("fTerm").hidden=true;$("lblCant").textContent=c.u?"Cantidad ("+c.u+")":"Cantidad";$("fOtro").hidden=true;$("pAviso").hidden=true;$("pErr").hidden=true;return}
   $("pLargo").innerHTML=c.L.map(function(l){return '<option value="'+l+'">'+m(l)+' m</option>'}).join("")+(c.L.length>1||c.t?'<option value="otro">Otro largo…</option>':'');
-  $("fTerm").hidden=!c.t;$("lblCant").textContent="Cantidad ("+c.u+")";$("fOtro").hidden=true;$("pAviso").hidden=true;$("pErr").hidden=true}
+  $("fTerm").hidden=!c.t;pLbl(c);$("fOtro").hidden=true;$("pAviso").hidden=true;$("pErr").hidden=true;
+  if(LAST_L!=null){if(LAST_L==="otro"&&$("pOtro").value&&(c.L.length>1||c.t)){$("pLargo").value="otro";$("fOtro").hidden=false;$("pOtro").dispatchEvent(new Event("input"))}
+    else if(c.L.indexOf(+LAST_L)>=0)$("pLargo").value=String(+LAST_L);
+    else if(LAST_L!=="otro"&&(c.L.length>1||c.t)){var ls=largoStock(c,+LAST_L);if(Math.abs(ls-LAST_L)<0.005)$("pLargo").value=String(ls);else{$("pLargo").value="otro";$("pOtro").value=LAST_L;$("fOtro").hidden=false;$("pOtro").dispatchEvent(new Event("input"))}}}}
+document.querySelectorAll("input[name=pmodo]").forEach(function(x){x.addEventListener("change",function(){pLbl(catBy($("pProd").value))})});
 function largoStock(c,pedido){var ok=c.L.filter(function(l){return l>=pedido-1e-9});return ok.length?ok[0]:c.L[c.L.length-1]}
 $("pProd").addEventListener("change",pSync);
-$("pLargo").addEventListener("change",function(){$("fOtro").hidden=$("pLargo").value!=="otro";$("pAviso").hidden=true});
-$("pOtro").addEventListener("input",function(){var c=catBy($("pProd").value),v=num("pOtro");if(!(v>0)){$("pAviso").hidden=true;return}
+$("pLargo").addEventListener("change",function(){LAST_L=$("pLargo").value;$("fOtro").hidden=$("pLargo").value!=="otro";$("pAviso").hidden=true});
+$("pOtro").addEventListener("input",function(){var c=catBy($("pProd").value),v=num("pOtro");LAST_L="otro";if(!(v>0)){$("pAviso").hidden=true;return}
   var l=largoStock(c,v);$("pAviso").textContent=Math.abs(l-v)<0.005?"Lo tenemos de "+m(l)+" m.":"No tenemos de "+m(v)+" m. Te cotizamos el largo disponible más cercano: "+m(l)+" m"+(l>v?" (se puede cortar a medida).":".");$("pAviso").hidden=false});
 pSync();
 function pRender(){
   function nom(x,c){return c.n+(x.l?" de "+m(x.l)+" m":"")+(x.det?" ("+x.det+")":"")}
-  $("pRows").innerHTML=PED.map(function(x,i){var c=catBy(x.id);return '<div><span>'+nom(x,c)+(c.t?(x.f==="c"?", cepillado":", sin cepillar"):"")+(x.pide?'<small>Pediste '+m(x.pide)+' m</small>':'')+'</span><b>'+m(x.q)+(c.u?' '+c.u:'')+' <button type="button" class="btn-x" data-del="'+i+'" aria-label="Quitar">✕</button></b></div>'}).join("");
+  $("pRows").innerHTML=PED.map(function(x,i){var c=catBy(x.id);return '<div><span>'+nom(x,c)+(c.t?(x.f==="c"?", cepillado":", sin cepillar"):"")+(x.pide?'<small>Pediste '+m(x.pide)+' m</small>':'')+(x.m2?'<small>Para cubrir '+m(x.m2)+' m²</small>':'')+'</span><b>'+m(x.q)+(c.u?' '+c.u:'')+' <button type="button" class="btn-x" data-del="'+i+'" aria-label="Quitar">✕</button></b></div>'}).join("");
   $("pRes").hidden=!PED.length;
-  var txt="Hola J&R Maderas. Quiero comprar:\n"+PED.map(function(x){var c=catBy(x.id);return "• "+x.q+(c.u?" "+c.u:"")+": "+nom(x,c)+(c.t?(x.f==="c"?", cepillado":", sin cepillar"):"")+(x.pide?" (pedí "+m(x.pide)+" m)":"")}).join("\n")+
+  var txt="Hola J&R Maderas. Quiero comprar:\n"+PED.map(function(x){var c=catBy(x.id);return "• "+x.q+(c.u?" "+c.u:"")+": "+nom(x,c)+(c.t?(x.f==="c"?", cepillado":", sin cepillar"):"")+(x.pide?" (pedí "+m(x.pide)+" m)":"")+(x.m2?" (para cubrir "+m(x.m2)+" m²)":"")}).join("\n")+
     ($("pLoc").value.trim()?"\nLocalidad: "+$("pLoc").value.trim():"")+"\n¿Tienen stock? ¿Me pasan el precio?\nCódigo: M-"+PED.map(function(x){return x.id+"-"+x.l+"-"+(x.f||"x")+"-"+x.q}).join("_");
   $("pWa").href=waUrl(txt,"PEDIDO");
 }
@@ -991,8 +1003,9 @@ $("pedForm").addEventListener("submit",function(e){e.preventDefault();
   if(!(q>0)){$("pErr").textContent="Poné la cantidad.";$("pErr").hidden=false;return}
   $("pErr").hidden=true;
   var f=c.t?document.querySelector("input[name=pterm]:checked").value:null;
-  var ex=c.det?null:PED.filter(function(x){return x.id===c.id&&x.l===l&&x.f===f&&x.pide===pide})[0];
-  if(ex)ex.q+=q;else PED.push({id:c.id,l:l,f:f,q:q,pide:pide,det:det});
+  var m2=null;if(c.cub&&pModo()==="m2"){m2=q;q=Math.ceil(m2/(c.cub*l)-1e-9)}
+  var ex=c.det||m2?null:PED.filter(function(x){return x.id===c.id&&x.l===l&&x.f===f&&x.pide===pide&&!x.m2})[0];
+  if(ex)ex.q+=q;else PED.push({id:c.id,l:l,f:f,q:q,pide:pide,det:det,m2:m2});
   $("pCant").value=1;pRender();track("pedido_agregar",{producto:c.id});
 });
 
