@@ -515,7 +515,28 @@ function techoDatos(L,A){
     warn+="La pared tiene que quedar unos "+cm(A*0.15)+" más alta que la viga del frente para la pendiente del 15 %.";
   }
   var lin=up(need/0.8)+1,ml=lin*L,lis=up(ml/3-1e-9);
-  return {need:need,rows:rows,warn:warn,clav:["Clavaderas 2″ × 2″ cada 80 cm",lis+" listones de 3 m",lin+" líneas de "+m(L)+" m = "+fmt(ml,1)+" m lineales"],lis:lis,ml:ml};
+  var ck=[];if(sec&&tlen)ck.push(["TI"+(sec==="2″ × 6″"?"26":"36"),tlen,"b",n]);
+  if(ap==="pared"){ck.push(["PO3",0,"x",pos],["V38",3,"b",pos-1],["TI26",3,"b",up(L/3)],["AN",0,"x",pos])}
+  ck.push(["TI22",3,"b",lis]);
+  return {ck:ck,need:need,rows:rows,warn:warn,clav:["Clavaderas 2″ × 2″ cada 80 cm",lis+" listones de 3 m",lin+" líneas de "+m(L)+" m = "+fmt(ml,1)+" m lineales"],lis:lis,ml:ml};
+}
+/* Vista lateral de la pérgola (lado largo): columnas, viga y finos. Orientativa. */
+function pergCorte(o){ /* o: L lado largo, n columnas por lado, nico (finos a lo largo), fs separación, lbl nombre del fino */
+  var L=o.L,H=3,vd=0.16,W=L+1.2,Ht=H+0.9,sc=Math.min(340/W,190/Ht),ox=20+0.6*sc,gy=14+Ht*sc,s='',bay=L/(o.n-1);
+  function X(x){return (ox+x*sc).toFixed(1)}function Y(y){return (gy-y*sc).toFixed(1)}
+  function ln(x1,y1,x2,y2,c,w){return '<line x1="'+X(x1)+'" y1="'+Y(y1)+'" x2="'+X(x2)+'" y2="'+Y(y2)+'" class="'+c+'"'+(w?' stroke-width="'+w+'"':'')+'/>'}
+  function tx(x,y,t,a){return '<text x="'+X(x)+'" y="'+Y(y)+'" text-anchor="'+(a||"middle")+'" class="tx">'+t+'</text>'}
+  s+='<line x1="0" y1="'+gy+'" x2="'+(W*sc+40)+'" y2="'+gy+'" class="cota"/>';
+  for(var i=0;i<o.n;i++)s+=ln(i*bay,0,i*bay,H,"col",7);
+  s+='<rect x="'+X(-0.15)+'" y="'+Y(H+vd)+'" width="'+((L+0.3)*sc).toFixed(1)+'" height="'+(vd*sc).toFixed(1)+'" class="viga"/>';
+  if(o.nico){for(var j=0;j<o.n;j++)s+='<rect x="'+X(j*bay-0.1)+'" y="'+Y(H+vd+0.18)+'" width="'+(0.2*sc).toFixed(1)+'" height="'+(0.18*sc).toFixed(1)+'" class="viga"/>';
+    s+=ln(-0.1,H+vd+0.22,L+0.1,H+vd+0.22,"cab",3)+tx(L/2,H+vd+0.42,o.lbl+"s a lo largo, sobre las vigas transversales");}
+  else{var nf=Math.round(L/o.fs)+1,r=Math.max(1.8,0.05*sc);for(var k=0;k<nf;k++)s+='<circle cx="'+X(Math.min(k*o.fs,L))+'" cy="'+Y(H+vd+0.06)+'" r="'+r.toFixed(1)+'" class="poste"/>';
+    s+=tx(L/2,H+vd+0.32,o.lbl+"s cada "+Math.round(o.fs*100)+" cm (se ven de punta)");}
+  s+=tx(bay/2,H-0.3,"Viga")+tx(0.12,H/2,"Columna","start");
+  s+='<line x1="'+X(0)+'" y1="'+(gy+14)+'" x2="'+X(L)+'" y2="'+(gy+14)+'" class="cota" marker-start="url(#ar5)" marker-end="url(#ar5)"/><text x="'+X(L/2)+'" y="'+(gy+30)+'" text-anchor="middle" class="tx">Largo '+m(L)+' m · columnas cada '+m(bay)+' m</text>';
+  s+='<line x1="'+X(-0.4)+'" y1="'+Y(0)+'" x2="'+X(-0.4)+'" y2="'+Y(H)+'" class="cota" marker-start="url(#ar5)" marker-end="url(#ar5)"/><text x="'+X(-0.48)+'" y="'+Y(H/2)+'" text-anchor="middle" class="tx" transform="rotate(-90 '+X(-0.48)+' '+Y(H/2)+')">Poste de 3 m</text>';
+  return '<svg viewBox="0 0 '+(W*sc+40).toFixed(0)+' '+(gy+40).toFixed(0)+'" role="img" aria-label="Vista lateral de la pérgola"><defs><marker id="ar5" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L8 4L0 8z" class="ar"/></marker></defs>'+s+'</svg>';
 }
 /* Corte lateral: para que el cliente entienda cómo queda armado. Dibujo orientativo, sin escala exacta de alturas. */
 function corte(o){ /* o: tipo pared|paredes|agua1|dosA|dosB, A luz, al alero, pend */
@@ -892,7 +913,7 @@ $("calcForm").addEventListener("submit",function(e){
       else rows.push(["Finos de "+m(flN)+" m, cada "+cm(fs),nfN+" finos",filasN]);
       rows.push(["Anclajes",pn*2+" anclajes","uno por columna"]);
       note="Cantidades sin desperdicio. Es un bosquejo orientativo: te confirmamos medidas y diámetros al pasarte el precio.";
-      fig=pergolaPlano2(PL,PW,pn,fs,pino?"Tabla de pino":"Fino");
+      fig=pergCorte({L:PL,n:pn,nico:true,fs:fs,lbl:pino?"Tabla":"Fino"})+'<div style="height:12px"></div>'+pergolaPlano2(PL,PW,pn,fs,pino?"Tabla de pino":"Fino");
     }else{
     var pos=PL<=4?2:up(PL/3.5)+1,lin=up(PW/3)+1,tramo=PW/(lin-1),fl=tramo<=2.5?2.5:3;
     var porFila=Math.round(PL/fs)+1,nf=porFila*(lin-1),nc=pos*lin;
@@ -907,10 +928,17 @@ $("calcForm").addEventListener("submit",function(e){
     else rows.push(["Finos de "+m(fl)+" m, cada "+cm(fs),nf+" finos",filas]);
     rows.push(["Anclajes",nc+" anclajes","uno por columna"]);
     note="Cantidades sin desperdicio. Es un bosquejo orientativo: te confirmamos medidas y diámetros al pasarte el precio.";
-    fig=pergolaPlano(PL,PW,pos,lin,fs,pino?"Tabla de pino":"Fino");
+    fig=pergCorte({L:PL,n:pos,nico:false,fs:fs,lbl:pino?"Tabla":"Fino"})+'<div style="height:12px"></div>'+pergolaPlano(PL,PW,pos,lin,fs,pino?"Tabla de pino":"Fino");
     }
   }
-  var pedido="";
+  var pedido="",CK=[];
+  if(t==="cielo"||t==="techo"){var mid=$("cMach").value==="m4"?"MH4":"MH5";p.hojas.forEach(function(h){CK.push([mid,h.largo,"x",h.cant])});
+    if(t==="cielo"){CK.push(["TI22",3,"b",up(lin*L/3-1e-9)],["CO",0,"x",Math.round(2*(L+A)*10)/10])}
+    else{CK=CK.concat(TD.ck);CK.push(["ME",0,"x",up(L*TD.need/20)],["AP",0,"x",TD.lis],["AU",0,"x",up(TD.ml*3)])}}
+  if(t==="rustico")CK=TR.ck.slice();
+  if(t==="entrepiso")CK.push(["TX",0,"x",n2]);
+  if(t==="cerco")CK.push(["PX",0,"x",np]);
+  if(CK.length)pedido="M-"+CK.map(function(x){return x.join("-")}).join("_");
   if(t==="pergola"){pedido="P-perg-"+L+"x"+A+"-"+document.querySelector("input[name=techmat]:checked").value+"-"+Math.round(parseFloat(document.querySelector("input[name=finsep]:checked").value)*100)}
   if(t==="quincho"){
     var qv=function(n){return document.querySelector("input[name="+n+"]:checked").value};
@@ -941,6 +969,7 @@ $("calcForm").addEventListener("submit",function(e){
 /* ── Pedido de madera: medidas que maneja J&R ── */
 var CAT=[
  {id:"PU33",g:"Puntales",n:"Puntal 3″ × 3″",L:[3,4],t:1,u:"puntales"},
+ {id:"TB12",g:"Tablas",n:"Tabla 1″ × 2″",L:[3],t:1,u:"tablas"},
  {id:"TB13",g:"Tablas",n:"Tabla 1″ × 3″",L:[3],t:1,u:"tablas"},
  {id:"TB14",g:"Tablas",n:"Tabla 1″ × 4″",L:[3],t:1,u:"tablas"},
  {id:"TB15",g:"Tablas",n:"Tabla 1″ × 5″",L:[3],t:1,u:"tablas"},
