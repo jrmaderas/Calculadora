@@ -900,7 +900,18 @@ $("calcForm").addEventListener("submit",function(e){
        Columnas de 3 m, cada 3,5 m como máximo. Vigas de 3/4/5 m; si pasa de 5 m, una viga por tramo, empalmada sobre columna. */
     var PL=Math.max(L,A),PW=Math.min(L,A),fs=parseFloat(document.querySelector("input[name=finsep]:checked").value);
     var pino=document.querySelector("input[name=techmat]:checked").value==="pino";
-    if(PW>3&&PW<=5){
+    if(PL<=5+1e-9){
+      /* Regla J&R (16/10): hasta 5 m de largo, columnas solo en las esquinas de cada línea de vigas (vigas de una pieza).
+         Finos de 2,5, 3 o 4 m; si el ancho no alcanza, una línea de vigas al medio (5 × 5: 6 columnas, 3 vigas de 5 m). */
+      var linS=PW<=(pino?3:4)+1e-9?2:3,spS=PW/(linS-1),pfS=Math.round(PL/fs)+1,flS=spS<=2.5+1e-9?2.5:spS<=3+1e-9?3:4,vS=[3,4,5].filter(function(v){return v>=PL-1e-9})[0];
+      rows.push(["Columnas: postes de 3 m",2*linS+" postes","en las esquinas"+(linS===3?" y 2 al medio":"")]);
+      rows.push(["Vigas: postes de "+m(vS)+" m",linS+" postes",(linS===3?"2 en los lados y 1 al medio":"una por lado")+", de una pieza"]);
+      if(pino)rows.push(['Tablas de pino 1" × 3" de 3 m, cada '+cm(fs),pfS*(linS-1)+" tablas",(linS>2?pfS+" por tramo":"")+(spS<2.995?(linS>2?", ":"")+"cortadas a "+m(spS)+" m":"")]);
+      else rows.push(["Finos de "+m(flS)+" m, cada "+cm(fs),pfS*(linS-1)+" finos",linS>2?pfS+" por tramo, 2 tramos":"cruzan "+m(PW)+" m"]);
+      rows.push(["Anclajes",2*linS+" anclajes","uno por columna"]);
+      note="Cantidades sin desperdicio. Es un bosquejo orientativo: te confirmamos medidas y diámetros al pasarte el precio.";
+      fig=pergCorte({L:PL,n:2,nico:false,fs:fs,lbl:pino?"Tabla":"Fino"})+'<div style="height:12px"></div>'+pergolaPlano(PL,PW,2,linS,fs,pino?"Tabla de pino":"Fino");
+    }else if(PW>3&&PW<=5){
       /* Sistema J&R (cobertizo de Nicolás): columnas solo en los lados largos, cada 3 m como máximo; vigas transversales
          sobre cada par de columnas; finos de 3 m a lo largo, apoyados sobre las transversales. */
       var pn=up(PL/3)+1,bay=PL/(pn-1),flN=bay<=2.5?2.5:3,porT=up(PW/fs)+1,nfN=porT*(pn-1);
