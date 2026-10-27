@@ -476,6 +476,10 @@ var T={
  PERG:"Hola J&R Maderas. Quiero hacer una pérgola.\nMedidas: … x … m\nAltura: … m"
 };
 document.querySelectorAll("[data-wa]").forEach(function(a){var c=a.getAttribute("data-wa");a.href=waUrl(T[c],c);a.addEventListener("click",function(){track("whatsapp_click",{producto:c})})});
+/* Link directo a una calculadora (QR de las guías): ?calc=pergola|quincho|techo|cerco|... (27/10) */
+(function(){var c=(new URLSearchParams(location.search).get("calc")||"").toLowerCase().replace(/[^a-z]/g,"");if(!c)return;
+  var r=document.querySelector('input[name=tipo][value="'+c+'"]');if(!r)return;r.checked=true;try{sync()}catch(e){}
+  function go(){var el=$("calculadora");if(el)el.scrollIntoView({behavior:"instant",block:"start"})}setTimeout(go,150);window.addEventListener("load",function(){setTimeout(go,100)});})();
 document.addEventListener("click",function(e){
   var k=e.target.closest("[data-calc]");
   if(k){var r=document.querySelector('input[name=tipo][value="'+k.getAttribute("data-calc")+'"]');if(r){r.checked=true;sync()}$("calculadora").scrollIntoView();$("cLargo").focus({preventScroll:true});return}
