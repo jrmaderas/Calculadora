@@ -152,6 +152,9 @@ input,select,textarea{font:inherit;font-size:17px;color:var(--ink);background:va
 .form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form .full{grid-column:1/-1}
 .err{color:var(--brand);font-size:14px;font-weight:600;margin:0}
+.aviso{border:2px solid var(--wood);border-radius:10px;padding:10px 12px;font-size:15px;font-weight:600;background:rgba(196,118,42,.10)}
+.aviso .btn{display:flex;width:100%;justify-content:center}
+.alerta{border:2px solid var(--brand);border-radius:10px;padding:10px 12px;font-size:15px;font-weight:700;color:var(--brand);background:rgba(139,26,26,.08)}
 
 /* confianza y ubicación */
 .trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
@@ -271,9 +274,9 @@ footer a{text-decoration:underline;text-underline-offset:3px}
         </div>
       </div>
       <div class="grid2">
-        <div class="field"><label for="cLargo" id="lblLargo">Largo (m)</label><input id="cLargo" type="number" inputmode="decimal" min="0.5" step="0.1" placeholder="Ej.: 6"></div>
-        <div class="field" id="fSep" hidden><label for="cSep">Postes cada (m)</label><input id="cSep" type="number" inputmode="decimal" min="0.5" step="0.1" value="2.5"><small>Recomendamos cada 2,5 m.</small></div>
-        <div class="field" id="fAncho"><label for="cAncho">Ancho (m)</label><input id="cAncho" type="number" inputmode="decimal" min="0.5" step="0.1" placeholder="Ej.: 5"></div>
+        <div class="field"><label for="cLargo" id="lblLargo">Largo (m)</label><input id="cLargo" type="text" inputmode="decimal" autocomplete="off" min="0.5" step="0.1" placeholder="Ej.: 6"></div>
+        <div class="field" id="fSep" hidden><label for="cSep">Postes cada (m)</label><input id="cSep" type="text" inputmode="decimal" autocomplete="off" min="0.5" step="0.1" value="2.5"><small>Recomendamos cada 2,5 m.</small></div>
+        <div class="field" id="fAncho"><label for="cAncho">Ancho (m)</label><input id="cAncho" type="text" inputmode="decimal" autocomplete="off" min="0.5" step="0.1" placeholder="Ej.: 5"><small id="ayAncho" hidden>Es el lado por donde baja el agua: de la pared más alta al alero.</small></div>
       </div>
       <div class="grid2" id="optMach">
         <div class="field"><label for="cMach">Machimbre</label>
@@ -320,7 +323,9 @@ footer a{text-decoration:underline;text-underline-offset:3px}
         </div><small>Cada 20 cm da más sombra (la más elegida). Cada 50 cm es lo mínimo recomendado.</small></div>
       <button class="btn btn-brand btn-block" type="submit">Calcular</button>
       <p class="err" id="calcErr" hidden></p>
+      <div class="aviso" id="calcAviso" hidden></div>
       <div class="result" id="calcRes" hidden>
+        <div class="alerta" id="resAlerta" hidden></div>
         <h3 id="resTitle"></h3>
         <figure class="plano" id="plano"></figure>
         <div class="rows" id="resRows"></div>
@@ -525,8 +530,9 @@ function techoDatos(L,A){
   var tlen=LTIR.filter(function(v){return v>=need-1e-9})[0],sec=A<=3?"2″ × 6″":(A<=4.5?"3″ × 6″":null);
   var st=parseFloat(document.querySelector("input[name=tir]:checked").value),n=up(L/st)+1,rows=[],warn="";
   rows.push(["Tirantes "+(sec||"")+(tlen?" de "+m(tlen)+" m":""),n+" tirantes","cada "+cm(st)+": "+m(A)+" m de luz + alero de "+cm(al)+(ap==="pared"?" al frente":" de cada lado")+" y 15 % de pendiente"+(tlen&&tlen-need>0.05?" (se cortan a "+m(need)+" m)":"")]);
-  if(!sec)warn+="Más de 4,5 m de luz necesita un apoyo intermedio o cálculo de un profesional. ";
-  if(!tlen)warn+="El tirante necesita más de 5,8 m: hace falta un apoyo intermedio. ";
+  var alerta=[];
+  if(!sec){warn+="Más de 4,5 m de luz necesita un apoyo intermedio o cálculo de un profesional. ";alerta.push("Más de 4,5 m de luz necesita un apoyo intermedio o cálculo de un profesional.")}
+  if(!tlen){warn+="El tirante necesita más de 5,8 m: hace falta un apoyo intermedio. ";alerta.push("El tirante necesita más de 5,8 m: hace falta un apoyo intermedio.")}
   if(ap==="pared"){
     var pos=up(L/3)+1,bay=L/(pos-1);
     rows.push(["Columnas: postes de eucalipto de 3 m",pos+" postes","al frente, cada "+m(bay)+" m"]);
@@ -539,7 +545,7 @@ function techoDatos(L,A){
   var ck=[];if(sec&&tlen)ck.push(["TI"+(sec==="2″ × 6″"?"26":"36"),tlen,"b",n]);
   if(ap==="pared"){ck.push(["PO3",0,"x",pos],["V38",3,"b",pos-1],["TI26",3,"b",up(L/3)],["AN",0,"x",pos])}
   ck.push(["TI22",3,"b",lis]);
-  return {ck:ck,need:need,rows:rows,warn:warn,clav:["Clavaderas 2″ × 2″ cada 80 cm",lis+" listones de 3 m",lin+" líneas de "+m(L)+" m = "+fmt(ml,1)+" m lineales"],lis:lis,ml:ml};
+  return {alerta:alerta,ck:ck,need:need,rows:rows,warn:warn,clav:["Clavaderas 2″ × 2″ cada 80 cm",lis+" listones de 3 m",lin+" líneas de "+m(L)+" m = "+fmt(ml,1)+" m lineales"],lis:lis,ml:ml};
 }
 /* Vista lateral de la pérgola (lado largo): columnas, viga y finos. Orientativa. */
 function pergCorte(o){ /* o: L lado largo, n columnas por lado, nico (finos a lo largo), fs separación, lbl nombre del fino */
@@ -843,7 +849,7 @@ function sync(){
   $("fAncho").hidden=(t==="cerco");$("fSep").hidden=(t!=="cerco");
   $("lblLargo").textContent=t==="cerco"?"Largo del cerco (m)":"Largo (m)";
   $("optMach").hidden=!(t==="cielo"||t==="techo");
-  $("optClav").hidden=(t!=="cielo");
+  $("optClav").hidden=(t!=="cielo");$("ayAncho").hidden=!(t==="techo"||t==="rustico");
   $("optTir").hidden=!TIR[t];$("optApoyo").hidden=!(t==="techo"||t==="rustico"||t==="quincho");$("fApoyo").hidden=(t==="quincho");
   $("optFin").hidden=(t!=="pergola");$("optQuin").hidden=(t!=="quincho");$("fQviga").hidden=(t!=="quincho");$("optMat").hidden=(t!=="pergola");
   if(TIR[t]){
@@ -853,23 +859,34 @@ function sync(){
   $("calcRes").hidden=true;$("calcErr").hidden=true;
 }
 document.querySelectorAll("input[name=tipo]").forEach(function(r){r.addEventListener("change",sync)});
-["cLargo","cAncho","cMach","cLHoja","cSep"].forEach(function(id){$(id).addEventListener("input",function(){$("calcRes").hidden=true})});
+["cLargo","cAncho","cMach","cLHoja","cSep"].forEach(function(id){$(id).addEventListener("input",function(){$("calcRes").hidden=true;CONF30=false;$("calcAviso").hidden=true})});
+/* Mejora 26/10: si cambian "Clavaderas cada" o "Tirantes cada" después de calcular, se oculta el resultado viejo */
+document.addEventListener("change",function(e){var n=e.target&&e.target.name;if(n==="clav"||n==="tir")$("calcRes").hidden=true});
+var CONF30=false;
 document.querySelectorAll("input[name=finsep],input[name=techmat],input[name=qmod],input[name=qcol],input[name=qviga],input[name=qtir],input[name=qmach],input[name=qaisl]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
 document.querySelectorAll("input[name=apoyo],input[name=alero]").forEach(function(r){r.addEventListener("change",function(){$("calcRes").hidden=true})});
 sync();
 
+document.addEventListener("click",function(e){if(e.target&&e.target.id==="bVuelta"){var a=$("cLargo").value;$("cLargo").value=$("cAncho").value;$("cAncho").value=a;$("calcAviso").hidden=true;
+  var sb=$("calcForm").querySelector("button[type=submit]");if(sb)sb.click()}});
 $("calcForm").addEventListener("submit",function(e){
   e.preventDefault();
   var t=tipo(),L=num("cLargo"),A=num("cAncho");
   var need=t==="cerco"?[L,num("cSep")]:[L,A];
   if(need.some(function(v){return !(v>0)})){$("calcErr").textContent=t==="cerco"?"Poné el largo del cerco y cada cuántos metros van los postes.":"Poné el largo y el ancho en metros.";$("calcErr").hidden=false;$("calcRes").hidden=true;return}
+  /* Mejora 19/10: más de 30 m suele ser una medida en centímetros; se confirma tocando Calcular otra vez */
+  if(t!=="pared"&&need.some(function(v){return v>30})&&!CONF30){CONF30=true;$("calcErr").textContent="Pusiste más de 30 m. ¿Lo pusiste en centímetros? Las medidas van en metros (ej.: 4,5). Si está bien, tocá Calcular de nuevo.";$("calcErr").hidden=false;$("calcRes").hidden=true;return}
+  CONF30=false;
   $("calcErr").hidden=true;
+  /* Mejora 09/11: en techos, el ancho es el lado por donde baja el agua; si es más grande que el largo, se avisa */
+  var av=$("calcAviso");if((t==="techo"||t==="rustico")&&A>L){av.innerHTML='Cargaste el ancho ('+m(A)+' m) más grande que el largo ('+m(L)+' m). El ancho es el lado por donde baja el agua. ¿Las pusiste al revés? <button type="button" class="btn btn-brand" id="bVuelta" style="margin-top:8px">Dar vuelta las medidas</button>';av.hidden=false}else av.hidden=true;
+  var ALR=[];
   var rows=[],note="Cantidades sin desperdicio. Te confirmamos todo al pasarte el precio.",sup=L*A,fig="";
   if(t!=="cerco")rows.push(["Superficie",fmt(sup,1)+" m²",m(L)+" × "+m(A)+" m"]);
   if(t==="cielo"||t==="techo"){
     /* cielorraso: machimbre en sentido del ancho, filas a lo largo; techo: machimbre a lo largo, cruzando los tirantes */
     var mm=MACH[$("cMach").value],fijo=$("cLHoja").value==="auto"?null:parseFloat($("cLHoja").value);
-    var TD=t==="techo"?techoDatos(L,A):null;
+    var TD=t==="techo"?techoDatos(L,A):null;if(TD)ALR=TD.alerta;
     var rec=t==="cielo"?A:L,cub=t==="cielo"?L:TD.need,p=planMachimbre(rec,cub,mm.cubre,fijo),m2=0;
     p.hojas.forEach(function(h){m2+=h.cant*mm.m2[String(h.largo)]});
     var fila=(p.c.n?(p.c.n>1?p.c.n+" hojas de ":"1 hoja de ")+m(p.c.H)+" m":"")+(p.c.r&&p.c.n?" + ":"")+(p.c.r?"un pedazo de "+m(p.c.r)+" m":"");
@@ -881,7 +898,8 @@ $("calcForm").addEventListener("submit",function(e){
     if(t==="cielo"){
       var s=parseFloat(document.querySelector("input[name=clav]:checked").value),lin=up(A/s)+1;
       for(var i=0;i<lin;i++)lineas.push(Math.min(i*s,A));
-      rows.push(["Clavaderas cada "+cm(s),fmt(lin*L,1)+" m lineales",lin+" líneas de "+m(L)+" m, cruzando el machimbre"]);
+      var lisC=up(lin*L/3-1e-9); /* 16/11: listones de 3 m, el mismo número que ya va en el código del pedido */
+      rows.push(["Clavaderas cada "+cm(s),lisC+(lisC===1?" listón":" listones")+" de 3 m",lin+" líneas de "+m(L)+" m = "+fmt(lin*L,1)+" m lineales, cruzando el machimbre"]);
       rows.push(["Cornisa (perímetro)",fmt(2*(L+A),1)+" m",""]);
       ley.push(["est","Clavadera"]);
     }else{
@@ -904,7 +922,7 @@ $("calcForm").addEventListener("submit",function(e){
     for(var q=0;q<n2;q++)ls.push(Math.min(q*st2,L));
     if(t==="entrepiso"){rows.push(["Tirantes cada "+cm(st2),n2+" tirantes","de "+m(A)+" m de luz"]);
       note="Cantidades sin desperdicio. La sección del tirante y el piso del entrepiso te los recomendamos según la luz.";}
-    else{var TR=techoDatos(L,A);TR.rows.forEach(function(r){rows.push(r)});rows.push(TR.clav);
+    else{var TR=techoDatos(L,A);ALR=TR.alerta;TR.rows.forEach(function(r){rows.push(r)});rows.push(TR.clav);
       note=(TR.warn?TR.warn+" ":"")+"Cantidades sin desperdicio. Te confirmamos la sección del tirante según la luz.";}
     fig=plano({w:L,h:A,lineas:ls,lw:m(L)+" m",lh:m(A)+" m",ley:[["est","Tirante"]],alt:"Dibujo de la ubicación de los tirantes"});
     if(t==="rustico")fig=corte({tipo:document.querySelector("input[name=apoyo]:checked").value,A:A,al:parseFloat(document.querySelector("input[name=alero]:checked").value),pend:0.15})+'<div style="height:12px"></div>'+fig;
@@ -965,7 +983,7 @@ $("calcForm").addEventListener("submit",function(e){
   }
   var pedido="",CK=[];
   if(t==="cielo"||t==="techo"){var mid=$("cMach").value==="m4"?"MH4":"MH5";p.hojas.forEach(function(h){CK.push([mid,h.largo,"x",h.cant])});
-    if(t==="cielo"){CK.push(["TI22",3,"b",up(lin*L/3-1e-9)],["CO",0,"x",Math.round(2*(L+A)*10)/10])}
+    if(t==="cielo"){CK.push(["TI22",3,"b",lisC],["CO",0,"x",Math.round(2*(L+A)*10)/10])}
     else{CK=CK.concat(TD.ck);CK.push(["ME",0,"x",up(L*TD.need/20)],["AP",0,"x",TD.lis],["AU",0,"x",up(TD.ml*3)])}}
   if(t==="rustico")CK=TR.ck.slice();
   if(t==="entrepiso")CK.push(["TX",0,"x",n2]);
@@ -985,11 +1003,12 @@ $("calcForm").addEventListener("submit",function(e){
     fig=corte({tipo:qm,A:Math.min(L,A),al:qo.alero,pend:qm==="agua1"?0.15:(qm==="dosA"?0.2:0.3)});
     pedido="Q-"+qm+"-"+L+"x"+A+"-"+qo.col+"-"+qo.viga+"-"+qo.mach+"-"+qo.aisl+"-t"+qo.tir;
   }
+  $("resAlerta").textContent=ALR.length?"⚠ Atención: "+ALR.join(" "):"";$("resAlerta").hidden=!ALR.length;
   $("resTitle").textContent=NOMBRE[t];
   $("plano").innerHTML=fig;$("plano").hidden=!fig;
   $("resRows").innerHTML=rows.map(function(r){return "<div><span>"+r[0]+(r[2]?"<small>"+r[2]+"</small>":"")+"</span><b>"+r[1]+"</b></div>"}).join("");
   $("resNote").textContent=note;
-  var txt="Hola J&R Maderas. Usé la calculadora de la web.\nProyecto: "+NOMBRE[t]+"\nMedidas: "+(t==="cerco"?m(L)+" m de largo":m(L)+" x "+m(A)+" m")+"\n"+rows.map(function(r){return "• "+r[0]+": "+r[1]+(r[2]&&r[0].indexOf("Hojas")===0?" ("+r[2]+")":"")}).join("\n")+"\n¿Me pasás el precio?"+(pedido?"\nCódigo: "+pedido:"");
+  var txt="Hola J&R Maderas. Usé la calculadora de la web.\nProyecto: "+NOMBRE[t]+"\nMedidas: "+(t==="cerco"?m(L)+" m de largo":m(L)+" x "+m(A)+" m")+"\n"+(ALR.length?"⚠ Atención: "+ALR.join(" ")+"\n":"")+rows.map(function(r){return "• "+r[0]+": "+r[1]+(r[2]&&r[0].indexOf("Hojas")===0?" ("+r[2]+")":"")}).join("\n")+"\n¿Me pasás el precio?"+(pedido?"\nCódigo: "+pedido:"");
   var code="CALC-"+t.toUpperCase();
   $("calcWa").href=waUrl(txt,code);
   $("calcWa").onclick=function(){track("whatsapp_click",{producto:code})};
